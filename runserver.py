@@ -1,4 +1,4 @@
 # -*- coding: utf-8 -*-
-from api import app
+from ig_api import app
 
 app.run(debug=True)
