@@ -2,7 +2,6 @@
 from functools import wraps
 
 from flask import g, request
-from flask.ext.restful import abort
 
 from ig_api import db
 from ig_api.error_codes import abort_error
