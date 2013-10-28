@@ -3,7 +3,7 @@ import md5
 
 from ig_api import db
 
-__all__ = ['AdminUser', ]
+__all__ = ['AdminUserModel', ]
 
 
 class BaseUser(object):
@@ -23,7 +23,7 @@ class BaseUser(object):
         return self._password == md5.md5(password).hexdigest()
 
 
-class AdminUser(BaseUser, db.Document):
+class AdminUserModel(BaseUser, db.Document):
     name = db.StringField(required=True)
     username = db.StringField(required=True, unique=True)
     email = db.EmailField(required=True)
@@ -37,10 +37,10 @@ class AdminUser(BaseUser, db.Document):
         
         Note: Error handling not taken care of.
         """
-        admin = AdminUser(name=name, username=username, email=email)
+        admin = AdminUserModel(name=name, username=username, email=email)
         admin.password = password # cannot set while initializing as the hash of the password needs to be saved
         admin.save()
         return admin
 
     def __repr__(self):
-        return '<AdminUser: %s (%s)>' % (self.name, self.username)
+        return '<AdminUserModel: %s (%s)>' % (self.name, self.username)

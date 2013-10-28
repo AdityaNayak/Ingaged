@@ -5,7 +5,7 @@ from flask import g, request
 
 from ig_api import db
 from ig_api.error_codes import abort_error
-from ig_api.authentication.models import AdminUser
+from ig_api.authentication.models import AdminUserModel
 
 
 class login_required(object):
@@ -30,7 +30,7 @@ class login_required(object):
                 abort_error(1000)
 
             # find user with given username and compare passwords
-            user_models = {'admin': AdminUser}
+            user_models = {'admin': AdminUserModel}
             user_model = user_models[self.access]
             try:
                 user = user_model.objects.get(username=auth.username)
