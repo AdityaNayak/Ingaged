@@ -3,6 +3,8 @@ import md5
 
 from ig_api import db
 
+__all__ = ['AdminUser', ]
+
 
 class BaseUser(object):
     """This class has all the methods which are common to any kind of a user."""

@@ -4,6 +4,8 @@ from flask.ext.restful import Resource
 from ig_api import api
 from ig_api.authentication import login_required
 
+__all__ = ['AdminUserCredentialCheck', ]
+
 
 class AdminUserCredentialCheck(Resource):
 
