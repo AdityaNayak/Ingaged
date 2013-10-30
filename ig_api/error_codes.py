@@ -23,6 +23,7 @@ ERROR_CODES = {
         # merchants (2000 - 2999)
         '2000': 'Merchant details provided were not correct.', # while merchant is being edited or created
         '2001': 'Only jpg, jpeg and png are valid extensions for a logo.', # when uploading the logo
-        '2003': 'Merchant with the given ID does not exist.' # merchant does not exist
+        '2003': 'Merchant with the given ID does not exist.', # merchant does not exist
+        '2004': 'Payment details provided were not correct.', # while keying in a new payment
 
 }

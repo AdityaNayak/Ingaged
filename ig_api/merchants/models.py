@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import datetime
+
 from ig_api import db, app
 
 
@@ -7,6 +9,9 @@ class MerchantModel(db.Document):
     address = db.StringField(required=True)
     contact_number = db.StringField()
     logo = db.URLField()
+
+    # will be used for payments
+    current_balance = db.FloatField(required=True, default=0.0)
 
     meta = {'collection': 'merchants'}
 
@@ -22,4 +27,56 @@ class MerchantModel(db.Document):
         return merchant
 
     def __repr__(self):
-        return '<MerchantModel: %s>' % self.name
+        return '<MerchantModel: {0}>'.format(self.name)
+
+
+class PaymentModel(db.Document):
+    METHOD_CHOICES = (
+        (1, 'Cheque'),
+        (2, 'Cash')
+    )
+
+    amount = db.FloatField(required=True)
+    method = db.IntField(required=True, choices=METHOD_CHOICES)
+    notes = db.StringField(required=False)
+    received_at = db.DateTimeField(required=True)
+    key_in_at = db.DateTimeField(required=True, default=datetime.datetime.utcnow)
+
+    # which merchant is the payment associated with?
+    merchant = db.ReferenceField('MerchantModel', required=True)
+
+    @staticmethod
+    def key_in(amount, method, received_at, merchant, notes=None):
+        """Keys in the payment in the system corresponding to the given merchant.
+        Also increments the current balance of the merchant by the amount
+        of the payment.
+
+        Returns the payment object (PaymentModel).
+
+        Keyword Arguments:
+        amount -- Float value of the amount.
+        method -- Integer. Check `PaymentModel.METHOD_CHOICES` for the possible values.
+        received_at -- DateTime the payment was received at. This is different from the time
+                       when the payment was keyed into the system which is set automatically
+                       as the current system time.
+        notes -- Any custom notes which need to be attached.
+        merchant -- Object of the merchant with which the payment needs to be associated.
+        """
+        details = locals()
+
+        # create and save payment object
+        payment = PaymentModel()
+        for k,v in details.items():
+            setattr(payment, k, v)
+        payment.save()
+
+        #TODO: mongodb two phase commits should be taken care of later on.
+        # increment the merchant balance and save
+        merchant = details.pop('merchant')
+        merchant.current_balance += payment.amount
+        merchant.save()
+
+        return payment
+
+    def __repr__(self):
+        return '<PaymentModel: {0} - {1} ({2})>'.format(self.amount, self.received_at, self.merchant.name)

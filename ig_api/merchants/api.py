@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
+import datetime
 from cStringIO import StringIO
 
 from flask.ext.restful import Resource, reqparse, fields, marshal_with
+from flask.ext.restful.fields import MarshallingException
 from boto.s3.connection import S3Connection
 from boto.s3.key import Key as S3Key
 from werkzeug.datastructures import FileStorage
@@ -11,7 +13,7 @@ from pymongo.errors import InvalidId
 from ig_api import api, db, app
 from ig_api.error_codes import abort_error
 from ig_api.authentication import login_required
-from ig_api.merchants.models import MerchantModel
+from ig_api.merchants.models import MerchantModel, PaymentModel
 
 __all__ = ['MerchantList', 'Merchant', 'MerchantUploadLogo']
 
@@ -96,6 +98,17 @@ def merchant_id_exists(merchant_id):
 
     return merchant
 
+class DateTimeField(fields.Raw):
+    """Formats the DateTime object in the ISO8016 format for JSON."""
+
+    def format(self, value):
+        if isinstance(value, datetime.datetime):
+            return value.isoformat()
+        raise MarshallingException("Only DateTime objects can be marshalled.")
+
+def DateTimeFieldType(value):
+    return datetime.datetime.strptime(value, '%Y-%m-%dT%H:%M:%S')
+
 ## Different objects to be returned (to be used with `marshal_with`)
 
 merchant_obj = {
@@ -103,9 +116,17 @@ merchant_obj = {
     'name': fields.String,
     'address': fields.String,
     'contact_number': fields.String,
+    'current_balance': fields.Float,
     'logo': fields.String
 }
 
+payment_obj = {
+    'id': fields.String,
+    'amount': fields.Float,
+    'notes': fields.String,
+    'received_at': DateTimeField,
+    'key_in_at': DateTimeField
+}
 
 ## Endpoints
 
@@ -233,9 +254,59 @@ class Merchant(Resource):
         return {'merchant': merchant}
 
 
+class MerchantPaymentsList(Resource):
+
+    put_parser = reqparse.RequestParser()
+    put_parser.add_argument('amount', required=True, type=float, location='json')
+    put_parser.add_argument('method', required=True, type=int, choices=[i[0] for i in PaymentModel.METHOD_CHOICES], location='json')
+    put_parser.add_argument('notes', required=False, type=unicode, location='json')
+    put_parser.add_argument('received_at', required=True, type=DateTimeFieldType, location='json')
+
+    get_fields = {
+        'error': fields.Boolean(default=False),
+        'payments': fields.List(fields.Nested(payment_obj)),
+    }
+
+    post_fields = {
+        'error': fields.Boolean(default=False),
+        'payment': fields.Nested(payment_obj),
+    }
+
+    @login_required('admin')
+    @marshal_with(post_fields)
+    def post(self, merchant_id):
+        merchant = merchant_id_exists(merchant_id)
+        args = self.put_parser.parse_args()
+
+        # check the receive date time is less than current date and time
+        if args['received_at'] > datetime.datetime.utcnow():
+            print 'this is bullshit'
+            abort_error(2004)
+
+        # create new payment
+        try:
+            payment = PaymentModel.key_in(merchant=merchant, **args)
+        except db.ValidationError:
+            abort_error(2004)
+
+        return {'payment': payment}
+
+    @login_required('admin')
+    @marshal_with(get_fields)
+    def get(self, merchant_id):
+        #TODO: add pagination support
+        merchant = merchant_id_exists(merchant_id)
+
+        # get payment objects of the merchant
+        payments = PaymentModel.objects.filter(merchant=merchant)
+
+        return {'payments': payments}
+
+
 ## Registering Endpoints
 
 # admin panel
 api.add_resource(MerchantList, '/admin/merchants')
 api.add_resource(Merchant, '/admin/merchants/<merchant_id>')
 api.add_resource(MerchantUploadLogo, '/admin/merchants/<merchant_id>/upload_logo')
+api.add_resource(MerchantPaymentsList, '/admin/merchants/<merchant_id>/payments')
