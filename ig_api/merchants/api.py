@@ -12,6 +12,7 @@ from pymongo.errors import InvalidId
 
 from ig_api import api, db, app
 from ig_api.error_codes import abort_error
+from ig_api.helpers import FileStorageArgument, DateTimeFieldType, DateTimeField
 from ig_api.authentication import login_required
 from ig_api.merchants.models import MerchantModel, PaymentModel
 
@@ -19,21 +20,6 @@ __all__ = ['MerchantList', 'Merchant', 'MerchantUploadLogo']
 
 
 ## Helpers
-class FileStorageArgument(reqparse.Argument):
-    """This argument class for flask-restful will be used in
-    all cases where file uploads need to be handled."""
-    
-    def convert(self, value, op):
-        if self.type is FileStorage:  # only in the case of files
-            # this is done as self.type(value) makes the name attribute of the
-            # FileStorage object same as argument name and value is a FileStorage
-            # object itself anyways
-            return value
-
-        # called so that this argument class will also be useful in
-        # cases when argument type is not a file.
-        super(FileStorageArgument, self).convert(*args, **kwargs)
-
 def upload_s3(file, key_name, content_type, bucket_name):
     """Uploads a given StringIO object to S3. Closes the file after upload.
 
@@ -97,17 +83,6 @@ def merchant_id_exists(merchant_id):
         abort_error(2003)
 
     return merchant
-
-class DateTimeField(fields.Raw):
-    """Formats the DateTime object in the ISO8016 format for JSON."""
-
-    def format(self, value):
-        if isinstance(value, datetime.datetime):
-            return value.isoformat()
-        raise MarshallingException("Only DateTime objects can be marshalled.")
-
-def DateTimeFieldType(value):
-    return datetime.datetime.strptime(value, '%Y-%m-%dT%H:%M:%S')
 
 ## Different objects to be returned (to be used with `marshal_with`)
 
