@@ -45,6 +45,8 @@ class PaymentModel(db.Document):
     # which merchant is the payment associated with?
     merchant = db.ReferenceField('MerchantModel', required=True)
 
+    meta = {'collection': 'merchant_payments'}
+
     @staticmethod
     def key_in(amount, method, received_at, merchant, notes=None):
         """Keys in the payment in the system corresponding to the given merchant.
