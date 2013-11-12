@@ -14,7 +14,8 @@ from ig_api import api, db, app
 from ig_api.error_codes import abort_error
 from ig_api.helpers import FileStorageArgument, DateTimeFieldType, DateTimeField
 from ig_api.authentication import login_required
-from ig_api.merchants.models import MerchantModel, PaymentModel
+from ig_api.authentication.models import MerchantUserException
+from ig_api.merchants.models import MerchantModel, PaymentModel, MerchantException
 
 __all__ = ['MerchantList', 'Merchant', 'MerchantUploadLogo']
 
@@ -108,9 +109,15 @@ payment_obj = {
 class MerchantList(Resource):
 
     post_parser = reqparse.RequestParser()
+    # merchant details
     post_parser.add_argument('name', required=True, type=unicode, location='json')
     post_parser.add_argument('address', required=True, type=unicode, location='json')
     post_parser.add_argument('contact_number', required=False, type=unicode, location='json')
+    # merchant user details
+    post_parser.add_argument('user_name', required=True, type=unicode, location='json') # name of the user
+    post_parser.add_argument('user_username', required=True, type=unicode, location='json') # this is the username
+    post_parser.add_argument('user_email', required=True, type=unicode, location='json')
+    post_parser.add_argument('user_password', required=True, type=unicode, location='json')
 
     post_fields = {
         'error': fields.Boolean(default=False),
@@ -127,11 +134,21 @@ class MerchantList(Resource):
     def post(self):
         args = self.post_parser.parse_args()
 
+        # merchant user details
+        user_details = {
+            'name': args.pop('user_name'),
+            'username': args.pop('user_username'),
+            'email': args.pop('user_email'),
+            'password': args.pop('user_password')
+        }
+
         # create merchant
         try:
-            merchant = MerchantModel.create_merchant(**args)
-        except db.ValidationError: # incorrect data provided by user
+            merchant = MerchantModel.create_merchant(user_details=user_details, **args)
+        except MerchantException:
             abort_error(2000)
+        except MerchantUserException:
+            abort_error(3000)
 
         return {'merchant': merchant}
 

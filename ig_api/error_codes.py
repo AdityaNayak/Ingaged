@@ -26,4 +26,7 @@ ERROR_CODES = {
         '2003': 'Merchant with the given ID does not exist.', # merchant does not exist
         '2004': 'Payment details provided were not correct.', # while keying in a new payment
 
+        # merchant users (3000 - 3999) only related to merchant user specific action. mainly authentication
+        '3000': 'New merchant user information provided is not correct.' # while creating a new merchant
+
 }

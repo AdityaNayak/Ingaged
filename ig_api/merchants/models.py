@@ -2,6 +2,18 @@
 import datetime
 
 from ig_api import db, app
+from ig_api.authentication.models import MerchantUserModel
+
+
+## Helpers
+
+
+class MerchantException(Exception):
+    def __init__(self, message):
+        self.message = message
+
+
+## Models
 
 
 class MerchantModel(db.Document):
@@ -16,13 +28,27 @@ class MerchantModel(db.Document):
     meta = {'collection': 'merchants'}
 
     @staticmethod
-    def create_merchant(name, address, contact_number=None):
+    def create_merchant(name, address, user_details, contact_number=None):
+        """Creates a new merchant and a new user attached with the merchant.
+        
+        Note: Keys of `user_details` dict should be same as fields of
+              `MerchantUserModel`
+        """
         details = locals()
+
+        ## create merchant
         # default logo image set as logo
         # this is done as logo is set using a PUT request only after merchant has been created
         details['logo'] = app.config['AWS_S3_DEFAULT_LOGO_URL']
         merchant = MerchantModel(**details)
-        merchant.save()
+        try:
+            merchant.save()
+        except (db.ValidationError, db.NotUniqueError):
+            raise MerchantException('Merchant data provided was wrong.')
+
+        ## create merchant user
+        user_details['merchant'] = merchant
+        user = MerchantUserModel.create(**user_details)
 
         return merchant
 
