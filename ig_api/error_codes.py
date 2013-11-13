@@ -27,6 +27,12 @@ ERROR_CODES = {
         '2004': 'Payment details provided were not correct.', # while keying in a new payment
 
         # merchant users (3000 - 3999) only related to merchant user specific action. mainly authentication
-        '3000': 'New merchant user information provided is not correct.' # while creating a new merchant
+        '3000': 'New merchant user information provided is not correct.', # while creating a new merchant
+
+        # feedback (4000 - 4999) related to form creation etc. on dashboard and customer facing feedback collection
+        '4000': 'Form data provided was not right.', # while creating the form
+        '4001': 'Form with the given ID does not exist.', # form does not exist
+        '4002': 'Form instance data provided was not correct.', # while creating a form instance
+        '4003': 'Form instance with the given ID does not exist.' # form instance does not exist
 
 }

@@ -48,3 +48,7 @@ from ig_api.authentication.models import *
 # merchants
 from ig_api.merchants.api import *
 from ig_api.merchants.models import *
+
+# feedback (dashboard & customer facing feedback collection)
+from ig_api.feedback.api import *
+from ig_api.feedback.models import *
