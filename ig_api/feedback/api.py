@@ -7,7 +7,7 @@ from pymongo.errors import InvalidId
 from ig_api import api, db
 from ig_api.error_codes import abort_error
 from ig_api.authentication import login_required
-from ig_api.feedback.models import FormModel, InstanceModel, FormException, InstanceException
+from ig_api.feedback.models import FormModel, InstanceModel, FormException, InstanceException, FeedbackModel, FeedbackException
 
 
 ## Helpers
@@ -168,6 +168,53 @@ class FormInstance(Resource):
         return {'instance': instance}
 
 
+class CustomerFeedback(Resource):
+
+    post_parser = reqparse.RequestParser()
+    post_parser.add_argument('text', required=True, type=unicode, location='json')
+    post_parser.add_argument('customer_name', required=False, type=unicode, location='json')
+    post_parser.add_argument('customer_mobile', required=False, type=unicode, location='json')
+    post_parser.add_argument('customer_email', required=False, type=unicode, location='json')
+    
+    get_fields = {
+        'error': fields.Boolean(default=False),
+        'form': fields.Nested(form_obj)        
+    }
+
+    post_fields = {
+        'error': fields.Boolean(default=False),
+        'success': fields.Boolean
+    }
+
+    @marshal_with(get_fields)
+    def get(self, instance_id):
+        instance = instance_id_exists(instance_id)
+        form = instance.form
+
+        return {'form': form}
+
+    def post(self, instance_id):
+        args = self.post_parser.parse_args()
+
+        instance = instance_id_exists(instance_id)
+
+        customer_details = None
+        if args.get('customer_name') or args.get('customer_mobile') or args.get('customer_email'):
+            customer_details = {
+                'name': args.get('customer_name'),
+                'mobile': args.get('customer_mobile'),
+                'email': args.get('customer_email')
+            }
+        
+        # save customer feedback
+        try:
+            feedback = FeedbackModel.create(args['text'], instance, customer_details)
+        except FeedbackException:
+            abort_error(4004)
+
+        return {'success': True}
+            
+
 ## Registering Endpoints
 
 # merchant dashboard
@@ -175,3 +222,6 @@ api.add_resource(FormList, '/dashboard/forms')
 api.add_resource(Form, '/dashboard/forms/<form_id>')
 api.add_resource(FormInstanceList, '/dashboard/forms/<form_id>/instances')
 api.add_resource(FormInstance, '/dashboard/forms/<form_id>/instances/<instance_id>')
+
+# customer facing
+api.add_resource(CustomerFeedback, '/customer/feedback/<instance_id>')

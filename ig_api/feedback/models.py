@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import datetime
+
 from ig_api import db
 
 
@@ -11,6 +13,10 @@ class FormException(Exception):
 
 
 class InstanceException(Exception):
+    def __init__(self, message):
+        self.message = message
+
+class FeedbackException(Exception):
     def __init__(self, message):
         self.message = message
 
@@ -63,3 +69,59 @@ class InstanceModel(db.Document):
 
     def __repr__(self):
         return '<InstanceModel: {0}>'.format(self.name)
+
+
+class FeedbackModel(db.Document):
+    text = db.StringField(required=True)
+    received_at = db.DateTimeField(required=True, default=datetime.datetime.utcnow)
+
+    # which customer is feedback associated with?
+    customer = db.ReferenceField('CustomerModel')
+
+    # which instance is feedback associated with?
+    form_instance = db.ReferenceField('InstanceModel', required=True)
+
+    meta = {'collection': 'feedbacks'}
+
+    @staticmethod
+    def create(text, form_instance, customer_details=None):
+        feedback = FeedbackModel(text=text, form_instance=form_instance)
+
+        # create customer object only if customer exists
+        customer = None
+        if customer_details:
+            name = customer_details.get('name')
+            mobile = customer_details.get('mobile')
+            email = customer_details.get('email')
+            customer = CustomerModel(name=name, mobile=mobile, email=email)
+
+        # validate customer & feedback objects
+        try:
+            feedback.validate()
+            if customer:
+                customer.validate()
+        except db.ValidationError:
+            raise FeedbackException('Feedback data provided was wrong.')
+
+        # add customer id to feedback object
+        if customer:
+            customer.save()
+            feedback.customer = customer
+
+        feedback.save()
+
+        return feedback
+
+    def __repr__(self):
+        return '<FeedbackModel: {0}>'.format(self.received_at)
+
+
+class CustomerModel(db.Document):
+    name = db.StringField(required=False)
+    mobile = db.StringField(required=False)
+    email = db.StringField(required=False)
+
+    meta = {'collection': 'customers'}
+
+    def __repr__(self):
+        return '<CustomerModel: {0} ({1})>'.format(self.name, self.email)
