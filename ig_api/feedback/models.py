@@ -81,11 +81,14 @@ class FeedbackModel(db.Document):
     # which instance is feedback associated with?
     form_instance = db.ReferenceField('InstanceModel', required=True)
 
+    # which merchant is feedback associated with?
+    merchant = db.ReferenceField('MerchantModel', required=True)
+
     meta = {'collection': 'feedbacks'}
 
     @staticmethod
     def create(text, form_instance, customer_details=None):
-        feedback = FeedbackModel(text=text, form_instance=form_instance)
+        feedback = FeedbackModel(text=text, form_instance=form_instance, merchant=form_instance.form.merchant)
 
         # create customer object only if customer exists
         customer = None

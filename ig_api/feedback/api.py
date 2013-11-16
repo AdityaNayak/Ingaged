@@ -54,6 +54,20 @@ instance_obj = {
     'location': fields.String
 }
 
+customer_obj = {
+    'id': fields.String,
+    'name': fields.String,
+    'mobile': fields.String,
+    'email': fields.String
+}
+
+feedback_obj = {
+    'id': fields.String,
+    'text': fields.String,
+    'received_at': fields.DateTime,
+    'customer': fields.Nested(customer_obj)
+}
+
 
 ## Endpoints
 
@@ -213,7 +227,24 @@ class CustomerFeedback(Resource):
             abort_error(4004)
 
         return {'success': True}
-            
+
+
+class FeedbackTimeline(Resource):
+
+    get_fields = {
+        'error': fields.Boolean(default=False),
+        'feedbacks': fields.List(fields.Nested(feedback_obj))
+    }
+
+    @marshal_with(get_fields)
+    @login_required('merchant')
+    def get(self):
+        merchant = g.user.merchant
+
+        feedbacks = FeedbackModel.objects.filter(merchant=merchant).order_by("-received_at")
+
+        return {'feedbacks': feedbacks}
+
 
 ## Registering Endpoints
 
@@ -222,6 +253,7 @@ api.add_resource(FormList, '/dashboard/forms')
 api.add_resource(Form, '/dashboard/forms/<form_id>')
 api.add_resource(FormInstanceList, '/dashboard/forms/<form_id>/instances')
 api.add_resource(FormInstance, '/dashboard/forms/<form_id>/instances/<instance_id>')
+api.add_resource(FeedbackTimeline, '/dashboard/timeline')
 
 # customer facing
 api.add_resource(CustomerFeedback, '/customer/feedback/<instance_id>')
