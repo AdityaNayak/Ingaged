@@ -9,7 +9,22 @@ from flask.ext.restful import Api as FlaskRestfulAPI
 current_dir = os.path.dirname(os.path.realpath(__file__))
 
 DEBUG = True
-MONGODB_SETTINGS = {'DB': 'ingage-develop'}
+MONGODB_SETTINGS = {
+    'DB': 'ingage-develop',
+    'USERNAME': None,
+    'PASSWORD': None,
+    'HOST': None,
+    'PORT': None
+}
+if os.environ.get('MONGOHQ_URL'): # if on heroku
+    user, password_host, port_db = os.environ.get('MONGOHQ_URL')[10:].split(':')
+    password, host = password_host.split('@')
+    port, db = port_db.split('/')
+    MONGODB_SETTINGS['USERNAME'] = user
+    MONGODB_SETTINGS['PASSWORD'] = password
+    MONGODB_SETTINGS['HOST'] = host
+    MONGODB_SETTINGS['PORT'] = int(port)
+    MONGODB_SETTINGS['DB'] = db
 LOGO_ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png']
 IMAGE_CONTENT_TYPES = { # content types of different images. will be used while uploading images to S3.
     'jpg': 'image/jpeg',
@@ -27,7 +42,7 @@ TRANSACTIONAL_EMAILS = {
     'new_merchant_new_user': { # this is sent to a new user who is created while creating a merchant
         'subject': 'Wecome to InGage Dashboard',
         'template': 'emails/new_merchant_user.html',
-        'from': 'InGage <me@rishabhverma.me>',
+        'from': 'InGage <ingage@mutinylabs.in>',
     },
 }
 
@@ -37,6 +52,8 @@ app.config.from_object(__name__)
 
 ## extensions
 db = MongoEngine(app)
+if os.environ.get('MONGOHQ_URL'): # if on heroku
+    db.connection[MONGODB_SETTINGS['DB']].authenticate(MONGODB_SETTINGS['USERNAME'], MONGODB_SETTINGS['PASSWORD'])
 api = FlaskRestfulAPI(app)
 
 ## endpoints & models
