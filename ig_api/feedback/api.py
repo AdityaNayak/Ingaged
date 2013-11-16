@@ -35,7 +35,7 @@ def instance_id_exists(instance_id):
     try:
         instance = InstanceModel.objects.get(id=ObjectId(instance_id))
     except (db.ValidationError, InvalidId, db.DoesNotExist):
-        abort_error(4001)
+        abort_error(4003)
 
     return instance
 
