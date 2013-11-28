@@ -3,6 +3,7 @@ import datetime
 
 from flask import render_template
 from flask.ext.restful import reqparse, fields
+from werkzeug.datastructures import FileStorage
 
 from ig_api import app
 from ig_api.aws import SESMessage
