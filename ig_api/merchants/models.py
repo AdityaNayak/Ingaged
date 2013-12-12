@@ -3,6 +3,7 @@ import datetime
 
 from ig_api import db, app
 from ig_api.authentication.models import MerchantUserModel
+from ig_api.authentication.models import MerchantUserException
 
 
 ## Helpers
@@ -48,7 +49,11 @@ class MerchantModel(db.Document):
 
         ## create merchant user
         user_details['merchant'] = merchant
-        user = MerchantUserModel.create(**user_details)
+        try:
+            user = MerchantUserModel.create(**user_details)
+        except MerchantUserException as e:
+            merchant.delete() # delete the merchant created in the last step as that is no longer needed
+            raise e
 
         return merchant
 
