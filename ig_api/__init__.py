@@ -32,8 +32,8 @@ IMAGE_CONTENT_TYPES = { # content types of different images. will be used while 
     'png': 'image/png'
 }
 LOGO_MAX_FILE_SIZE = 1 * 1024 * 1024 # 1MB
-AWS_ACCESS_KEY_ID = 'AKIAJUWCXRMPSG23JT5A'
-AWS_SECRET_ACCESS_KEY = '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'
+AWS_ACCESS_KEY_ID = 'AKIAJPKFYAQXRHIIIPNA'
+AWS_SECRET_ACCESS_KEY = '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'
 AWS_S3_LOGO_BUCKET = 'ingage-logos-development'
 AWS_S3_DEFAULT_LOGO_FILE = os.path.join(current_dir, 'config/default-logo.png') # path to default logo of the merchant. absolute path.
 AWS_S3_DEFAULT_LOGO_KEY_NAME = 'default-logo.png'
