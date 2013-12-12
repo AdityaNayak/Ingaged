@@ -1,1 +1,1 @@
-web: gunicorn ig_api:app
+web: gunicorn --pythonpath api/ ig_api:app
