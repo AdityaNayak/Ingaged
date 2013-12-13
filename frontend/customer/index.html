@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <title>Customer Feedback</title>
+
+    <link rel="stylesheet" href="css/form.css">
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="js/custom.modernizr.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.2/underscore-min.js" type="text/javascript"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.2/backbone-min.js"></script>
+    <script src="js/customer.backbone.js"></script>
+</head>
+<body>
+
+    <script type="text/template" id="feedback-form-template">
+        <div class="row header">
+            <div class="small-4 small-offset-8 columns">
+                <img src="http://placehold.it/180x60&text=marchant logo"> <!-- height fixed, width variable -->
+            </div>
+        </div>
+
+        <div class="row">
+            <form id="comment-form" name="comment-form" class="small-12 medium-10 medium-centered large-8 columns">
+                <fieldset class="commentsection">
+                    <h3>How was your experience?</h3>
+                    <div class="form-element">
+                        <textarea id="comment" name="comment" required placeholder="Write your feedback here" autofocus="autofocus"></textarea>
+                    </div>
+                    <div class="form-element text-right">
+                        <a class="button green" id="next">Next Section </a>
+                    </div>
+                </fieldset>
+                <fieldset class="contactdetails next">
+                    <h3>Contact Details</h3>
+                    <p>Let us show you our appreciation for your feedback. Do leave your contact details.</p>
+                    <div class="form-element">
+                        <label for="name">Name: </label>
+                        <input type="text" id="name" name="name" placeholder="Your Name" />
+                        <label for="email">Email: </label>
+                        <input type="email" id="email" name="email" placeholder="you@email.com" />
+                        <label for="phone">Phone: </label>
+                        <input type="tel" id="phone" name="phone" placeholder="xxx-xxx-xxxx" />
+                        <input type="hidden" name="id" value="<%= instance_id %>">
+                    </div>
+                    <div class="form-element text-right">
+                        <button type="submit" class="success">Submit Feedback</button>
+                    </div>
+                </fieldset>
+            </form>       
+        </div>
+    </script>
+
+    <script type="text/template" id="feedback-form-not-exists-template">
+        <div class="row">
+            <h1>The Feedback Form Does Not Exist.</h1>
+            <h5>This template needs to be designed.</h5>
+        </div>
+    </script>
+
+    <script type="text/template" id="feedback-form-success-template">
+        <div class="row">
+            <h1>Thank You for Submitting Your Feedback.</h1>
+            <h5>This template needs to be designed.</h5>
+        </div>
+    </script>
+
+</body>
+</html>
