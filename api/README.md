@@ -1,4 +1,4 @@
-Ingaged
-=======
+Ingaged API
+===========
 
-The super powerful version of Ingage
+This is the API powering the front-end for Admin Panel, Merchant Dashboard and Customer Facing Feedback Form.
