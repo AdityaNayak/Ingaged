@@ -207,7 +207,7 @@ class CustomerFeedback(Resource):
 
         return {'form': form}
 
-    def post(self, instance_id):
+    def put(self, instance_id):
         args = self.post_parser.parse_args()
 
         instance = instance_id_exists(instance_id)
