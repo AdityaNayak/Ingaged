@@ -184,18 +184,18 @@ class FormInstance(Resource):
 
 class CustomerFeedback(Resource):
 
-    post_parser = reqparse.RequestParser()
-    post_parser.add_argument('text', required=True, type=unicode, location='json')
-    post_parser.add_argument('customer_name', required=False, type=unicode, location='json')
-    post_parser.add_argument('customer_mobile', required=False, type=unicode, location='json')
-    post_parser.add_argument('customer_email', required=False, type=unicode, location='json')
+    put_parser = reqparse.RequestParser()
+    put_parser.add_argument('text', required=True, type=unicode, location='json')
+    put_parser.add_argument('customer_name', required=False, type=unicode, location='json')
+    put_parser.add_argument('customer_mobile', required=False, type=unicode, location='json')
+    put_parser.add_argument('customer_email', required=False, type=unicode, location='json')
     
     get_fields = {
         'error': fields.Boolean(default=False),
         'form': fields.Nested(form_obj)        
     }
 
-    post_fields = {
+    put_fields = {
         'error': fields.Boolean(default=False),
         'success': fields.Boolean
     }
@@ -207,6 +207,7 @@ class CustomerFeedback(Resource):
 
         return {'form': form}
 
+    @marshal_with(put_fields)
     def put(self, instance_id):
         args = self.post_parser.parse_args()
 
