@@ -25,7 +25,7 @@ $( document ).ready(function() {
 
     /* feedback form model */
     var FeedbackFormModel = Backbone.Model.extend({
-        urlRoot: "http://inage.herokuapp.com/customer/feedback",
+        urlRoot: "http://ingage.herokuapp.com/customer/feedback",
         parse: function(response, xhr){
             return response.form;
         },
