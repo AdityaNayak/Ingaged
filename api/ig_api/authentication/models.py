@@ -83,6 +83,7 @@ class MerchantUserModel(BaseUser, db.Document):
         # send e-Mail
         email_vars = {
             'name': name,
+            'last_name': name.split(' ')[-1], #TODO: crude method, will take First and Last name seperately.
             'username': username,
             'email': email,
             'password': password
