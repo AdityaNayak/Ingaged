@@ -65,7 +65,9 @@ feedback_obj = {
     'id': fields.String,
     'text': fields.String,
     'received_at': fields.DateTime,
-    'customer': fields.Nested(customer_obj)
+    'customer': fields.Nested(customer_obj),
+    'instance': fields.Nested(instance_obj, attribute='form_instance'),
+    'form': fields.Nested(form_obj, attribute='form_instance.form')
 }
 
 
