@@ -15,6 +15,7 @@
     <script src="js/backbone.basicauth.js"></script>
     <script src="js/md5.js"></script>
     <script src="http://timeago.yarp.com/jquery.timeago.js"></script>
+    <script src="js/dashboard.backbone.js"></script>
 </head>
 
 <body>
@@ -70,7 +71,7 @@
                 <div class="large-9 columns">
                     <ul class="inline-list nav-list right">
                         <li class="secondary secondary-color">Welcome <%= username %></li>
-                        <li><a href="/list_form.html" >System</a></li>
+                        <li><a href="#/feedback_forms" >System</a></li>
                         <li><a href="#" >Log Out</a></li>
                     </ul>
                 </div>
@@ -91,7 +92,7 @@
 
         <div class="row">
             <div class="large-9 columns feedback-column">
-                <ul class="feedback-list">
+                <ul class="feedback-list feedback-timeline">
                     <% _.each(feedbacks, function(feedback){ %>
                         <li class="row">
                             <form class="custom large-1 columns"><input type="checkbox" id="checkbox1" style="display: none;"></form>
@@ -185,6 +186,147 @@
         </aside>
     </script>
 
+    <script type="text/template" id="feedback-forms-list-template">
+        <div class="row">
+            <h2>Forms <a href="#/feedback_forms/new" class="button tiny">Create New Form</a></h2>
+            <div class="large-9 columns">
+                <ul class="feedback-list list-header">
+                    <li class="row read"><form class="custom large-1 columns"><input type="checkbox" id="checkbox1" style="display: none;"></form>
+                    <span class="large-2 columns">Name</span>
+                    <!-- <span class="large-2 columns">Instance</span> //TODO: just showing the list of instances on the right side-->
+                    <span class="large-3 columns">Description</span>
+                    <!-- <span class="large-4 columns">
+                        <span class="row collapse">
+                            <span class="large-4 columns">This week</span>
+                            <span class="large-4 columns">Last used</span>
+                            <span class="large-4 columns">All time</span>
+                        </span>
+                    </span> //TODO: these attributes are currently not being supplied by the API -->
+                    </li>
+                </ul>
+                <ul class="feedback-list forms-list">
+                    <% _.each(forms, function(form){ %>
+                        <li class="row"><form class="custom large-1 columns"><input type="checkbox" id="checkbox1" style="display: none;"></form>
+                            <span class="large-4 columns"><%= form.get("name") %></span>
+                            <!-- <span class="large-2 columns">Table 1</span> //TODO: just showing the list of instances on right side -->
+                            <span class="large-5 columns"><%= form.get("description") %></span>
+                            <!-- <span class="large-4 columns">
+                                <span class="row collapse">
+                                    <span class="large-4 columns">16</span>
+                                    <span class="large-4 columns">3 days</span>
+                                    <span class="large-4 columns">108</span>
+                                </span>
+                            </span> //TODO: these attributes are currently not being supplied by the API -->
+                            <input type="hidden" value="<%= form.get("id") %>">
+                        </li>
+                    <% }); %>
+                </ul>
+            </div>	
+        </div>
+    </script>
+
+    <script type="text/template" id="form-instances-side-list-template">
+        <div class="large-3 columns">
+            <div class="panel" id="form-instances-side-list">
+                <h5>Associated Instances</h5>
+                <% if (instances.length > 0) { %>
+                    <a class="secondary" href="#/feedback_forms/<%= form_id %>/instances">View details</a>
+                    <ul class="side-nav">
+                        <% _.each(instances, function(instance){ %>
+                            <li><%= instance.get("name") %></li>
+                        <% }); %>
+                    </ul>
+                <% } else { %>
+                    <!-- TODO: style this -->
+                    <h6>No Instances Associated</h6>
+                <% } %>
+                <a href="#/feedback_forms/<%= form_id %>/instances/new" class="button small">Create New Instance</a>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/template" id="form-instances-list-template">
+        <div class="row">
+            <div class="large-9 large-centered columns">
+                <div class="row">
+                    <a class="secondary secondary-color" href="#/feedback_forms">Back to Form</a>
+                    <h2>Instances attached to <em>"<%= form.get('name') %>"</em></h2>
+                    <div class="large-12 columns">
+                        <ul class="feedback-list list-header">
+                            <li class="row read"><form class="custom large-1 columns"><input type="checkbox" id="checkbox1" style="display: none;"></form>
+                                <span class="large-2 columns">Name</span>
+                                <span class="large-2 columns">Location</span>
+                                <span class="large-3 columns">Description </span>
+                            </li>
+                        </ul>
+                        <ul class="feedback-list">
+                            <% _.each(instances, function(instance){ %>
+                                <li class="row"><form class="custom large-1 columns"><input type="checkbox" id="checkbox1" style="display: none;"></form>
+                                    <span class="large-2 columns"><%= instance.get("name") %></span>
+                                    <span class="large-2 columns"><%= instance.get("location") %></span>
+                                    <span class="large-3 columns"><%= instance.get("description") %></span>
+                                </li>
+                            <% }); %>
+                        </ul>
+                    </div>	
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/template" id="form-creation-form-template">
+        <div class="row">
+            <h2>Create a New Form</h2>
+            <div class="large-9 large-centered columns">
+                <div class="row">
+                    <form id="form-form" name="form-form" class="large-6 columns panel">
+                        <fieldset>
+                            <div class="form-element">
+                                <label for="name">Form Name:</label>
+                                <input type="text" id="instance-name" required placeholder="eg. feedback for new menu" name="name" />
+                                <label for="name">Form Description:</label>
+                                <textarea id="instance-description" class="form-textarea" required name="description" placeholder="eg. Tablet kept at the table"></textarea>
+                            </div>
+                        </fieldset>
+                        <div class="form-element text-right">
+                            <button type="submit" class="medium success">Create Form</button>
+                        </div>
+                    </form>   
+                    <div class="large-4 large-offset-1 columns panel">
+                        <p>Place to show hints based on what input is on focus</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/template" id="instance-creation-form-template">
+        <div class="large-9 large-centered columns">
+            <div class="row">
+                <h2> Create a New instance for <em><%= form.get("name") %></em></h2>
+                <form id="instances-form" name="login-form" class="large-6 columns panel">
+                    <fieldset>
+                        <div class="form-element">
+                            <label for="name">Instance Name:</label>
+                            <input type="text" id="name" required placeholder="eg. feedback for new menu" name="name" />
+                            <label for="name">Instance Location:</label>
+                            <input type="text" id="location" required placeholder="eg. Table No.1" name="location" />
+                            <label for="name">Instance Description:</label>
+                            <textarea id="description" class="form-textarea" required name="description" placeholder="eg. Tablet kept at the table"></textarea>
+                            <input type="hidden" value="<%= form.get('id') %>" name="form_id">
+                        </div>
+                    </fieldset>
+                    <div class="form-element text-right">
+                        <button type="submit" class="small primary">Create instance</button>
+                    </div>
+                </form>   
+                <div class="large-5 large-offset-1 columns panel">
+                    <p>Place to show hints based on what input is on focus</p>
+                </div>
+            </div>
+        </div>
+    </script>
+
     <script type="text/template" id="footer-template">
         <footer class="row">
             <div class="large-12 columns secondary secondary-color">
@@ -203,131 +345,6 @@
         </footer> <!-- End footer -->
     </script>
     
-    <script type="text/javascript">
-
-        $.fn.serializeObject = function() {
-            var o = {};
-            var a = this.serializeArray();
-            $.each(a, function() {
-                if (o[this.name] !== undefined) {
-                    if (!o[this.name].push) {
-                        o[this.name] = [o[this.name]];
-                    }
-                    o[this.name].push(this.value || '');
-                } else {
-                    o[this.name] = this.value || '';
-                }
-            });
-            return o;
-        };
-
-        var Router = Backbone.Router.extend({
-            routes: {
-                "": "login",
-                "timeline": "feedbackTimeline",
-            }
-        });
-            
-        var api_root = 'ingage.herokuapp.com'
-
-        var UserCredentialsModel = Backbone.Model.extend();
-        var userCredentialsModel = new UserCredentialsModel();
-
-        var FeedbackTimelineCollection = Backbone.Collection.extend({
-            url: "http://" + api_root + "/dashboard/timeline",
-            parse: function(response, xhr){
-                return response.feedbacks;
-            }
-        });
-
-        var LoginView = Backbone.View.extend({
-            el: '.main-app',
-            events: {
-                'submit #login-form': 'loginUser'
-            },
-            loginUser: function(ev){
-                ev.preventDefault();
-                var credentials = $(ev.currentTarget).serializeObject();
-                $.ajax({
-                    type: "GET",
-                    url: "http://" + api_root + "/dashboard/auth/check_credentials",
-                    headers: Backbone.BasicAuth.getHeader({ username: credentials.username, password: credentials.password }),
-                    success: function(data){
-                        userCredentialsModel.username = credentials.username;
-                        userCredentialsModel.password = credentials.password;
-                        router.navigate('timeline', {trigger: true});
-                    },
-                        error: function(data){
-                        //TODO: proper error handling
-                        alert("There was a problem with username/password combination");
-                    } 
-                });
-            },
-            render: function(){
-                if (userCredentialsModel.username && userCredentialsModel.password){
-                    router.navigate('timeline', {trigger: true});
-                    return false
-                }
-                var template = _.template($("#login-template").html(), {});
-                var footerTemplate = _.template($("#footer-template").html(), {});
-                this.$el.html(template);
-                this.$el.append(footerTemplate);
-            }
-        });
-        var loginView = new LoginView();
-
-        var FeedbackTimelineView = Backbone.View.extend({
-            el: '.main-app',
-            events: {
-                'click li[class=row]': 'showCustomerDetails',
-            },
-            showCustomerDetails: function(ev){
-                var feedbackID = $(ev.currentTarget).find("input[type=hidden]")[0].value;
-                var feedback = feedbackTimelineCollection.get(feedbackID);
-                var template = _.template($("#timeline-customer-details-template").html(), {feedback: feedback});
-                var toRemoveClass = $("li.row.selected").removeClass("selected"); // remove already existng 'selected' class
-                $(ev.currentTarget).addClass("selected"); // add 'selected' class to clicked li element
-                var toAppendTo = $(ev.currentTarget.parentElement.parentElement.parentElement); // element to append details
-                var toRemove = $("aside[id=details]") // already existing details to remove
-                if (toRemove){
-                    toRemove.remove();
-                }
-                toAppendTo.append(template);
-            },
-            render: function(){
-                var that = this;
-                // fetching feedback timeline
-                feedbackTimelineCollection = new FeedbackTimelineCollection();
-                feedbackTimelineCollection.credentials = {
-                    username: "aditayanayak",
-                    password: "adityanayak"
-                };
-                feedbackTimelineCollection.fetch({
-                    success: function(feedbacks){
-                        // rendering
-                        var template = _.template($("#feedback-timeline-template").html(), {feedbacks: feedbacks.models});
-                        var headerTemplate = _.template($("#header-template").html(), {username: userCredentialsModel.username});
-                        var footerTemplate = _.template($("#footer-template").html(), {});
-                        that.$el.html(template);
-                        that.$el.prepend(headerTemplate);
-                        that.$el.append(footerTemplate);
-                        $(document).foundation(); 
-                    }
-                });
-            }
-        });
-        var feedbackTimelineView = new FeedbackTimelineView();
-
-        var router = new Router();
-        router.on('route:login', function(){
-            loginView.render();
-        });
-        router.on('route:feedbackTimeline', function(){
-            feedbackTimelineView.render();
-        });
-        Backbone.history.start();
-    </script>
-
     <script type="text/javascript">
         document.write('<script src=' +
         ('__proto__' in {} ? 'js/vendor/zepto' : 'js/vendor/jquery') +
