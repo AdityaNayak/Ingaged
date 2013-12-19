@@ -211,7 +211,7 @@ class CustomerFeedback(Resource):
 
     @marshal_with(put_fields)
     def put(self, instance_id):
-        args = self.post_parser.parse_args()
+        args = self.put_parser.parse_args()
 
         instance = instance_id_exists(instance_id)
 
