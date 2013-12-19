@@ -41,10 +41,14 @@ $( document ).ready(function() {
         },
         nextSection: function(ev){
             if (!$("#comment")[0].checkValidity()){
-                //TODO: a way to show the message to the user
-                console.log("the comment section is not filled.")
+                $(".error").show();
+                setTimeout(function(){
+                   $(".error").hide();
+                   $(".error").fadeOut(500);
+                   },5000);
                 return
             }
+            $(".error").hide();
             $(".commentsection").hide();
             $(".contactdetails").show();
         },
