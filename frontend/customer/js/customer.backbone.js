@@ -23,9 +23,12 @@ $( document ).ready(function() {
         }
     });
 
+    /* hostname of the api */
+    var api_root = 'ingage.herokuapp.com'
+
     /* feedback form model */
     var FeedbackFormModel = Backbone.Model.extend({
-        urlRoot: "http://ingage.herokuapp.com/customer/feedback",
+        urlRoot: "http://" + api_root + "/customer/feedback",
         parse: function(response, xhr){
             return response.form;
         },
@@ -73,8 +76,8 @@ $( document ).ready(function() {
             var feedbackForm = new FeedbackFormModel({'id': options.instance_id})
             var that = this;
             feedbackForm.fetch({
-                'success': function(response){
-                    var template = _.template($("#feedback-form-template").html(), {instance_id: options.instance_id});
+                'success': function(form){
+                    var template = _.template($("#feedback-form-template").html(), {instance_id: options.instance_id, form: form});
                     that.$el.html(template);
                     return
                 },
