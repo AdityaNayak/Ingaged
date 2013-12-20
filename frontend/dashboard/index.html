@@ -120,7 +120,7 @@
                                     <%= feedback.get("text") %>
                                 </span>
                             </span>
-                            <span class="large-2 columns text-right"><%= $.timeago(feedback.get("received_at")) %></span>
+                            <span class="large-2 columns text-right"><%= $.timeago(new Date(feedback.get("received_at"))) %></span>
                             <input type="hidden" name="feedback_id" value="<%= feedback.get('id') %>">
                         </li>
                     <% }); %>
