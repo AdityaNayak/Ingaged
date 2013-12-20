@@ -30,7 +30,7 @@ $( document ).ready(function() {
     });
         
     /* hostname of the api server */
-    var api_root = 'ingagelive.herokuapp.com'
+    var api_root = 'ingage.herokuapp.com'
 
 
     var UserCredentialsModel = Backbone.Model.extend();
