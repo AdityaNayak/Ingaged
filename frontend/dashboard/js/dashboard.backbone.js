@@ -102,8 +102,12 @@ $( document ).ready(function() {
                     router.navigate('timeline', {trigger: true});
                 },
                     error: function(data){
-                    //TODO: proper error handling
-                    alert("There was a problem with username/password combination");
+                    $(".error").show();
+                    $("#login-form").removeClass("login-form");
+                        setTimeout(function(){
+                           $(".error").hide();
+                           $("#login-form").addClass("login-form");
+                           },5000);
                 } 
             });
         },

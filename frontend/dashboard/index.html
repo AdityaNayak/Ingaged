@@ -26,7 +26,7 @@
         <header class="top-nav">
             <div class="row">
                 <div class="large-3 columns">
-                    <h1><img src="images/logo.png" alt="Ingage Dashbaord"></h1>	
+                    <h1><a href="http://ingagelive.com"><img src="images/logo.png" alt="Ingage Dashbaord"></a></h1>	
                 </div>
                 <div class="large-9 columns">
                     <ul class="inline-list nav-list right">
@@ -34,17 +34,19 @@
                     </ul>
                 </div>
             </div>
-        </header> <!-- End Header and Nav -->
-
+        </header>
         <div class="row login">
             <div class="large-4 columns">
-                <p class="primary-message">You in-venue customer feedback collection and management tool</p>
+                <p class="primary-message">Your in-venue customer feedback collection and management tool</p>
             </div>
             <div class="large-3 large-offset-1 columns">
                 <img src="images/phone.png" >
             </div>
-            <div class="large-3 large-offet-1 columns login-form panel">
-                <form id="login-form" name="login-form">
+            <div class="large-3 large-offet-1 columns panel">
+                <form id="login-form" name="login-form" class="login-form">
+                 <div class="alert-box error" style="display: none;" data-alert="">
+                    Please check the Username/Password
+                </div>
                     <fieldset>
                         <div class="form-element">
                         <label for="name">Username: </label>
@@ -54,19 +56,20 @@
                         </div>
                     </fieldset>
                     <div class="form-element text-right">
-                    <button type="submit" class="small primary">Log in</button>
+                    <button id="login-submit" type="submit" class="small primary">Log in</button>
+                    <div class="progress round" id="progress" style="display: none;"></div>
                     </div>
                 </form>    
-                <p>Want to Sign up? Reach us at ingage@mutinylabs.in</p>
+                <p class="secondary secondary-color">Want to Sign up? <br>Reach us at ingage@mutinylabs.in</p>
             </div>
-        </div> <!-- End main page body -->
+        </div>
     </script>
 
     <script type="text/template" id="header-template">
         <header class="top-nav">
             <div class="row">
                 <div class="large-3 columns">
-                    <h1><img src="images/logo.png" alt="Ingage Dashbaord"></h1>	
+                    <h1><a href="http://ingagelive.com"><img src="images/logo.png" alt="Ingage Dashbaord"></a></h1>	
                 </div>
                 <div class="large-9 columns">
                     <ul class="inline-list nav-list right">
@@ -77,6 +80,14 @@
                 </div>
             </div>
         </header>
+         <div class="row alerts">
+            <div class="large-6 large-centered columns">
+                <div class="alert-box" style="display: none;" data-alert="">
+              
+                </div>
+            </div>
+        </div>
+
     </script>
 
     <script type="text/template" id="feedback-timeline-template">
