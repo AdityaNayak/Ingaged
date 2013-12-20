@@ -102,8 +102,12 @@ $( document ).ready(function() {
                     router.navigate('timeline', {trigger: true});
                 },
                     error: function(data){
-                    //TODO: proper error handling
-                    alert("There was a problem with username/password combination");
+                    $(".error").show();
+                    $("#login-form").removeClass("login-form");
+                        setTimeout(function(){
+                           $(".error").hide();
+                           $("#login-form").addClass("login-form");
+                           },5000);
                 } 
             });
         },
@@ -148,8 +152,8 @@ $( document ).ready(function() {
             // fetching feedback timeline
             feedbackTimelineCollection = new FeedbackTimelineCollection();
             feedbackTimelineCollection.credentials = {
-                username: "aditayanayak",
-                password: "adityanayak"
+                username: "riteshaggarwal",
+                password: "rishabhverma"
             };
             feedbackTimelineCollection.fetch({
                 success: function(feedbacks){
@@ -176,8 +180,8 @@ $( document ).ready(function() {
             var formID = $(ev.currentTarget).find("input[type=hidden]")[0].value;
             formInstancesCollection = new FormInstancesCollection({id: formID});
             formInstancesCollection.credentials = {
-                username: "aditayanayak",
-                password: "adityanayak"
+                username: "riteshaggarwal",
+                password: "rishabhverma"
             };
             formInstancesCollection.fetch({
                 success: function(instances){
