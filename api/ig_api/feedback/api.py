@@ -41,10 +41,20 @@ def instance_id_exists(instance_id):
 
 
 ## Different objects to be returns (to be used with `marshal_with`)
+merchant_obj = {
+    'id': fields.String,
+    'name': fields.String,
+    'address': fields.String,
+    'contact_number': fields.String,
+    'current_balance': fields.Float,
+    'logo': fields.String
+}
+
 form_obj = {
     'id': fields.String,
     'name': fields.String,
-    'description': fields.String
+    'description': fields.String,
+    'merchant': fields.Nested(merchant_obj)
 }
 
 instance_obj = {
@@ -67,7 +77,7 @@ feedback_obj = {
     'received_at': fields.DateTime,
     'customer': fields.Nested(customer_obj),
     'instance': fields.Nested(instance_obj, attribute='form_instance'),
-    'form': fields.Nested(form_obj, attribute='form_instance.form')
+    'form': fields.Nested(form_obj, attribute='form_instance.form'),
 }
 
 
@@ -211,7 +221,7 @@ class CustomerFeedback(Resource):
 
     @marshal_with(put_fields)
     def put(self, instance_id):
-        args = self.post_parser.parse_args()
+        args = self.put_parser.parse_args()
 
         instance = instance_id_exists(instance_id)
 
