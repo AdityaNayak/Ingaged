@@ -92,6 +92,15 @@ $( document ).ready(function() {
         loginUser: function(ev){
             ev.preventDefault();
             var credentials = $(ev.currentTarget).serializeObject();
+            var submitButton = $('#login-submit');              // Variable to cache button element
+            var loadingButton= $('.loading');
+            var progressBar = $('#progress');               // Variable to cache progress bar element
+            var progressBarMeter = $('#progress .meter');   // Variable to cache meter element
+            var alertBox = $('.alert-box');                 // Variable to cache meter element
+            var closeButton = $('.close');                  // Variable to cache close button element
+            $(submitButton).fadeOut(300); 
+            $(loadingButton).delay(300).fadeIn(300); 
+            
             $.ajax({
                 type: "GET",
                 url: "http://" + api_root + "/dashboard/auth/check_credentials",
@@ -102,12 +111,14 @@ $( document ).ready(function() {
                     router.navigate('timeline', {trigger: true});
                 },
                     error: function(data){
-                    $(".error").show();
-                    $("#login-form").removeClass("login-form");
-                        setTimeout(function(){
-                           $(".error").hide();
-                           $("#login-form").addClass("login-form");
-                           },5000);
+                    $(loadingButton).fadeOut(300); 
+                     $(submitButton).delay(300).fadeIn(300); 
+                    $(".error").fadeIn(300);
+                    $( "input" ).click(function() {
+                        $(".error").fadeOut(300);
+                    });
+                    //$("#login-form").removeClass("login-form");
+
                 } 
             });
         },
