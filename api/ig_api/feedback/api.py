@@ -104,7 +104,7 @@ class FormList(Resource):
     @marshal_with(get_fields)
     def get(self):
         #TODO: add pagination support.
-        forms = FormModel.objects.all()
+        forms = FormModel.objects.filter(merchant=g.user.merchant)
 
         return {'forms': forms}
 

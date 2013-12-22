@@ -163,8 +163,8 @@ $( document ).ready(function() {
             // fetching feedback timeline
             feedbackTimelineCollection = new FeedbackTimelineCollection();
             feedbackTimelineCollection.credentials = {
-                username: "riteshaggarwal",
-                password: "rishabhverma"
+                username: userCredentialsModel.username,
+                password: userCredentialsModel.password
             };
             feedbackTimelineCollection.fetch({
                 success: function(feedbacks){
@@ -191,8 +191,8 @@ $( document ).ready(function() {
             var formID = $(ev.currentTarget).find("input[type=hidden]")[0].value;
             formInstancesCollection = new FormInstancesCollection({id: formID});
             formInstancesCollection.credentials = {
-                username: "riteshaggarwal",
-                password: "rishabhverma"
+                username: userCredentialsModel.username,
+                password: userCredentialsModel.password
             };
             formInstancesCollection.fetch({
                 success: function(instances){
@@ -216,8 +216,8 @@ $( document ).ready(function() {
             var that = this;
             feedbackFormsCollection = new FeedbackFormsCollection();
             feedbackFormsCollection.credentials = {
-                username: "aditayanayak",
-                password: "adityanayak"
+                username: userCredentialsModel.username,
+                password: userCredentialsModel.password
             };
             feedbackFormsCollection.fetch({
                 success: function(forms){
@@ -244,15 +244,15 @@ $( document ).ready(function() {
             var that = this;
             var form = new FormModel({id: options.formID});
             form.credentials = {
-                username: "aditayanayak",
-                password: "adityanayak"
+                username: userCredentialsModel.username,
+                password: userCredentialsModel.password
             };
             form.fetch({
                 success: function(){
                     formInstancesCollection = new FormInstancesCollection({id: options.formID});
                     formInstancesCollection.credentials = {
-                        username: "aditayanayak",
-                        password: "adityanayak"
+                        username: userCredentialsModel.username,
+                        password: userCredentialsModel.password
                     };
                     formInstancesCollection.fetch({
                         success: function(instances){
@@ -281,8 +281,8 @@ $( document ).ready(function() {
             var formDetails = $(ev.currentTarget).serializeObject();
             var form = new FormModel();
             form.credentials = {
-                username: "aditayanayak",
-                password: "adityanayak"
+                username: userCredentialsModel.username,
+                password: userCredentialsModel.password
             };
             form.save(formDetails, {
                 success: function(form){
@@ -317,8 +317,8 @@ $( document ).ready(function() {
             var instanceDetails = $(ev.currentTarget).serializeObject();
             var instance = new InstanceModel({form_id: instanceDetails.form_id});
             instance.credentials = {
-                username: "aditayanayak",
-                password: "adityanayak"
+                username: userCredentialsModel.username,
+                password: userCredentialsModel.password
             };
             instance.save(instanceDetails, {
                 success: function(instance){
@@ -336,8 +336,8 @@ $( document ).ready(function() {
             var that = this;
             var form = new FormModel({id: options.formID});
             form.credentials = {
-                username: "aditayanayak",
-                password: "adityanayak"
+                username: userCredentialsModel.username,
+                password: userCredentialsModel.password
             };
             form.fetch({
                 success: function(form){
