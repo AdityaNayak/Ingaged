@@ -23,28 +23,30 @@
     <div class="main-app"></div>
 
     <script type="text/template" id="login-template">
-
-        <header class="top-nav">
-            <div class="row">
-                <div class="large-3 columns">
-                    <h1><a href="http://ingagelive.com"><img src="images/logo.png" alt="Ingage Dashbaord"></a></h1>	
-                </div>
-                <div class="large-9 columns">
-                    <ul class="inline-list nav-list right">
-                        <li><a href="#" >Contact</a></li>
-                    </ul>
-                </div>
-            </div>
-        </header>
+    <div class="contain-to-grid">
+            <header class="top-bar" data-topbar>
+              <ul class="title-area">
+                <li class="name">
+                  <h1><a href="http://ingagelive.com"><img src="images/logo.png" alt="Ingage Dashbaord"></a></h1>
+                </li>
+                <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+              </ul>
+              <section class="top-bar-section">
+                <ul class="right">
+                    <li><a href="#" >Contact</a></li>      
+                </ul>
+              </section>
+            </header>
+        </div>
         <div class="row login">
-            <div class="large-4 columns">
+            <div class="small-4 columns">
          
                 <p class="primary-message">Your in-venue customer feedback collection and management tool</p>
             </div>
-            <div class="large-3 large-offset-1 columns">
+            <div class="small-3 small-offset-1 columns">
                 <img src="images/phone.png" >
             </div>
-            <div class="large-3 large-offet-1 columns panel">
+            <div class="small-3 small-offet-1 columns panel">
                 <div class="login-alert">
                     <div class="alert-box error" style="display: none;" data-alert="">
                         Incorrect Username/Password
@@ -82,23 +84,27 @@
     </script>
 
     <script type="text/template" id="header-template">
-        <header class="top-nav">
-            <div class="row">
-                <div class="large-3 columns">
-                    <h1><a href="http://ingagelive.com"><img src="images/logo.png" alt="Ingage Dashbaord"></a></h1>	
-                </div>
-                <div class="large-9 columns">
-                    <ul class="inline-list nav-list right">
-                        <li class="secondary secondary-color">Welcome <%= username %></li>
-                        <li><a href="#/feedback_forms" >System</a></li>
-                        <li><a href="#" >Log Out</a></li>
-                    </ul>
-                </div>
-            </div>
-        </header>
-         <div class="row alerts">
-            <div class="large-6 large-centered columns">
-                <div class="alert-box" style="display: none;" data-alert="">
+        <div class="contain-to-grid">
+            <header class="top-bar" data-topbar>
+              <ul class="title-area">
+                <li class="name">
+                  <h1><a href="http://ingagelive.com"><img src="images/logo.png" alt="Ingage Dashbaord"></a></h1>
+                </li>
+                <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+              </ul>
+              <section class="top-bar-section">
+                <ul class="right">
+                <li class="secondary-color namesyntax">Welcome <%= username %></li>
+                                    <li><a href="#/feedback_forms" >System</a></li>
+                                    <li><a href="#" >Log Out</a></li>      
+                </ul>
+              </section>
+            </header>
+        </div>
+
+         <div class="row">
+            <div class="small-6 small-centered columns">
+                <div class="alert-bar">
               
                 </div>
             </div>
@@ -108,7 +114,7 @@
 
     <script type="text/template" id="feedback-timeline-template">
         <div class="row collapse">
-            <dl class="sub-nav action-nav large-12 columns">
+            <dl class="sub-nav action-nav small-12 columns">
             <dd class="checkbox-dd"><form class="custom"><input type="checkbox" id="checkbox1" style="display: none;"></form></dd>
             <dd class="active"><a href="#">All</a></dd>
             <dd><a href="#">Mark as Read</a></dd>
@@ -117,15 +123,15 @@
             </dl>
         </div>
 
-        <div class="row">
-            <div class="large-9 columns feedback-column">
+        <div class="stickem-container row">
+            <div class="small-9 columns content feedback-column">
                 <ul class="feedback-list feedback-timeline">
                     <% _.each(feedbacks, function(feedback){ %>
                         <li class="row">
-                            <form class="custom large-1 columns"><input type="checkbox" id="checkbox1" style="display: none;"></form>
-                            <span class="large-2 columns"><%= feedback.get("instance").name %></span>
-                            <span class="large-7 columns feedback-content">
-                                <span class="customer-name">
+                            <form class="custom small-1 columns"><input type="checkbox" id="checkbox1" style="display: none;"></form>
+                            <span class="small-2 columns"><%= feedback.get("instance").name %></span>
+                            <span class="small-7 columns feedback-content">
+                                <span class="customer-name namesyntax">
                                     <% if (feedback.get("customer").name) { %>
                                         <strong><%= feedback.get("customer").name %></strong>
                                     <% } else { %>
@@ -136,7 +142,7 @@
                                     <%= feedback.get("text") %>
                                 </span>
                             </span>
-                            <span class="large-2 columns text-right"><%= $.timeago(new Date(feedback.get("received_at"))) %></span>
+                            <span class="small-2 columns text-right secondary secondary-color"><%= $.timeago(new Date(feedback.get("received_at"))) %></span>
                             <input type="hidden" name="feedback_id" value="<%= feedback.get('id') %>">
                         </li>
                     <% }); %>
@@ -146,9 +152,9 @@
     </script>
 
     <script type="text/template" id="timeline-customer-details-template">
-        <aside id="details" class="large-3 columns details-column">
+        <div id="details" class="small-3 columns details-column aside stickem">
             <div class="panel">
-                <h3>
+                <h3 class="namesyntax">
                     <% if (feedback.get('customer').name) { %>
                         <%= feedback.get('customer').name %>
                     <% } else { %>
@@ -156,14 +162,14 @@
                     <% } %>
                 </h3>
                 <div class="row collapse">
-                    <div class="large-4 columns">
+                    <div class="small-3 columns">
                         <% if (feedback.get('customer').email) { %>
                             <img src="http://www.gravatar.com/avatar/<%= MD5(feedback.get('customer').email) %>">
                         <% } else { %>
                             <img src="http://www.gravatar.com/avatar/">
                         <% } %>
                         </div>
-                        <div class="large-8 columns">
+                        <div class="small-9 columns">
                         <ul class="naked secondary contact-details">
                             <li> 
                                 <% if (feedback.get('customer').email) { %>
@@ -184,11 +190,11 @@
                 </div>
                 <hr>
                 <div class="secondary-color secondary row collapse">
-                    <div class="text-left large-5 columns">
+                    <div class="text-left small-5 columns">
                         <% var received_at = new Date(feedback.get("received_at")) %>
                         <%= received_at.getHours() %>:<%= received_at.getMinutes() %>
                     </div>
-                    <div class="text-right large-7 columns">
+                    <div class="text-right small-7 columns">
                         <%= received_at.getDate() %>-<%= received_at.getMonth() %>-<%= received_at.getFullYear() %>
                     </div>
                 </div>
@@ -199,49 +205,49 @@
                 <h3>Instance Details</h3>
                 <div class="form-details secondary">
                     <div class="row collapse">
-                        <div class="large-4 columns secondary-color">Name:</div><div class="large-8 columns">
+                        <div class="small-4 columns secondary-color">Name:</div><div class="small-8 columns">
                             <%= feedback.get("instance").name %>
                         </div>
-                        <div class="large-4 columns secondary-color">Location:</div><div class="large-8 columns">
+                        <div class="small-4 columns secondary-color">Location:</div><div class="small-8 columns">
                             <%= feedback.get("instance").location %>
                         </div>
-                        <div class="large-4 columns secondary-color">Details:</div><div class="large-8 columns">
+                        <div class="small-4 columns secondary-color">Details:</div><div class="small-8 columns">
                             <%= feedback.get("instance").description %>
                         </div>
                 </div>
             </div>
-        </aside>
+        </div>
     </script>
 
     <script type="text/template" id="feedback-forms-list-template">
         <div class="row">
             <h2>Forms <a href="#/feedback_forms/new" class="button tiny">Create New Form</a></h2>
-            <div class="large-9 columns">
+            <div class="small-9 columns">
                 <ul class="feedback-list list-header">
-                    <li class="row read"><form class="custom large-1 columns"><input type="checkbox" id="checkbox1" style="display: none;"></form>
-                    <span class="large-2 columns">Name</span>
-                    <!-- <span class="large-2 columns">Instance</span> //TODO: just showing the list of instances on the right side-->
-                    <span class="large-3 columns">Description</span>
-                    <!-- <span class="large-4 columns">
+                    <li class="row read"><form class="custom small-1 columns"><input type="checkbox" id="checkbox1" style="display: none;"></form>
+                    <span class="small-2 columns">Name</span>
+                    <!-- <span class="small-2 columns">Instance</span> //TODO: just showing the list of instances on the right side-->
+                    <span class="small-3 columns">Description</span>
+                    <!-- <span class="small-4 columns">
                         <span class="row collapse">
-                            <span class="large-4 columns">This week</span>
-                            <span class="large-4 columns">Last used</span>
-                            <span class="large-4 columns">All time</span>
+                            <span class="small-4 columns">This week</span>
+                            <span class="small-4 columns">Last used</span>
+                            <span class="small-4 columns">All time</span>
                         </span>
                     </span> //TODO: these attributes are currently not being supplied by the API -->
                     </li>
                 </ul>
                 <ul class="feedback-list forms-list">
                     <% _.each(forms, function(form){ %>
-                        <li class="row"><form class="custom large-1 columns"><input type="checkbox" id="checkbox1" style="display: none;"></form>
-                            <span class="large-4 columns"><%= form.get("name") %></span>
-                            <!-- <span class="large-2 columns">Table 1</span> //TODO: just showing the list of instances on right side -->
-                            <span class="large-5 columns"><%= form.get("description") %></span>
-                            <!-- <span class="large-4 columns">
+                        <li class="row"><form class="custom small-1 columns"><input type="checkbox" id="checkbox1" style="display: none;"></form>
+                            <span class="small-4 columns"><%= form.get("name") %></span>
+                            <!-- <span class="small-2 columns">Table 1</span> //TODO: just showing the list of instances on right side -->
+                            <span class="small-5 columns"><%= form.get("description") %></span>
+                            <!-- <span class="small-4 columns">
                                 <span class="row collapse">
-                                    <span class="large-4 columns">16</span>
-                                    <span class="large-4 columns">3 days</span>
-                                    <span class="large-4 columns">108</span>
+                                    <span class="small-4 columns">16</span>
+                                    <span class="small-4 columns">3 days</span>
+                                    <span class="small-4 columns">108</span>
                                 </span>
                             </span> //TODO: these attributes are currently not being supplied by the API -->
                             <input type="hidden" value="<%= form.get("id") %>">
@@ -253,7 +259,7 @@
     </script>
 
     <script type="text/template" id="form-instances-side-list-template">
-        <div class="large-3 columns">
+        <div class="small-3 columns">
             <div class="panel" id="form-instances-side-list">
                 <h5>Associated Instances</h5>
                 <% if (instances.length > 0) { %>
@@ -274,24 +280,24 @@
 
     <script type="text/template" id="form-instances-list-template">
         <div class="row">
-            <div class="large-9 large-centered columns">
+            <div class="small-9 small-centered columns">
                 <div class="row">
                     <a class="secondary secondary-color" href="#/feedback_forms">Back to Form</a>
                     <h2>Instances attached to <em>"<%= form.get('name') %>"</em></h2>
-                    <div class="large-12 columns">
+                    <div class="small-12 columns">
                         <ul class="feedback-list list-header">
-                            <li class="row read"><form class="custom large-1 columns"><input type="checkbox" id="checkbox1" style="display: none;"></form>
-                                <span class="large-2 columns">Name</span>
-                                <span class="large-2 columns">Location</span>
-                                <span class="large-3 columns">Description </span>
+                            <li class="row read"><form class="custom small-1 columns"><input type="checkbox" id="checkbox1" style="display: none;"></form>
+                                <span class="small-2 columns">Name</span>
+                                <span class="small-2 columns">Location</span>
+                                <span class="small-3 columns">Description </span>
                             </li>
                         </ul>
                         <ul class="feedback-list">
                             <% _.each(instances, function(instance){ %>
-                                <li class="row"><form class="custom large-1 columns"><input type="checkbox" id="checkbox1" style="display: none;"></form>
-                                    <span class="large-2 columns"><%= instance.get("name") %></span>
-                                    <span class="large-2 columns"><%= instance.get("location") %></span>
-                                    <span class="large-3 columns"><%= instance.get("description") %></span>
+                                <li class="row"><form class="custom small-1 columns"><input type="checkbox" id="checkbox1" style="display: none;"></form>
+                                    <span class="small-2 columns"><%= instance.get("name") %></span>
+                                    <span class="small-2 columns"><%= instance.get("location") %></span>
+                                    <span class="small-3 columns"><%= instance.get("description") %></span>
                                 </li>
                             <% }); %>
                         </ul>
@@ -304,9 +310,9 @@
     <script type="text/template" id="form-creation-form-template">
         <div class="row">
             <h2>Create a New Form</h2>
-            <div class="large-9 large-centered columns">
+            <div class="small-9 small-centered columns">
                 <div class="row">
-                    <form id="form-form" name="form-form" class="large-6 columns panel">
+                    <form id="form-form" name="form-form" class="small-6 columns panel">
                         <fieldset>
                             <div class="form-element">
                                 <label for="name">Form Name:</label>
@@ -319,7 +325,7 @@
                             <button type="submit" class="medium success">Create Form</button>
                         </div>
                     </form>   
-                    <div class="large-4 large-offset-1 columns panel">
+                    <div class="small-4 small-offset-1 columns panel">
                         <p>Place to show hints based on what input is on focus</p>
                     </div>
                 </div>
@@ -328,10 +334,10 @@
     </script>
 
     <script type="text/template" id="instance-creation-form-template">
-        <div class="large-9 large-centered columns">
+        <div class="small-9 small-centered columns">
             <div class="row">
                 <h2> Create a New instance for <em><%= form.get("name") %></em></h2>
-                <form id="instances-form" name="login-form" class="large-6 columns panel">
+                <form id="instances-form" name="login-form" class="small-6 columns panel">
                     <fieldset>
                         <div class="form-element">
                             <label for="name">Instance Name:</label>
@@ -347,7 +353,7 @@
                         <button type="submit" class="small primary">Create instance</button>
                     </div>
                 </form>   
-                <div class="large-5 large-offset-1 columns panel">
+                <div class="small-5 small-offset-1 columns panel">
                     <p>Place to show hints based on what input is on focus</p>
                 </div>
             </div>
@@ -356,25 +362,27 @@
 
     <script type="text/template" id="footer-template">
         <footer class="row">
-            <div class="large-12 columns secondary secondary-color">
+            <div class="small-12 columns secondary secondary-color">
                 <hr />
                 <div class="row">
-                    <div class="large-5 columns">
+                    <div class="small-5 columns">
                         <p>&copy; Copyright Mutiny Labs 2013</p>
                     </div>
-                    <div class="large-7 columns">
+                    <div class="small-7 columns">
                         <ul class="inline-list nav-list right">
                             <li><a href="#">Legal</a></li>
                         </ul> 
                     </div>
                 </div>
             </div>
-        </footer> <!-- End footer -->
+        </footer>
     </script>
     
     <!-- <script src="js/vendor/jquery.js"></script> -->
     <script src="js/foundation/foundation.js"></script>
+    <script src="js/foundation/foundation.topbar.js"></script>
 	<script src="js/foundation/foundation.forms.js"></script>
+    <script src="js/plugins/script.js"></script>
     <script>
         $(document).ready(function() {
             $(document).foundation();
