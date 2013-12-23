@@ -222,9 +222,9 @@
             <h2>Forms <a href="#/feedback_forms/new" class="button tiny">Create New Form</a></h2>
             <div class="small-9 columns">
                 <ul class="feedback-list list-header">
-                    <li class="row read"><form class="custom small-1 columns"><input type="checkbox" id="checkbox1" style="display: none;"></form>
+                    <li class="row"><form class="custom small-1 columns"><input type="checkbox" id="checkbox1" style="display: none;"></form>
                     <span class="small-2 columns">Name</span>
-                    <!-- <span class="small-2 columns">Instance</span> //TODO: just showing the list of instances on the right side-->
+                    <!-- <span class="small-2 columns">Instance</span> 
                     <span class="small-3 columns">Description</span>
                     <!-- <span class="small-4 columns">
                         <span class="row collapse">
@@ -233,6 +233,9 @@
                             <span class="small-4 columns">All time</span>
                         </span>
                     </span> //TODO: these attributes are currently not being supplied by the API -->
+                    <div class="small-3 columns">
+                    <a href="#">View form</a>
+                    </div>
                     </li>
                 </ul>
                 <ul class="feedback-list forms-list">
@@ -268,7 +271,6 @@
                         <% }); %>
                     </ul>
                 <% } else { %>
-                    <!-- TODO: style this -->
                     <h6>No Instances Associated</h6>
                 <% } %>
                 <a href="#/feedback_forms/<%= form_id %>/instances/new" class="button small">Create New Instance</a>
@@ -281,7 +283,7 @@
             <div class="small-9 small-centered columns">
                 <div class="row">
                     <a class="secondary secondary-color" href="#/feedback_forms">Back to Form</a>
-                    <h2>Instances attached to <em>"<%= form.get('name') %>"</em></h2>
+                    <h2>Instances attached to <em>"<%= form.get('name') %>"</em><a href="#/feedback_forms/<%= form_id %>/instances/new" class="button small">Create New Instance</a></h2>
                     <div class="small-12 columns">
                         <ul class="feedback-list list-header">
                             <li class="row read"><form class="custom small-1 columns"><input type="checkbox" id="checkbox1" style="display: none;"></form>
