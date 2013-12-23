@@ -123,7 +123,7 @@
             </dl>
         </div>
 
-        <div class="stickem-container row">
+        <div class="row">
             <div class="small-9 columns content feedback-column">
                 <ul class="feedback-list feedback-timeline">
                     <% _.each(feedbacks, function(feedback){ %>
@@ -152,7 +152,7 @@
     </script>
 
     <script type="text/template" id="timeline-customer-details-template">
-        <div id="details" class="small-3 columns details-column aside stickem">
+        <div id="details" class="small-3 columns details-column">
             <div class="panel">
                 <h3 class="namesyntax">
                     <% if (feedback.get('customer').name) { %>
@@ -188,7 +188,6 @@
                         </ul>
                     </div>
                 </div>
-                <hr>
                 <div class="secondary-color secondary row collapse">
                     <div class="text-left small-5 columns">
                         <% var received_at = new Date(feedback.get("received_at")) %>
@@ -198,7 +197,6 @@
                         <%= received_at.getDate() %>-<%= received_at.getMonth() %>-<%= received_at.getFullYear() %>
                     </div>
                 </div>
-                <hr>
                 <p class="secondary">
                     <%= feedback.get("text") %>
                 </p>
