@@ -25,7 +25,8 @@ $( document ).ready(function() {
             "feedback_forms": "feedbackForms",
             "feedback_forms/new": "newFeedbackForm",
             "feedback_forms/:form_id/instances": "formInstancesList",
-            "feedback_forms/:form_id/instances/new": "newFormInstances"
+            "feedback_forms/:form_id/instances/new": "newFormInstances",
+            "analytics": "analytics"
         }
     });
         
@@ -109,12 +110,11 @@ $( document ).ready(function() {
                 },
                     error: function(data){
                     $(loadingButton).fadeOut(300); 
-                     $(submitButton).delay(300).fadeIn(300); 
+                    $(submitButton).delay(300).fadeIn(300); 
                     $(errorBox).fadeIn(300);
                     $( "input" ).click(function() {
                         $(errorBox).fadeOut(300);
                     });
-
                 } 
             });
         },
@@ -176,6 +176,43 @@ $( document ).ready(function() {
         }
     });
     var feedbackTimelineView = new FeedbackTimelineView();
+
+    /* Analytics View */
+
+    var AnalyticsView = Backbone.View.extend({
+        el: '.main-app',
+        /* events: {
+            'submit #form-form': 'createNewForm',
+        },
+        createNewForm: function(ev){
+            ev.preventDefault();
+            var formDetails = $(ev.currentTarget).serializeObject();
+            var form = new FormModel();
+            form.credentials = {
+                username: userCredentialsModel.username,
+                password: userCredentialsModel.password
+            };
+            form.save(formDetails, {
+                success: function(form){
+                    router.navigate('/feedback_forms', {trigger: true});
+                    return;
+                }
+            });
+        }, */
+        render: function(){
+            if (!userCredentialsModel.username && !userCredentialsModel.password){
+                router.navigate('', {trigger: true});
+                return
+            }
+            var template = _.template($("#analytics-template").html(), {});
+            var headerTemplate = _.template($("#header-template").html(), {username: userCredentialsModel.username});
+            var footerTemplate = _.template($("#footer-template").html(), {});
+            this.$el.html(template);
+            this.$el.prepend(headerTemplate);
+            this.$el.append(footerTemplate);
+        }
+    });
+    var AnalyticsView = new AnalyticsView();
 
     /* view of list of feedbacks */
     var FeedbackFormsView = Backbone.View.extend({
@@ -357,6 +394,10 @@ $( document ).ready(function() {
 
     router.on('route:feedbackTimeline', function(){
         feedbackTimelineView.render();
+    });
+
+    router.on('route:analytics', function(){
+        AnalyticsView.render();
     });
 
     router.on('route:feedbackForms', function(){

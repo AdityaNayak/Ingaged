@@ -2,7 +2,7 @@
 For all other js things on the dashbard
 **/
 
-$(function() {
+$(document).ready(function() {
     $(window).scroll(function() {
         var scroll = $(window).scrollTop();
         if (scroll >= 200) {
@@ -11,4 +11,9 @@ $(function() {
             $("#details").removeClass("stickit");
         }
     });
+    $(function(){
+     $(".top-bar-section ul li>a").click(function(){ //
+    	$("#loading-bar").fadeIn(300);
+   		 });
+	 });
 });

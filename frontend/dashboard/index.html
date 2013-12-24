@@ -64,7 +64,8 @@
                         <div class="form-element text-right">
                         <button id="login-submit" type="submit" class="small fullwidth primary">Log in</button>
                             <div class="button small fullwidth loading" style="display:none;">
-                            Loading
+                            <span class="alert-text">
+                                Loading
                                 <span class="spinner-css">      
                                   <span class="side sp_left">
                                     <span class="fill"></span>
@@ -73,9 +74,9 @@
                                     <span class="fill"></span>
                                   </span>
                                 </span>
-                            </div>
+                            </span>
                         </div>
-              
+                    </div>
                 </form>    
                 <p class="secondary secondary-color">Want to Sign up? <br>Reach us at ingage@mutinylabs.in</p>
                       </div>
@@ -95,8 +96,9 @@
               <section class="top-bar-section">
                 <ul class="right">
                 <li class="secondary-color namesyntax">Welcome <%= username %></li>
-                                    <li><a href="#/feedback_forms" >System</a></li>
-                                    <li><a href="#" >Log Out</a></li>      
+                <li><a href="#/analytics" >Analytics</a></li>
+                <li><a href="#/feedback_forms" >System</a></li>
+                <li><a href="#" >Log Out</a></li>      
                 </ul>
               </section>
             </header>
@@ -105,10 +107,22 @@
          <div class="row">
             <div class="small-6 small-centered columns">
                 <div class="alert-bar">
-              
+                <div id="loading-bar" data-alert="" class="alert-box loading" style="display:none;">
+                    <span class="alert-text">
+                        Loading
+                        <span class="spinner-css">      
+                          <span class="side sp_left">
+                            <span class="fill"></span>
+                          </span>
+                          <span class="side sp_right">
+                            <span class="fill"></span>
+                          </span>
+                        </span>
+                    </span>
                 </div>
             </div>
         </div>
+    </div>
 
     </script>
 
@@ -231,6 +245,20 @@
         </div>
     </script>
 
+    <script type="text/template" id="analytics-template">
+        
+
+        <div class="row">
+            <div class="small-9 columns content feedback-column">
+                <ul class="feedback-list feedback-timeline">
+                   <p> Something </p>
+                </ul>
+            
+            </div>
+
+        </div>
+    </script>
+
     <script type="text/template" id="feedback-forms-list-template">
         <div class="row">
             <h2>Forms <a href="#/feedback_forms/new" class="button tiny">Create New Form</a></h2>
@@ -247,9 +275,6 @@
                             <span class="small-4 columns">All time</span>
                         </span>
                     </span> //TODO: these attributes are currently not being supplied by the API -->
-                    <div class="small-3 columns">
-                    <a href="#">View form</a>
-                    </div>
                     </li>
                 </ul>
                 <ul class="feedback-list forms-list">
@@ -266,7 +291,11 @@
                                 </span>
                             </span> //TODO: these attributes are currently not being supplied by the API -->
                             <input type="hidden" value="<%= form.get("id") %>">
+                            <span class="small-3 columns">
+                    <a href="#">View form</a>
+                    </span>
                         </li>
+
                     <% }); %>
                 </ul>
             </div>	
@@ -396,11 +425,9 @@
     <script src="js/foundation/foundation.js"></script>
     <script src="js/foundation/foundation.topbar.js"></script>
 	<script src="js/foundation/foundation.forms.js"></script>
-    <script src="js/plugins/script.js"></script>
+    <script src="js/plugins/script.js"></script> <!-- //TODO: Fix the loading-bar fadein. It works in console -->
     <script>
-        $(document).ready(function() {
             $(document).foundation();
-        });
     </script>
     
 </body>
