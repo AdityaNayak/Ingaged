@@ -129,11 +129,14 @@
     <script type="text/template" id="feedback-timeline-template">
         <div class="row collapse">
             <dl class="sub-nav action-nav small-12 columns">
-            <dd class="checkbox-dd"><form class="custom"><input type="checkbox" id="checkbox1" style="display: none;"></form></dd>
+            <dd class="checkbox-dd">
+            <form class="custom"><input type="checkbox" id="checkbox1" style="display: none;"></form>
+            </dd>
             <dd class="active"><a href="#">All</a></dd>
             <dd><a href="#">Mark as Read</a></dd>
             <dd><a href="#">Delete</a></dd>
             <dd><a href="#">Label</a></dd>
+            <dd><i class="fi-refresh"></i></dd>
             </dl>
         </div>
 
@@ -180,7 +183,7 @@
     </script>
 
     <script type="text/template" id="timeline-customer-details-template">
-        <div id="details" class="small-3 columns details-column">
+        <aside id="details" class="small-3 columns details-column">
             <div class="panel">
                 <h3 class="namesyntax">
                     <% if (feedback.get('customer').name) { %>
@@ -216,6 +219,7 @@
                         </ul>
                     </div>
                 </div>
+                <hr>
                 <div class="secondary-color secondary row collapse">
                     <div class="text-left small-5 columns">
                         <% var received_at = new Date(feedback.get("received_at")) %>
@@ -225,6 +229,7 @@
                         <%= received_at.getDate() %>-<%= received_at.getMonth() %>-<%= received_at.getFullYear() %>
                     </div>
                 </div>
+                <hr>
                 <p class="secondary">
                     <%= feedback.get("text") %>
                 </p>
@@ -242,18 +247,16 @@
                         </div>
                 </div>
             </div>
-        </div>
+        </aside>
     </script>
 
     <script type="text/template" id="analytics-template">
-        
-
         <div class="row">
+        <div class="small-3 columns">
+        Some filters
+        </div>
             <div class="small-9 columns content feedback-column">
-                <ul class="feedback-list feedback-timeline">
-                   <p> Something </p>
-                </ul>
-            
+                
             </div>
 
         </div>
