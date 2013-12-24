@@ -181,24 +181,6 @@ $( document ).ready(function() {
 
     var AnalyticsView = Backbone.View.extend({
         el: '.main-app',
-        /* events: {
-            'submit #form-form': 'createNewForm',
-        },
-        createNewForm: function(ev){
-            ev.preventDefault();
-            var formDetails = $(ev.currentTarget).serializeObject();
-            var form = new FormModel();
-            form.credentials = {
-                username: userCredentialsModel.username,
-                password: userCredentialsModel.password
-            };
-            form.save(formDetails, {
-                success: function(form){
-                    router.navigate('/feedback_forms', {trigger: true});
-                    return;
-                }
-            });
-        }, */
         render: function(){
             if (!userCredentialsModel.username && !userCredentialsModel.password){
                 router.navigate('', {trigger: true});
