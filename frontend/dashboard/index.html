@@ -256,7 +256,11 @@
         Some filters
         </div>
             <div class="small-9 columns content feedback-column">
-                
+                <div class="panel">
+                <div id="reportrange" class="rangepicker-box">
+                    <span></span>
+                </div>
+            </div>  
             </div>
 
         </div>
@@ -428,10 +432,12 @@
     <script src="js/foundation/foundation.js"></script>
     <script src="js/foundation/foundation.topbar.js"></script>
 	<script src="js/foundation/foundation.forms.js"></script>
-    <script src="js/plugins/script.js"></script> <!-- //TODO: Fix the loading-bar fadein. It works in console -->
+    <script src="js/plugins/moment.min.js"></script>
+    <script src="js/plugins/daterangepicker.js"></script>
     <script>
             $(document).foundation();
     </script>
+    <script src="js/plugins/script.js"></script> <!-- //TODO: Fix the loading-bar fadein. It works in console -->
     
 </body>
 </html>

@@ -144,7 +144,7 @@ $( document ).ready(function() {
             var toRemoveClass = $("li.row.selected").removeClass("selected"); // remove already existng 'selected' class
             $(ev.currentTarget).addClass("selected"); // add 'selected' class to clicked li element
             var toAppendTo = $(ev.currentTarget.parentElement.parentElement.parentElement); // element to append details
-            var toRemove = $("div[id=details]") // already existing details to remove
+            var toRemove = $("aside[id=details]") // already existing details to remove
             if (toRemove){
                 toRemove.remove();
             }
