@@ -30,9 +30,6 @@ $( document ).ready(function() {
         }
     });
 
-    var UserCredentialsModel = Backbone.Model.extend();
-    var userCredentialsModel = new UserCredentialsModel();
-
     /* collection storing the list of merchants */
     var Merchants = Backbone.Collection.extend({
         url: "http://" + root_server + "/admin/merchants",
@@ -63,8 +60,8 @@ $( document ).ready(function() {
                 url: "http://" + root_server + "/admin/auth/check_credentials",
                 headers: Backbone.BasicAuth.getHeader({ username: credentials.username, password: credentials.password }),
                 success: function(data){
-                    userCredentialsModel.username = credentials.username;
-                    userCredentialsModel.password = credentials.password;
+                    $.cookie("username", credentials.username);
+                    $.cookie("password", credentials.password);
                     router.navigate('merchants', {trigger: true});
                 },
                 error: function(data){
@@ -73,7 +70,7 @@ $( document ).ready(function() {
             });
         },
         render: function(){
-            if (userCredentialsModel.username && userCredentialsModel.password){
+            if ($.cookie("username") && $.cookie("password")){
                 router.navigate('merchants', {trigger: true});
                 return
             }
@@ -87,15 +84,15 @@ $( document ).ready(function() {
     var MerchantListView = Backbone.View.extend({
         el: '.page',
         render: function(){
-            if (!userCredentialsModel.username && !userCredentialsModel.password){
+            if (!$.cookie("username") && !$.cookie("password")){
                 router.navigate('', {trigger: true});
                 return
             }
             var that = this;
             var merchants = new Merchants();
             merchants.credentials = {
-                username: userCredentialsModel.username,
-                password: userCredentialsModel.password
+                username: $.cookie("username"),
+                password: $.cookie("password")
             }
             merchants.fetch({
                 success: function(merchants){
@@ -115,15 +112,15 @@ $( document ).ready(function() {
             'submit .merchant-edit-file-upload': 'uploadMerchantLogo',
         },
         render: function(options){
-            if (!userCredentialsModel.username && !userCredentialsModel.password){
+            if (!$.cookie("username") && !$.cookie("password")){
                 router.navigate('', {trigger: true});
                 return
             }
             var that = this;
             var merchant = new Merchant({id: options.id});
             merchant.credentials = {
-                username: userCredentialsModel.username,
-                password: userCredentialsModel.password
+                username: $.cookie("username"),
+                password: $.cookie("password")
             }
             merchant.fetch({
                 success: function(merchant) {
@@ -137,8 +134,8 @@ $( document ).ready(function() {
             var merchantDetails = $(ev.currentTarget).serializeObject();
             var merchant = new Merchant();
             merchant.credentials = {
-                username: userCredentialsModel.username,
-                password: userCredentialsModel.password
+                username: $.cookie("username"),
+                password: $.cookie("password")
             }
             merchant.save(merchantDetails, {
                 success: function(merchant){
@@ -156,7 +153,7 @@ $( document ).ready(function() {
             $.ajax({
                 type: 'PUT',
                 url: url,
-                headers: Backbone.BasicAuth.getHeader({ username: userCredentialsModel.username, password: userCredentialsModel.password }),
+                headers: Backbone.BasicAuth.getHeader({ username: $.cookie("username"), password: $.cookie("username") }),
                 data: logo_data,
                 processData: false,
                 contentType: false,
@@ -178,7 +175,7 @@ $( document ).ready(function() {
             'submit .new-merchant-form': 'newMerchant'
         },
         render: function(options){
-            if (!userCredentialsModel.username && !userCredentialsModel.password){
+            if (!$.cookie("username") && !$.cookie("password")){
                 router.navigate('', {trigger: true});
                 return
             }
@@ -189,8 +186,8 @@ $( document ).ready(function() {
             var newMerchantDetails = $(ev.currentTarget).serializeObject()
             var merchant = new Merchant();
             merchant.credentials = {
-                username: userCredentialsModel.username,
-                password: userCredentialsModel.password
+                username: $.cookie("username"),
+                password: $.cookie("password")
             }
             merchant.save(newMerchantDetails, {
                 success: function(merchant){
