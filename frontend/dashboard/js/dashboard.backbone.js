@@ -34,8 +34,14 @@ $( document ).ready(function() {
     var api_root = 'ingage.herokuapp.com'
 
 
-    var UserCredentialsModel = Backbone.Model.extend();
-    var userCredentialsModel = new UserCredentialsModel();
+    /* logs out the user on the click of the logout link */
+    logoutUser = function(ev){
+        ev.preventDefault();
+        $.removeCookie("username");
+        $.removeCookie("password");
+        router.navigate('', {trigger: true})
+        return false
+    }
 
     /* collection storing the list of feedbacks which come in the timeline */
     var FeedbackTimelineCollection = Backbone.Collection.extend({
@@ -104,11 +110,11 @@ $( document ).ready(function() {
                 url: "http://" + api_root + "/dashboard/auth/check_credentials",
                 headers: Backbone.BasicAuth.getHeader({ username: credentials.username, password: credentials.password }),
                 success: function(data){
-                    userCredentialsModel.username = credentials.username;
-                    userCredentialsModel.password = credentials.password;
+                    $.cookie("username", credentials.username);
+                    $.cookie("password", credentials.password);
                     router.navigate('timeline', {trigger: true});
                 },
-                    error: function(data){
+                error: function(data){
                     $(loadingButton).fadeOut(300); 
                     $(submitButton).delay(300).fadeIn(300); 
                     $(errorBox).fadeIn(300);
@@ -119,7 +125,7 @@ $( document ).ready(function() {
             });
         },
         render: function(){
-            if (userCredentialsModel.username && userCredentialsModel.password){
+            if ($.cookie("username") && $.cookie("password")){
                 router.navigate('timeline', {trigger: true});
                 return false
             }
@@ -136,6 +142,7 @@ $( document ).ready(function() {
         el: '.main-app',
         events: {
             'click ul.feedback-timeline li.row': 'showCustomerDetails',
+            'click #logout-link': logoutUser
         },
         showCustomerDetails: function(ev){
             var feedbackID = $(ev.currentTarget).find("input[type=hidden]")[0].value;
@@ -151,7 +158,7 @@ $( document ).ready(function() {
             toAppendTo.append(template);
         },
         render: function(){
-            if (!userCredentialsModel.username && !userCredentialsModel.password){
+            if (!$.cookie("username") && !$.cookie("password")){
                 router.navigate('', {trigger: true});
                 return
             }
@@ -159,13 +166,13 @@ $( document ).ready(function() {
             // fetching feedback timeline
             feedbackTimelineCollection = new FeedbackTimelineCollection();
             feedbackTimelineCollection.credentials = {
-                username: userCredentialsModel.username,
-                password: userCredentialsModel.password
+                username: $.cookie("username"),
+                password: $.cookie("password")
             };
             feedbackTimelineCollection.fetch({
                 success: function(feedbacks){
                     var template = _.template($("#feedback-timeline-template").html(), {feedbacks: feedbacks.models});
-                    var headerTemplate = _.template($("#header-template").html(), {username: userCredentialsModel.username});
+                    var headerTemplate = _.template($("#header-template").html(), {username: $.cookie("username")});
                     var footerTemplate = _.template($("#footer-template").html(), {});
                     that.$el.html(template);
                     that.$el.prepend(headerTemplate);
@@ -181,13 +188,16 @@ $( document ).ready(function() {
 
     var AnalyticsView = Backbone.View.extend({
         el: '.main-app',
+        events: {
+            'click #logout-link': logoutUser
+        },
         render: function(){
-            if (!userCredentialsModel.username && !userCredentialsModel.password){
+            if (!$.cookie("username") && !$.cookie("password")){
                 router.navigate('', {trigger: true});
                 return
             }
             var template = _.template($("#analytics-template").html(), {});
-            var headerTemplate = _.template($("#header-template").html(), {username: userCredentialsModel.username});
+            var headerTemplate = _.template($("#header-template").html(), {username: $.cookie("username")});
             var footerTemplate = _.template($("#footer-template").html(), {});
             this.$el.html(template);
             this.$el.prepend(headerTemplate);
@@ -201,13 +211,14 @@ $( document ).ready(function() {
         el: '.main-app',
         events: {
             'click ul.forms-list li.row': 'showFormInstances',
+            'click #logout-link': logoutUser
         },
         showFormInstances: function(ev){
             var formID = $(ev.currentTarget).find("input[type=hidden]")[0].value;
             formInstancesCollection = new FormInstancesCollection({id: formID});
             formInstancesCollection.credentials = {
-                username: userCredentialsModel.username,
-                password: userCredentialsModel.password
+                username: $.cookie("username"),
+                password: $.cookie("password")
             };
             formInstancesCollection.fetch({
                 success: function(instances){
@@ -224,20 +235,20 @@ $( document ).ready(function() {
             });
         },
         render: function(){
-            if (!userCredentialsModel.username && !userCredentialsModel.password){
+            if (!$.cookie("username") && !$.cookie("password")){
                 router.navigate('', {trigger: true});
                 return
             }
             var that = this;
             feedbackFormsCollection = new FeedbackFormsCollection();
             feedbackFormsCollection.credentials = {
-                username: userCredentialsModel.username,
-                password: userCredentialsModel.password
+                username: $.cookie("username"),
+                password: $.cookie("password")
             };
             feedbackFormsCollection.fetch({
                 success: function(forms){
                     var template = _.template($("#feedback-forms-list-template").html(), {forms: forms.models});
-                    var headerTemplate = _.template($("#header-template").html(), {username: userCredentialsModel.username});
+                    var headerTemplate = _.template($("#header-template").html(), {username: $.cookie("username")});
                     var footerTemplate = _.template($("#footer-template").html(), {});
                     that.$el.html(template);
                     that.$el.prepend(headerTemplate);
@@ -251,28 +262,31 @@ $( document ).ready(function() {
     /* list of instances attached to a feedback form */
     var FeedbackFormInstancesView = Backbone.View.extend({
         el: '.main-app',
+        events: {
+            'click #logout-link': logoutUser
+        },
         render: function(options){
-            if (!userCredentialsModel.username && !userCredentialsModel.password){
+            if (!$.cookie("username") && !$.cookie("password")){
                 router.navigate('', {trigger: true});
                 return
             }
             var that = this;
             var form = new FormModel({id: options.formID});
             form.credentials = {
-                username: userCredentialsModel.username,
-                password: userCredentialsModel.password
+                username: $.cookie("username"),
+                password: $.cookie("password")
             };
             form.fetch({
                 success: function(){
                     formInstancesCollection = new FormInstancesCollection({id: options.formID});
                     formInstancesCollection.credentials = {
-                        username: userCredentialsModel.username,
-                        password: userCredentialsModel.password
+                        username: $.cookie("username"),
+                        password: $.cookie("password")
                     };
                     formInstancesCollection.fetch({
                         success: function(instances){
                             var template = _.template($("#form-instances-list-template").html(), {instances: instances.models, form: form});
-                            var headerTemplate = _.template($("#header-template").html(), {username: userCredentialsModel.username});
+                            var headerTemplate = _.template($("#header-template").html(), {username: $.cookie("username")});
                             var footerTemplate = _.template($("#footer-template").html(), {});
                             that.$el.html(template);
                             that.$el.prepend(headerTemplate);
@@ -290,14 +304,15 @@ $( document ).ready(function() {
         el: '.main-app',
         events: {
             'submit #form-form': 'createNewForm',
+            'click #logout-link': logoutUser
         },
         createNewForm: function(ev){
             ev.preventDefault();
             var formDetails = $(ev.currentTarget).serializeObject();
             var form = new FormModel();
             form.credentials = {
-                username: userCredentialsModel.username,
-                password: userCredentialsModel.password
+                username: $.cookie("username"),
+                password: $.cookie("password")
             };
             form.save(formDetails, {
                 success: function(form){
@@ -307,12 +322,12 @@ $( document ).ready(function() {
             });
         },
         render: function(){
-            if (!userCredentialsModel.username && !userCredentialsModel.password){
+            if (!$.cookie("username") && !$.cookie("password")){
                 router.navigate('', {trigger: true});
                 return
             }
             var template = _.template($("#form-creation-form-template").html(), {});
-            var headerTemplate = _.template($("#header-template").html(), {username: userCredentialsModel.username});
+            var headerTemplate = _.template($("#header-template").html(), {username: $.cookie("username")});
             var footerTemplate = _.template($("#footer-template").html(), {});
             this.$el.html(template);
             this.$el.prepend(headerTemplate);
@@ -325,15 +340,16 @@ $( document ).ready(function() {
     var NewInstanceCreationView = Backbone.View.extend({
         el: '.main-app',
         events: {
-            'submit #instances-form': 'createNewInstance'
+            'submit #instances-form': 'createNewInstance',
+            'click #logout-link': logoutUser
         },
         createNewInstance: function(ev){
             ev.preventDefault();
             var instanceDetails = $(ev.currentTarget).serializeObject();
             var instance = new InstanceModel({form_id: instanceDetails.form_id});
             instance.credentials = {
-                username: userCredentialsModel.username,
-                password: userCredentialsModel.password
+                username: $.cookie("username"),
+                password: $.cookie("username")
             };
             instance.save(instanceDetails, {
                 success: function(instance){
@@ -344,20 +360,20 @@ $( document ).ready(function() {
             console.log(instanceDetails);
         },
         render: function(options){
-            if (!userCredentialsModel.username && !userCredentialsModel.password){
+            if (!$.cookie("username") && !$.cookie("password")){
                 router.navigate('', {trigger: true});
                 return
             }
             var that = this;
             var form = new FormModel({id: options.formID});
             form.credentials = {
-                username: userCredentialsModel.username,
-                password: userCredentialsModel.password
+                username: $.cookie("username"),
+                password: $.cookie("password")
             };
             form.fetch({
                 success: function(form){
                     var template = _.template($("#instance-creation-form-template").html(), {form: form});
-                    var headerTemplate = _.template($("#header-template").html(), {username: userCredentialsModel.username});
+                    var headerTemplate = _.template($("#header-template").html(), {username: $.cookie("username")});
                     var footerTemplate = _.template($("#footer-template").html(), {});
                     that.$el.html(template);
                     that.$el.prepend(headerTemplate);
