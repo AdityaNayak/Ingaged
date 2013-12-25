@@ -53,6 +53,7 @@ merchant_obj = {
 form_obj = {
     'id': fields.String,
     'name': fields.String,
+    'question': fields.String,
     'description': fields.String,
     'merchant': fields.Nested(merchant_obj)
 }
@@ -88,6 +89,7 @@ class FormList(Resource):
 
     post_parser = reqparse.RequestParser()
     post_parser.add_argument('name', required=True, type=unicode, location='json')
+    post_parser.add_argument('question', required=True, type=unicode, location='json')
     post_parser.add_argument('description', required=True, type=unicode, location='json')
 
     get_fields = {

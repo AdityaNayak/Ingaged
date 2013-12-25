@@ -26,6 +26,7 @@ class FeedbackException(Exception):
 
 class FormModel(db.Document):
     name = db.StringField(required=True)
+    question = db.StringField(required=True)
     description = db.StringField(required=True)
     
     # which merchant is the form associated with?
@@ -34,8 +35,8 @@ class FormModel(db.Document):
     meta = {'collection': 'forms'}
 
     @staticmethod
-    def create(name, description, merchant):
-        form = FormModel(name=name, description=description, merchant=merchant)
+    def create(name, description, question, merchant):
+        form = FormModel(name=name, description=description, question=question, merchant=merchant)
         try:
             form.save()
         except db.ValidationError:
