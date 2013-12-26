@@ -16,12 +16,27 @@
 
     <script type="text/template" id="feedback-form-template">
         <div class="row header">
-            <div class="small-4 small-offset-8 columns">
+            <div class= "small-4 small-offset-8 columns">
                 <img src="<%= form.get('merchant').logo %>"> <!-- height fixed, width variable -->
             </div>
         </div>
-
         <div class="row">
+            <div class="small-12 medium-10 medium-centered large-8 columns">
+               <div class="rateit" id="rateit5" data-rateit-min="2">
+            </div>
+            <div>
+                <span id="value5"></span>
+                <span id="hover5"></span>
+            </div>
+            </div>
+        </div>
+        <div class="row hide">
+            <div class="small-12 medium-10 medium-centered large-8 columns">
+                <div id="sample-create"></div>
+                <div id="show-serialization-field"> </div>
+            </div>
+        </div>
+        <div class="row hide">
             <div class="small-12 medium-10 medium-centered large-8 columns">
                 <div data-alert class="alert-box error" style="display:none;">
                 Please write something
@@ -55,6 +70,18 @@
                 </form>       
             </div>
         </div>
+        <script>
+        $("#sample-create").noUiSlider({
+                range: [0, 10],
+                start: 7,
+                step: 1,
+                handles: 1,
+                resolution: 1,
+                serialization: {
+                    to: [ $("#show-serialization-field"),"html" ]
+                }
+            });
+        </script>
     </script>
 
     <script type="text/template" id="feedback-form-not-exists-template">
@@ -69,9 +96,11 @@
                 <div data-alert class="alert-box success">
                 Feedback submitted successfully
                 </div>
-                <h3 clas="text-center">Thank you</h3>
+                <h3 class="text-center">Thank you</h3>
             </div>
         </div>
     </script>
+    <script src="js/jquery.nouislider.js"></script>
+    <script src="js/jquery.rateit.js"></script> 
 </body>
 </html>
