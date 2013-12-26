@@ -40,8 +40,7 @@
         </div>
         <div class="row login">
             <div class="small-4 columns">
-         
-                <p class="primary-message">Your in-venue customer feedback collection and management tool</p>
+                <p class="primary-message">Your in-venue customer experience management system</p>
             </div>
             <div class="small-3 small-offset-1 columns">
                 <img src="images/phone.png" >
@@ -103,8 +102,7 @@
               </section>
             </header>
         </div>
-
-         <div class="row">
+        <div class="row">
             <div class="small-6 small-centered columns">
                 <div class="alert-bar">
                 <div id="loading-bar" data-alert="" class="alert-box loading" style="display:none;">
@@ -123,7 +121,6 @@
             </div>
         </div>
     </div>
-
     </script>
 
     <script type="text/template" id="feedback-timeline-template">
@@ -141,7 +138,7 @@
         </div>
 
         <div class="row">
-            <div class="small-9 columns content feedback-column">
+            <div class="small-9 columns feedback-column">
                 <ul class="feedback-list feedback-timeline">
                     <% _.each(feedbacks, function(feedback){ %>
                         <li class="row">
@@ -255,12 +252,21 @@
         <div class="small-3 columns">
         Some filters
         </div>
-            <div class="small-9 columns content feedback-column">
-                <div class="panel">
+            <div class="small-9 columns">
                 <div id="reportrange" class="rangepicker-box">
                     <span></span>
                 </div>
-            </div>  
+
+                <canvas id="canvas0" height="300" width="300"></canvas>
+                <ul class="small-block-grid-7">
+                  <li>Question 1 and some words to add content</li>
+                  <li>Question 2 and some words to add content</li>
+                  <li>Question 3 and some words to add content</li>
+                  <li>Question 4 and some words to add content</li>
+                  <li>Question 5 and some words to add content</li>
+                  <li>Question 6 and some words to add content</li>
+                  <li>Question 7 and some words to add content</li>
+                </ul>
             </div>
 
         </div>
@@ -432,10 +438,34 @@
     <script src="js/foundation/foundation.js"></script>
     <script src="js/foundation/foundation.topbar.js"></script>
 	<script src="js/foundation/foundation.forms.js"></script>
+    <script src="js/plugins/chart.min.js"></script>
     <script src="js/plugins/moment.min.js"></script>
     <script src="js/plugins/daterangepicker.js"></script>
     <script>
             $(document).foundation();
+    </script>
+    <script>
+    var doughnutData0 = [
+        
+        {
+            value : 80,
+            color : "#46BFBD"
+        },
+        {
+            value : 100,
+            color : "#FDB45C"
+        },
+        {
+            value : 40,
+            color : "#949FB1"
+        },
+        {
+            value : 120,
+            color : "#4D5360"
+        }
+
+        ];
+        var myDoughnut0 = new Chart(document.getElementById("canvas0").getContext("2d")).Doughnut(doughnutData0);
     </script>
     <script src="js/plugins/script.js"></script> <!-- //TODO: Fix the loading-bar fadein. It works in console -->
     
