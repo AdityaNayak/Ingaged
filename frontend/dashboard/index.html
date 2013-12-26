@@ -96,7 +96,7 @@
               <section class="top-bar-section">
                 <ul class="right">
                 <li class="secondary-color namesyntax">Welcome <%= username %></li>
-                <li><a href="#/analytics" >Analytics</a></li>
+                <!-- <li><a href="#/analytics" >Analytics</a></li> -->
                 <li><a href="#/feedback_forms" >System</a></li>
                 <li><a href="#" id="logout-link">Log Out</a></li>      
                 </ul>
@@ -305,9 +305,6 @@
                                 </span>
                             </span> //TODO: these attributes are currently not being supplied by the API -->
                             <input type="hidden" value="<%= form.get("id") %>">
-                            <span class="small-3 columns">
-                    <a href="#">View form</a>
-                    </span>
                         </li>
 
                     <% }); %>
@@ -324,7 +321,7 @@
                     <a class="secondary" href="#/feedback_forms/<%= form_id %>/instances">View details</a>
                     <ul class="side-nav">
                         <% _.each(instances, function(instance){ %>
-                            <li><%= instance.get("name") %></li>
+                            <li><%= instance.get("name") %><a class="secondary secondary-color" href="http://customer.ingagelive.com#/<% instance.get('id')">View</a></li>
                         <% }); %>
                     </ul>
                 <% } else { %>
@@ -355,6 +352,8 @@
                                     <span class="small-2 columns"><%= instance.get("name") %></span>
                                     <span class="small-2 columns"><%= instance.get("location") %></span>
                                     <span class="small-3 columns"><%= instance.get("description") %></span>
+                                    <span class="small-3 columns"><a href="http://customer.ingagelive.com#/<% instance.get('id')">View</a></span>
+                                    
                                 </li>
                             <% }); %>
                         </ul>
