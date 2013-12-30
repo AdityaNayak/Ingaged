@@ -96,7 +96,7 @@
               <section class="top-bar-section">
                 <ul class="right">
                 <li class="secondary-color namesyntax">Welcome <%= username %></li>
-                <!-- <li><a href="#/analytics" >Analytics</a></li> -->
+                <li><a href="#/analytics" >Analytics</a></li>
                 <li><a href="#/feedback_forms" >System</a></li>
                 <li><a href="#" id="logout-link">Log Out</a></li>      
                 </ul>
@@ -122,29 +122,50 @@
             </div>
         </div>
     </div>
+    <script>
+     $(".top-bar-section ul li>a").click(function(){ //
+        $("#loading-bar").fadeIn(300);
+        });
+     </script>
     </script>
 
     <script type="text/template" id="feedback-timeline-template">
+
+        <div class="row">
+        <div class="small-9 columns">
+            <canvas id="line" data-type="Line" width="900" height="300"></canvas>
+        </div>
+            <div class="small-3 columns">
+            <h3>Select location</h3>
+                <select>
+                <option>Location 1</option>
+                <option>Location 2</option>
+                <option>Location 3</option>
+                <option>Location 4</option>
+                </select>
+            </div>
+            <hr>
+        </div>
+
         <div class="row collapse">
             <dl class="sub-nav action-nav small-12 columns">
             <dd class="checkbox-dd">
             <form class="custom"><input type="checkbox" id="checkbox1" style="display: none;"></form>
             </dd>
-            <dd class="active"><a href="#">All</a></dd>
             <dd><a href="#">Mark as Read</a></dd>
-            <dd><a href="#">Delete</a></dd>
             <dd><a href="#">Label</a></dd>
+            <dd><i class="fi-trash"></i></dd>
             <dd><i class="fi-refresh"></i></dd>
             </dl>
         </div>
 
         <div class="row">
-            <div class="small-9 columns feedback-column">
+            <div class="small-7 columns feedback-column">
                 <ul class="feedback-list feedback-timeline">
                     <% _.each(feedbacks, function(feedback){ %>
-                        <li class="row">
+                        <li class="row yellow">
                             <form class="custom small-1 columns"><input type="checkbox" id="checkbox1" style="display: none;"></form>
-                            <span class="small-2 columns"><%= feedback.get("instance").name %></span>
+                            <span class="small-2 columns"><%= feedback.get("instance").location %></span>
                             <span class="small-7 columns feedback-content">
                                 <span class="customer-name namesyntax">
                                     <% if (feedback.get("customer").name) { %>
@@ -163,25 +184,46 @@
                     <% }); %>
                 </ul>
                 <div class="pagination-centered">
-              <ul class="pagination">
-                <li class="arrow unavailable"><a href="">&laquo;</a></li>
-                <li class="current"><a href="">1</a></li>
-                <li><a href="">2</a></li>
-                <li><a href="">3</a></li>
-                <li><a href="">4</a></li>
-                <li class="unavailable"><a href="">&hellip;</a></li>
-                <li><a href="">12</a></li>
-                <li><a href="">13</a></li>
-                <li class="arrow"><a href="">&raquo;</a></li>
-              </ul>
+                  <ul class="pagination">
+                    <li class="arrow unavailable"><a href="">&laquo;</a></li>
+                    <li class="current"><a href="">1</a></li>
+                    <li><a href="">2</a></li>
+                    <li><a href="">3</a></li>
+                    <li><a href="">4</a></li>
+                    <li class="unavailable"><a href="">&hellip;</a></li>
+                    <li><a href="">12</a></li>
+                    <li><a href="">13</a></li>
+                    <li class="arrow"><a href="">&raquo;</a></li>
+                  </ul>
+                </div>
             </div>
-            </div>
-
         </div>
+        <script>
+        var npsdata = {
+            labels : ["6 Weeks ago","5 Weeks ago","4 Weeks ago","3 Weeks ago","2 Weeks ago","1 Week ago","Today"],
+            datasets : [
+                {
+                    fillColor : "none",
+                    strokeColor : "rgba(220,220,220,1)",
+                    pointColor : "rgba(220,220,220,1)",
+                    pointStrokeColor : "#fff",
+                    data : [6,5,9,8,5,2,4]
+                },     
+                 {
+            fillColor : "none",
+            strokeColor : "rgba(151,187,205,1)",
+            pointColor : "rgba(151,187,205,1)",
+            pointStrokeColor : "#fff",
+            data : [2,4,4,1,9,2,10]
+        }
+            ]
+        }
+        var myNPSchart = new Chart(document.getElementById("line").getContext("2d")).Line(npsdata);
+        </script>
     </script>
 
     <script type="text/template" id="timeline-customer-details-template">
-        <aside id="details" class="small-3 columns details-column">
+        <aside id="details" class="small-5 columns details-column">
             <div class="panel">
                 <h3 class="namesyntax">
                     <% if (feedback.get('customer').name) { %>
@@ -191,14 +233,14 @@
                     <% } %>
                 </h3>
                 <div class="row collapse">
-                    <div class="small-3 columns">
+                    <div class="small-2 columns">
                         <% if (feedback.get('customer').email) { %>
                             <img src="http://www.gravatar.com/avatar/<%= MD5(feedback.get('customer').email) %>">
                         <% } else { %>
                             <img src="http://www.gravatar.com/avatar/">
                         <% } %>
-                        </div>
-                        <div class="small-9 columns">
+                    </div>
+                    <div class="small-7 columns">
                         <ul class="naked secondary contact-details">
                             <li> 
                                 <% if (feedback.get('customer').email) { %>
@@ -216,21 +258,41 @@
                             </li>
                         </ul>
                     </div>
+                    <div class="small-3 columns">
+                        <div class="feedback-score green"> 9 </div>
+                        <div class="secondary-color secondary">
+                            <i class="fi-clock"></i><% var received_at = new Date(feedback.get("received_at")) %>
+                            <%= received_at.getHours() %>:<%= received_at.getMinutes() %>
+                        </div>
+                        <div class="secondary-color secondary">
+                            <i class="fi-calendar"></i>
+                            <%= received_at.getDate() %>-<%= received_at.getMonth() %>-<%= received_at.getFullYear() %>
+                        </div>
+                    </div>
                 </div>
                 <hr>
-                <div class="secondary-color secondary row collapse">
-                    <div class="text-left small-5 columns">
-                        <% var received_at = new Date(feedback.get("received_at")) %>
-                        <%= received_at.getHours() %>:<%= received_at.getMinutes() %>
-                    </div>
-                    <div class="text-right small-7 columns">
-                        <%= received_at.getDate() %>-<%= received_at.getMonth() %>-<%= received_at.getFullYear() %>
-                    </div>
+                <div class="secondary">
+                    <p><%= feedback.get("text") %></p>
                 </div>
                 <hr>
-                <p class="secondary">
-                    <%= feedback.get("text") %>
-                </p>
+                <div class="secondary survey-column">
+                    <ol>
+                        <li><h5>Question 1</h5>
+                        <p>Answer 1</p>
+                        </li>
+                        <li><h5>Question 1</h5>
+                        <p>Answer 1</p>
+                        </li>
+                        <li><h5>Question 1</h5>
+                        <p>Answer 1</p>
+                        </li>
+                        <li><h5>Question 1</h5>
+                        <p>Answer 1</p>
+                        </li>
+
+                    </ol>
+                </div>
+                <hr>
                 <h3>Instance Details</h3>
                 <div class="form-details secondary">
                     <div class="row collapse">
@@ -249,28 +311,125 @@
     </script>
 
     <script type="text/template" id="analytics-template">
+    
         <div class="row">
-        <div class="small-3 columns">
-        Some filters
+        <h3>Analytics for Form 1 </h3>
+        <div class="small-3 columns panel">
+            <select>
+                <option>Form 1</option>
+                <option>Form 2</option>
+                <option>Form 3</option>
+            <select>
+            <ul class="tristate"> <!-- //TODO: Dont add filter by intance functionality for now -->
+                <li>
+                    <input type="checkbox" />
+                    <label for="">checkbox</label>
+                    <ul>
+                        <li>
+                            <input type="checkbox" />
+                            <label for="">checkbox</label>
+                            <ul>
+                                <li>
+                                    <input type="checkbox" />
+                                    <label for="">checkbox</label>
+                                    <ul>
+                                        <li><input type="checkbox" checked /><label for="">checkbox</label></li>
+                                        <li><input type="checkbox" checked /><label for="">checkbox</label></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <input type="checkbox" />
+                                    <label for="">checkbox</label>
+                                    <ul>
+                                        <li><input type="checkbox" /><label for="">checkbox</label></li>
+                                        <li><input type="checkbox" /><label for="">checkbox</label></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <input type="checkbox" />
+                            <label for="">checkbox</label>
+                            <ul>
+                                <li>
+                                    <input type="checkbox" />
+                                    <label for="">checkbox</label>
+                                    <ul>
+                                        <li><input type="checkbox" checked /><label for="">checkbox</label></li>
+                                        <li><input type="checkbox" /><label for="">checkbox</label></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <input type="checkbox" />
+                                    <label for="">checkbox</label>
+                                    <ul>
+                                        <li><input type="checkbox" /><label for="">checkbox</label></li>
+                                        <li><input type="checkbox" /><label for="">checkbox</label></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
         </div>
             <div class="small-9 columns">
-                <div id="reportrange" class="rangepicker-box">
-                    <span></span>
+                <div class="row">
+                    <div class="small-8 columns">
+                        <canvas id="canvas0" height="450" width="450"></canvas>
+                        <div class="row">
+                        <span class="small-1 columns" style="background:#46BFBD;"> &nbsp; </span>
+                        <span class="small-2 columns">Hindustan Times</span>
+                        <span class="small-1 columns" style="background:#FDB45C;">&nbsp; </span>
+                        <span class="small-2 columns">New York Times</span>
+                        <span class="small-1 columns" style="background:#949FB1;">&nbsp; </span>
+                        <span class="small-2 columns">Live Mint</span>
+                        <span class="small-1 columns" style="background:#4D5360;">&nbsp; </span>
+                        <span class="small-2 columns">The Hindu</span>
+                        </div>
+                    </div>
+                    <div class="small-4 columns">
+                        <div id="reportrange" class="rangepicker-box">
+                            <span></span>
+                        </div>
+                        <div class="panel">
+                            <ul class="question-list naked">
+                              <li class="active">Question 1 and some words to add content</li>
+                              <li>Question 2 and some words to add content</li>
+                              <li>Question 3 and some words to add content</li>
+                              <li>Question 4 and some words to add content</li>
+                              <li>Question 5 and some words to add content</li>
+                              <li>Question 6 and some words to add content</li>
+                              <li>Question 7 and some words to add content</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-
-                <canvas id="canvas0" height="300" width="300"></canvas>
-                <ul class="small-block-grid-7">
-                  <li>Question 1 and some words to add content</li>
-                  <li>Question 2 and some words to add content</li>
-                  <li>Question 3 and some words to add content</li>
-                  <li>Question 4 and some words to add content</li>
-                  <li>Question 5 and some words to add content</li>
-                  <li>Question 6 and some words to add content</li>
-                  <li>Question 7 and some words to add content</li>
-                </ul>
             </div>
-
         </div>
+            <script>
+    var doughnutData0 = [
+        
+        {
+            value : 80,
+            color : "#46BFBD"
+        },
+        {
+            value : 100,
+            color : "#FDB45C"
+        },
+        {
+            value : 40,
+            color : "#949FB1"
+        },
+        {
+            value : 120,
+            color : "#4D5360"
+        }
+
+        ];
+        var myDoughnut0 = new Chart(document.getElementById("canvas0").getContext("2d")).Doughnut(doughnutData0);
+    </script>
     </script>
 
     <script type="text/template" id="feedback-forms-list-template">
@@ -311,6 +470,7 @@
                 </ul>
             </div>	
         </div>
+
     </script>
 
     <script type="text/template" id="form-instances-side-list-template">
@@ -443,31 +603,9 @@
     <script src="js/plugins/chart.min.js"></script>
     <script src="js/plugins/moment.min.js"></script>
     <script src="js/plugins/daterangepicker.js"></script>
+    <script src="js/plugins/jquery.tristate.min.js"></script>
     <script>
             $(document).foundation();
-    </script>
-    <script>
-    var doughnutData0 = [
-        
-        {
-            value : 80,
-            color : "#46BFBD"
-        },
-        {
-            value : 100,
-            color : "#FDB45C"
-        },
-        {
-            value : 40,
-            color : "#949FB1"
-        },
-        {
-            value : 120,
-            color : "#4D5360"
-        }
-
-        ];
-        var myDoughnut0 = new Chart(document.getElementById("canvas0").getContext("2d")).Doughnut(doughnutData0);
     </script>
     <script src="js/plugins/script.js"></script> <!-- //TODO: Fix the loading-bar fadein. It works in console -->
     
