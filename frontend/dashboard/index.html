@@ -314,14 +314,14 @@
     </script>
 
     <script type="text/template" id="form-instances-side-list-template">
-        <div class="small-3 columns">
+    <div class="small-3 columns">
             <div class="panel" id="form-instances-side-list">
                 <h5>Associated Instances</h5>
                 <% if (instances.length > 0) { %>
                     <a class="secondary" href="#/feedback_forms/<%= form_id %>/instances">View details</a>
                     <ul class="side-nav">
                         <% _.each(instances, function(instance){ %>
-                            <li><%= instance.get("name") %><a class="secondary secondary-color" href="http://customer.ingagelive.com#/<% instance.get('id')">View</a></li>
+                            <li><%= instance.get("name") %><a class="secondary secondary-color" href="http://customer.ingagelive.com#/<%= instance.get('id') %>">View</a></li>
                         <% }); %>
                     </ul>
                 <% } else { %>
@@ -337,7 +337,7 @@
             <div class="small-9 small-centered columns">
                 <div class="row">
                     <a class="secondary secondary-color" href="#/feedback_forms">Back to Form</a>
-                    <h2>Instances attached to <em>"<%= form.get('name') %>"</em><a href="#/feedback_forms/<%= form_id %>/instances/new" class="button small">Create New Instance</a></h2>
+                    <h2>Instances attached to <em>"<%= form.get('name') %>"</em><a href="#/feedback_forms/<%= form.get('id') %>/instances/new" class="button small">Create New Instance</a></h2>
                     <div class="small-12 columns">
                         <ul class="feedback-list list-header">
                             <li class="row read"><form class="custom small-1 columns"><input type="checkbox" id="checkbox1" style="display: none;"></form>
@@ -352,7 +352,7 @@
                                     <span class="small-2 columns"><%= instance.get("name") %></span>
                                     <span class="small-2 columns"><%= instance.get("location") %></span>
                                     <span class="small-3 columns"><%= instance.get("description") %></span>
-                                    <span class="small-3 columns"><a href="http://customer.ingagelive.com#/<% instance.get('id')">View</a></span>
+                                    <span class="small-3 columns"><a href="http://customer.ingagelive.com#/<%= instance.get('id') %>">View</a></span>
                                     
                                 </li>
                             <% }); %>
@@ -440,36 +440,6 @@
     <script src="js/foundation/foundation.js"></script>
     <script src="js/foundation/foundation.topbar.js"></script>
 	<script src="js/foundation/foundation.forms.js"></script>
-    <script src="js/plugins/chart.min.js"></script>
-    <script src="js/plugins/moment.min.js"></script>
-    <script src="js/plugins/daterangepicker.js"></script>
-    <script>
-            $(document).foundation();
-    </script>
-    <script>
-    var doughnutData0 = [
-        
-        {
-            value : 80,
-            color : "#46BFBD"
-        },
-        {
-            value : 100,
-            color : "#FDB45C"
-        },
-        {
-            value : 40,
-            color : "#949FB1"
-        },
-        {
-            value : 120,
-            color : "#4D5360"
-        }
-
-        ];
-        var myDoughnut0 = new Chart(document.getElementById("canvas0").getContext("2d")).Doughnut(doughnutData0);
-    </script>
-    <script src="js/plugins/script.js"></script> <!-- //TODO: Fix the loading-bar fadein. It works in console -->
     
 </body>
 </html>

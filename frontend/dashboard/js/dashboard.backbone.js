@@ -303,20 +303,20 @@ var feedbackTimelineView = new FeedbackTimelineView();
         var that = this;
         var form = new FormModel({id: options.formID});
         form.credentials = {
-            username: userCredentialsModel.username,
-            password: userCredentialsModel.password
+            username: $.cookie('username'),
+            password: $.cookie('password')
         };
         form.fetch({
             success: function(){
                 formInstancesCollection = new FormInstancesCollection({id: options.formID});
                 formInstancesCollection.credentials = {
-                    username: userCredentialsModel.username,
-                    password: userCredentialsModel.password
+                    username: $.cookie('username'),
+                    password: $.cookie('password')
                 };
                 formInstancesCollection.fetch({
                     success: function(instances){
                         var template = _.template($("#form-instances-list-template").html(), {instances: instances.models, form: form});
-                        var headerTemplate = _.template($("#header-template").html(), {username: userCredentialsModel.username});
+                        var headerTemplate = _.template($("#header-template").html(), {username: $.cookie('username')});
                         var footerTemplate = _.template($("#footer-template").html(), {});
                         that.$el.html(template);
                         that.$el.prepend(headerTemplate);
@@ -363,7 +363,7 @@ var feedbackFormInstancesView = new FeedbackFormInstancesView();
             this.$el.append(footerTemplate);
         
         var template = _.template($("#form-creation-form-template").html(), {});
-        var headerTemplate = _.template($("#header-template").html(), {username: userCredentialsModel.username});
+        var headerTemplate = _.template($("#header-template").html(), {username: $.cookie('username')});
         var footerTemplate = _.template($("#footer-template").html(), {});
         this.$el.html(template);
         this.$el.prepend(headerTemplate);
@@ -397,6 +397,7 @@ var feedbackFormCreationView = new FeedbackFormCreationView();
             console.log(instanceDetails);
         },
         render: function(options){
+            alert("this is something nice?");
             if (!$.cookie("username") && !$.cookie("password")){
                 router.navigate('', {trigger: true});
                 return
@@ -417,57 +418,39 @@ var feedbackFormCreationView = new FeedbackFormCreationView();
                     that.$el.append(footerTemplate);
                 }    
             });
+        }
+    });
+    var newInstanceCreationView = new NewInstanceCreationView();
 
-        
-        var that = this;
-        var form = new FormModel({id: options.formID});
-        form.credentials = {
-            username: userCredentialsModel.username,
-            password: userCredentialsModel.password
-        };
-        form.fetch({
-            success: function(form){
-                var template = _.template($("#instance-creation-form-template").html(), {form: form});
-                var headerTemplate = _.template($("#header-template").html(), {username: userCredentialsModel.username});
-                var footerTemplate = _.template($("#footer-template").html(), {});
-                that.$el.html(template);
-                that.$el.prepend(headerTemplate);
-                that.$el.append(footerTemplate);
-            }    
-        });
-    }
-});
-var newInstanceCreationView = new NewInstanceCreationView();
+    var router = new Router();
 
-var router = new Router();
+    router.on('route:login', function(){
+        loginView.render();
+    });
 
-router.on('route:login', function(){
-    loginView.render();
-});
+    router.on('route:feedbackTimeline', function(){
+        feedbackTimelineView.render();
+    });
 
-router.on('route:feedbackTimeline', function(){
-    feedbackTimelineView.render();
-});
+    router.on('route:analytics', function(){
+        AnalyticsView.render();
+    });
 
-router.on('route:analytics', function(){
-    AnalyticsView.render();
-});
+    router.on('route:feedbackForms', function(){
+        feedbackFormsView.render();
+    });
 
-router.on('route:feedbackForms', function(){
-    feedbackFormsView.render();
-});
+    router.on('route:formInstancesList', function(form_id){
+        feedbackFormInstancesView.render({formID: form_id});
+    });
 
-router.on('route:formInstancesList', function(form_id){
-    feedbackFormInstancesView.render({formID: form_id});
-});
+    router.on('route:newFeedbackForm', function(){
+        feedbackFormCreationView.render();
+    });
 
-router.on('route:newFeedbackForm', function(){
-    feedbackFormCreationView.render();
-});
+    router.on('route:newFormInstances', function(form_id){
+        newInstanceCreationView.render({formID: form_id});
+    });
 
-router.on('route:newFormInstances', function(form_id){
-    newInstanceCreationView.render({formID: form_id});
-});
-
-Backbone.history.start();
+    Backbone.history.start();
 });
