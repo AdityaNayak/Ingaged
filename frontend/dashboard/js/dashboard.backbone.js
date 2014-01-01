@@ -26,7 +26,6 @@ $( document ).ready(function() {
             "feedback_forms/new": "newFeedbackForm",
             "feedback_forms/:form_id/instances": "formInstancesList",
             "feedback_forms/:form_id/instances/new": "newFormInstances",
-            "analytics": "analytics"
         }
     });
     
@@ -184,29 +183,6 @@ var loginView = new LoginView();
         }
     });
 var feedbackTimelineView = new FeedbackTimelineView();
-
-/* Analytics View */
-
-
-    var AnalyticsView = Backbone.View.extend({
-        el: '.main-app',
-        events: {
-            'click #logout-link': logoutUser
-        },
-        render: function(){
-            if (!$.cookie("username") && !$.cookie("password")){
-                router.navigate('', {trigger: true});
-                return
-            }
-            var template = _.template($("#analytics-template").html(), {});
-            var headerTemplate = _.template($("#header-template").html(), {username: $.cookie("username")});
-            var footerTemplate = _.template($("#footer-template").html(), {});
-            this.$el.html(template);
-            this.$el.prepend(headerTemplate);
-            this.$el.append(footerTemplate);
-        }
-    });
-    var AnalyticsView = new AnalyticsView();
 
     /* view of list of feedbacks */
     var FeedbackFormsView = Backbone.View.extend({
