@@ -30,7 +30,7 @@ $( document ).ready(function() {
     });
     
     /* hostname of the api server */
-    var api_root = 'ingage.herokuapp.com'
+    var api_root = 'https://ingage.herokuapp.com'
 
 
     /* logs out the user on the click of the logout link */
@@ -44,7 +44,7 @@ $( document ).ready(function() {
 
     /* collection storing the list of feedbacks which come in the timeline */
     var FeedbackTimelineCollection = Backbone.Collection.extend({
-        url: "http://" + api_root + "/dashboard/timeline",
+        url: api_root + "/dashboard/timeline",
         parse: function(response, xhr){
             return response.feedbacks;
         }
@@ -52,7 +52,7 @@ $( document ).ready(function() {
 
     /* collection of the list of feedback forms of the merchant */
     var FeedbackFormsCollection = Backbone.Collection.extend({
-        url: "http://" + api_root + "/dashboard/forms",
+        url: api_root + "/dashboard/forms",
         parse: function(response, xhr){
             return response.forms;
         }
@@ -64,7 +64,7 @@ $( document ).ready(function() {
             this.id = options.id;
         },
         url: function(){
-            return "http://" + api_root + "/dashboard/forms/" + this.id + "/instances"
+            return api_root + "/dashboard/forms/" + this.id + "/instances"
         },
         parse: function(response, xhr){
             return response.instances 
@@ -73,7 +73,7 @@ $( document ).ready(function() {
     
     /* model of the feedback form */
     var FormModel = Backbone.Model.extend({
-        urlRoot: "http://" + api_root + "/dashboard/forms",
+        urlRoot: api_root + "/dashboard/forms",
         parse: function(response, xhr){
             return response.form
         }
@@ -85,7 +85,7 @@ $( document ).ready(function() {
             this.form_id = props.form_id;
         },
         urlRoot: function(){
-            return "http://" + api_root + "/dashboard/forms/" + this.form_id + "/instances"
+            return api_root + "/dashboard/forms/" + this.form_id + "/instances"
         }
     });
 
@@ -106,7 +106,7 @@ $( document ).ready(function() {
             $(loadingButton).delay(300).fadeIn(300); 
             $.ajax({
                 type: "GET",
-                url: "http://" + api_root + "/dashboard/auth/check_credentials",
+                url: api_root + "/dashboard/auth/check_credentials",
                 headers: Backbone.BasicAuth.getHeader({ username: credentials.username, password: credentials.password }),
                 success: function(data){
                     $.cookie("username", credentials.username);
