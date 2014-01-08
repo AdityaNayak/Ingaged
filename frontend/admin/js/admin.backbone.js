@@ -18,7 +18,7 @@ $( document ).ready(function() {
     };
 
     /* api root url */
-    var root_server = 'ingage.herokuapp.com'
+    var root_server = 'https://ingage.herokuapp.com'
 
     /* all the routes of the admin panel */
     var Router = Backbone.Router.extend({
@@ -32,7 +32,7 @@ $( document ).ready(function() {
 
     /* collection storing the list of merchants */
     var Merchants = Backbone.Collection.extend({
-        url: "http://" + root_server + "/admin/merchants",
+        url: root_server + "/admin/merchants",
         parse: function(response, xhr){
             return response.merchants
         }
@@ -40,7 +40,7 @@ $( document ).ready(function() {
 
     /* model for each individual merchant */
     var Merchant = Backbone.Model.extend({
-        urlRoot: "http://" + root_server + "/admin/merchants",
+        urlRoot: root_server + "/admin/merchants",
         parse: function(response, xhr){
             return response.merchant
         }
@@ -57,7 +57,7 @@ $( document ).ready(function() {
             var credentials = $(ev.currentTarget).serializeObject();
             $.ajax({
                 type: "GET",
-                url: "http://" + root_server + "/admin/auth/check_credentials",
+                url: root_server + "/admin/auth/check_credentials",
                 headers: Backbone.BasicAuth.getHeader({ username: credentials.username, password: credentials.password }),
                 success: function(data){
                     $.cookie("username", credentials.username);
@@ -147,7 +147,7 @@ $( document ).ready(function() {
         uploadMerchantLogo: function(ev){
             ev.preventDefault();
             merchant_id = $(".merchant-edit-form input[name=id]").val();
-            url = 'http://' + root_server + '/admin/merchants/' + merchant_id + '/upload_logo';
+            url = root_server + '/admin/merchants/' + merchant_id + '/upload_logo';
             var logo_data = new FormData();
             logo_data.append("logo", $("input[name=logo]")[0].files[0]);
             $.ajax({

@@ -2,6 +2,7 @@
 import os
 
 from flask import Flask
+from flask_sslify import SSLify
 from flask.ext.mongoengine import MongoEngine
 from flask.ext.restful import Api as FlaskRestfulAPI
 
@@ -54,6 +55,7 @@ app.config.from_object(__name__)
 db = MongoEngine(app)
 if os.environ.get('MONGOHQ_URL'): # if on heroku
     db.connection[MONGODB_SETTINGS['DB']].authenticate(MONGODB_SETTINGS['USERNAME'], MONGODB_SETTINGS['PASSWORD'])
+    sslify = SSLify(app)
 api = FlaskRestfulAPI(app)
 
 
