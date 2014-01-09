@@ -26,6 +26,7 @@ $( document ).ready(function() {
             "feedback_forms/new": "newFeedbackForm",
             "feedback_forms/:form_id/instances": "formInstancesList",
             "feedback_forms/:form_id/instances/new": "newFormInstances",
+            "analytics": "analytics",
         }
     });
     
@@ -178,11 +179,83 @@ var loginView = new LoginView();
                     that.$el.prepend(headerTemplate);
                     that.$el.append(footerTemplate);
                     $(document).foundation(); 
+                    $(window).scroll(function() {
+				        var scroll = $(window).scrollTop();
+				        if (scroll >= 550) {
+				            $("#details").addClass("stickit");
+				        } else {
+				            $("#details").removeClass("stickit");
+				        }
+				    });
                 }
             });
         }
     });
 var feedbackTimelineView = new FeedbackTimelineView();
+
+/* Analytics View */
+
+
+    var AnalyticsView = Backbone.View.extend({
+        el: '.main-app',
+        events: {
+            'click #logout-link': logoutUser
+        },
+        render: function(){
+            if (!$.cookie("username") && !$.cookie("password")){
+                router.navigate('', {trigger: true});
+                return
+            }
+            var template = _.template($("#analytics-template").html(), {});
+            var headerTemplate = _.template($("#header-template").html(), {username: $.cookie("username")});
+            var footerTemplate = _.template($("#footer-template").html(), {});
+            this.$el.html(template);
+            this.$el.prepend(headerTemplate);
+            this.$el.append(footerTemplate);
+            $('#reportrange').daterangepicker({
+		        startDate: moment().subtract('days', 29),
+		        endDate: moment(),
+		        minDate: '01/01/2012',
+		        maxDate: '12/31/2014',
+		        dateLimit: { days: 60 },
+		        showDropdowns: true,
+		        showWeekNumbers: false,
+		        timePicker: false,
+		        timePickerIncrement: 1,
+		        timePicker12Hour: true,
+		        ranges: {
+		           'Today': [moment(), moment()],
+		           'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+		           'Last 7 Days': [moment().subtract('days', 6), moment()],
+		           'Last 30 Days': [moment().subtract('days', 29), moment()],
+		           'This Month': [moment().startOf('month'), moment()],
+		           'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')],
+		           'This Year': [moment().startOf('year'), moment()]
+		        },
+		        opens: 'left',
+		        format: 'MM/DD/YYYY',
+		        separator: ' to ',
+		        locale: {
+		            applyLabel: 'Submit',
+		            fromLabel: 'From',
+		            toLabel: 'To',
+		            customRangeLabel: 'Custom Range',
+		            daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr','Sa'],
+		            monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+		            firstDay: 1
+		        }
+		     },
+		     function(start, end) {
+		      console.log("Callback has been called!");
+		      $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+		     }
+		  );
+		  //Set the initial state of the picker label
+		  $('#reportrange span').html(moment().subtract('days', 29).format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+        }
+    });
+    var AnalyticsView = new AnalyticsView();
+
 
     /* view of list of feedbacks */
     var FeedbackFormsView = Backbone.View.extend({
