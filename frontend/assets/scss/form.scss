@@ -1,0 +1,172 @@
+// Global Foundation Settings
+
+
+@import "settings";
+@import "settings-form";
+
+// Comment out this import if you don't want to use normalize
+@import "normalize";
+
+// Comment out this import if you are customizing you imports below
+//@import "foundation";
+
+// Make sure the charset is set appropriately
+@charset "UTF-8";
+
+// Behold, here are all the Foundation components.
+@import
+//  "foundation/components/accordion",
+"foundation/components/alert-boxes",
+//  "foundation/components/block-grid",
+//  "foundation/components/breadcrumbs",
+//  "foundation/components/button-groups",
+//  "foundation/components/buttons",
+//  "foundation/components/clearing",
+//  "foundation/components/dropdown",
+//  "foundation/components/dropdown-buttons",
+//  "foundation/components/flex-video",
+"foundation/components/forms",
+"foundation/components/grid",
+//  "foundation/components/inline-lists",
+//  "foundation/components/joyride",
+//  "foundation/components/keystrokes",
+//  "foundation/components/labels",
+//  "foundation/components/magellan",
+//  "foundation/components/orbit",
+//  "foundation/components/pagination",
+//  "foundation/components/panels",
+//  "foundation/components/pricing-tables",
+//  "foundation/components/progress-bars",
+//  "foundation/components/reveal",
+//  "foundation/components/side-nav",
+//  "foundation/components/split-buttons",
+//  "foundation/components/sub-nav",
+//  "foundation/components/switch",
+//  "foundation/components/tables",
+//  "foundation/components/tabs",
+//  "foundation/components/thumbs",
+//  "foundation/components/tooltips",
+//"foundation/components/top-bar",
+"foundation/components/type";
+//  "foundation/components/offcanvas",
+//"foundation/components/visibility";
+
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300);
+
+@import "foundation-icons";
+@import "nouislider";
+@import "scroll";
+
+textarea{
+	min-height:7.5em;
+}
+.fi-like{
+	color:$green;
+}
+.fi-dislike{
+	color:$red;
+}
+.alert-box.error{
+	background-color:$red;
+	color:$white;
+	border-color: darken($red,15%);
+}
+
+.intr-color{
+	background-color:$lightgrey;
+	border:1px solid $grey;
+	color:$black;
+	box-shadow:0 1px 1px $grey;
+	&:active{
+		background-color:$success-color;
+		border:1px solid darken($success-color,10%);
+	}
+}
+.intr-btn{	
+	font-size: 1.25em;
+	padding:0.5em 1em;	
+	text-align: center;
+	
+}
+.intr{
+	list-style: none;
+	padding:0.25em 1em;
+	margin:0.5em 0;
+	
+}
+.sec{
+	font-size:0.75em !important;
+}
+.yes-no{
+	i{
+		font-size: 1.5em;
+	}
+}
+
+.nps-score{
+	font-weight: 300;
+	font-size: 3.6em;
+	padding:0.25em;
+}
+.fi-star{
+		color: $yellow;
+		margin:0 0.25em;
+		font-size: 1.1em;
+	}
+.small-input{
+	input{
+		margin-bottom: 0.25em;
+	}
+}
+
+.customer-details{
+	label{
+		display: none;
+	}
+}
+
+@media #{$small-up} { }
+@media #{$small-only} { }
+
+@media #{$medium-up} {
+	.intr-btn{	
+		font-size: 1em;
+		padding:0.5em 1em;	
+		text-align: center;
+		
+	}
+	.intr{
+		list-style: none;
+		padding:0.75em 1em;
+		margin:0.5em 0;
+		
+	}
+	.customer-details{
+	label{
+		display: block;
+	}
+}
+}
+@media #{$medium-only} {
+}
+
+@media #{$large-up} {
+.section{
+	input, textarea{
+		font-size:1.4rem;
+		padding:0.5em;
+		height:3.2rem;
+	}
+}
+
+}
+@media #{$large-only} { }
+
+@media #{$xlarge-up} { }
+@media #{$xlarge-only} { }
+
+@media #{$xxlarge-up} { }
+@media #{$xxlarge-only} { }
+
+
+
