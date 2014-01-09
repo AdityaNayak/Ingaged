@@ -31,9 +31,9 @@ ERROR_CODES = {
 
         # feedback (4000 - 4999) related to form creation etc. on dashboard and customer facing feedback collection
         '4000': 'Form data provided was not right.', # while creating the form
-        '4001': 'Form with the given ID does not exist.', # form does not exist
+        '4001': 'Form(s) with the given ID does not exist.', # form does not exist
         '4002': 'Form instance data provided was not correct.', # while creating a form instance
-        '4003': 'Form instance with the given ID does not exist.', # form instance does not exist
+        '4003': 'Form instance(s) with the given ID does not exist.', # form instance does not exist
         '4004': 'Feedback data submitted is wrong' # while customer is giving feedback
 
 }
