@@ -76,7 +76,10 @@ form_obj = {
     'name': fields.String,
     'description': fields.String,
     'fields': fields.List(fields.Nested(field_obj)),
-    'merchant': fields.Nested(merchant_obj)
+    'merchant': fields.Nested(merchant_obj),
+    'customer_details_heading': fields.String,
+    'feedback_heading': fields.String,
+    'nps_score_heading': fields.String
 }
 
 instance_obj = {
@@ -335,6 +338,7 @@ class FeedbackAnalytics(Resource):
     get_parser.add_argument('end_date', required=False, type=date_arg, location='args')
 
     @marshal_with(get_fields)
+    @login_required('merchant')
     def get(self, form_id):
         form = form_id_exists(form_id)
         args = self.get_parser.parse_args()

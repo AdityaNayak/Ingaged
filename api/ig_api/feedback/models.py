@@ -60,7 +60,7 @@ class FormFieldSubModel(db.EmbeddedDocument):
     
             # STAR RATING FIELD
             if self.field_type == 'ST':
-                if not response in [1, 2, 3, 4, 5]:
+                if not int(response) in [1, 2, 3, 4, 5]:
                     raise ValueError('The response to a Star Rating Field can only be among [1,2,3,4,5]. Integer.')
 
             # MULTIPLE FIELD
@@ -70,7 +70,6 @@ class FormFieldSubModel(db.EmbeddedDocument):
 
             # TEXT FIELD
             if self.field_type == 'TT':
-                print type(response)
                 if not type(response) is str and not type(response) is unicode:
                     raise ValueError('The response to a Text Field can only be a string of unicode or str type.')
 
