@@ -239,18 +239,18 @@ $button-font-color-alt: $black;
 // $button-font-sml: rem-calc(13);
 // $button-font-med: rem-calc(16);
 // $button-font-lrg: rem-calc(20);
-$button-font-weight: 300;
+$button-font-weight: 400;
 // $button-font-align: center;
 
 // We use these to control various hover effects.
-// $button-function-factor: 5%;
+$button-function-factor: 5%;
 
 // We use these to control button border styles.
 $button-border-width: 0 0 3px 0;
-// $button-border-style: solid;
+$button-border-style: solid;
 
 // We use this to set the default radius used throughout the core.
-// $button-radius: $global-radius;
+ $button-radius: $global-radius;
 // $button-round: $global-rounded;
 
 // We use this to set default opacity for disabled buttons.
@@ -405,10 +405,10 @@ $input-include-glowing-effect: false;
 
 // We use these to style the fieldset border and spacing.
 // $fieldset-border-style: solid;
-// $fieldset-border-width: 1px;
+ $fieldset-border-width: 0px;
 $fieldset-border-color: $lightgrey;
-// $fieldset-padding: rem-calc(20);
-// $fieldset-margin: rem-calc(18 0);
+ $fieldset-padding: 0px;
+ $fieldset-margin: 0px;
 
 // We use these to style the legends when you use them
 // $legend-bg: #fff;

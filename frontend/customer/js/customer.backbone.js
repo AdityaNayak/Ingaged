@@ -43,7 +43,7 @@ $( document ).ready(function() {
 		events: {
 			'click input,textarea': 'showDone',
 			'click .intr-btn, .intr': 'nextSection',
-			'click .form-submit-btn': 'submitFeedback',
+			'click #form-submit-btn': 'submitFeedback',
 		},
 		nextSection: function(ev){
 			var previousResponse = $(ev.currentTarget).parent().find(".response");
