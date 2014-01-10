@@ -207,9 +207,11 @@ var feedbackTimelineView = new FeedbackTimelineView();
                 return
             }
             var template = _.template($("#analytics-template").html(), {});
+            var settingstemplate = _.template($("#analytics-settings-template").html(), {});
             var headerTemplate = _.template($("#header-template").html(), {username: $.cookie("username")});
             var footerTemplate = _.template($("#footer-template").html(), {});
-            this.$el.html(template);
+            this.$el.html(settingstemplate);
+            this.$el.append(template);
             this.$el.prepend(headerTemplate);
             this.$el.append(footerTemplate);
             $('#reportrange').daterangepicker({

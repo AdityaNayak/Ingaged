@@ -311,22 +311,53 @@
 								</div>
 							</aside>
 						</script>
+						<script type="text/template" id="analytics-settings-template">
+							<div class="row">
+							<div class="small-9 small-offset-3 columns">
 
+
+							<div class="small-6 small-offset-2 columns">
+							<div id="reportrange" class="rangepicker-box text-right">
+							<span ></span><i class="fi-calendar"></i>
+							</div>
+							</div>
+							<div class="small-4 columns">
+							<div class="form-change">
+							<form>
+							<select>
+							<option>Form 1</option>
+							<option>Form 2</option>
+							<option>Form 3</option>
+							</select>
+							</form>
+							</div>
+							</div>
+							</div>
+							</div>
+
+						</script>
 						<script type="text/template" id="analytics-template">
 
 							<div class="row">
 								<h1>Analytics for Form 1 </h1>
 								<div class="small-3 columns panel">
-									<div class="form-change">
-										<h4>Change Form</h4>
-										<form>
-										<select>
-											<option>Form 1</option>
-											<option>Form 2</option>
-											<option>Form 3</option>
-										</select>
-										</form>
-									</div>
+									<ul class="question-list naked">
+										<li class="active">Question 1 and some words to add content</li>
+										<li>Question 2 and some words to add content</li>
+										<li>Question 3 and some words to add content</li>
+										<li>Question 4 and some words to add content</li>
+										<li>Question 5 and some words to add content</li>
+										<li>Question 6 and some words to add content</li>
+										<li>Question 7 and some words to add content</li>
+									</ul>
+								</div>
+								<div class="small-9 columns">
+									<div class="row">
+										<div class="small-8 columns text-center">
+											<canvas id="canvas0" height="450" width="450"></canvas>
+										</div>
+										<div class="small-4 columns">
+
 									<div class="form-result">
 									<h4>Form Results</h4>
 										<div class="row">
@@ -362,31 +393,7 @@
 											</div>
 										</div>
 									</div>
-								</div>
-								<div class="small-9 columns">
-									<div class="row">
-										<div class="small-6 columns small-offset-6">
-											<div id="reportrange" class="rangepicker-box text-right">
-												<span ></span><i class="fi-calendar"></i>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="small-8 columns text-center">
-											<canvas id="canvas0" height="450" width="450"></canvas>
-										</div>
-										<div class="small-4 columns">
-											<div class="panel">
-												<ul class="question-list naked">
-													<li class="active">Question 1 and some words to add content</li>
-													<li>Question 2 and some words to add content</li>
-													<li>Question 3 and some words to add content</li>
-													<li>Question 4 and some words to add content</li>
-													<li>Question 5 and some words to add content</li>
-													<li>Question 6 and some words to add content</li>
-													<li>Question 7 and some words to add content</li>
-												</ul>
-											</div>
+										
 										</div>
 									</div>
 								</div>
@@ -397,8 +404,8 @@
 									value : 80,
 									color : "#46BFBD",
 									label: 'HELLO',
-        labelColor: 'black',
-        labelFontSize: '16'
+							        labelColor: 'black',
+							        labelFontSize: '16'
 								},
 								{
 									value : 100,
