@@ -27,8 +27,8 @@ $( document ).ready(function() {
 	var api_root = 'ingage.herokuapp.com'
 
 	/* feedback form model */
-	var FeedbackFormModel = Backbone.Model.extend({
-		urlRoot: "http://" + api_root + "/customer/feedback",
+	FeedbackFormModel = Backbone.Model.extend({
+		urlRoot: "https://" + api_root + "/customer/feedback",
 		parse: function(response, xhr){
 			return response.form;
 		},
@@ -43,9 +43,14 @@ $( document ).ready(function() {
 		events: {
 			'click input,textarea': 'showDone',
 			'click .intr-btn, .intr': 'nextSection',
-			'submit #comment-form': 'submitFeedback',
+			'click .form-submit-btn': 'submitFeedback',
 		},
 		nextSection: function(ev){
+			var previousResponse = $(ev.currentTarget).parent().find(".response");
+			if (previousResponse) {
+			    previousResponse.removeClass("response");
+			}
+			$(ev.currentTarget).addClass("response");
 			$.fn.fullpage.moveSectionDown();
 		},
 		showDone: function(ev){
@@ -55,17 +60,52 @@ $( document ).ready(function() {
 		},
 		submitFeedback: function(ev){
 			ev.preventDefault();
-			serializedForm = $(ev.currentTarget).serializeObject();
-			data = {"text": serializedForm.comment, "id": serializedForm.id}
-			if (!serializedForm.name == ""){
-				data.customer_name = serializedForm.name
+
+            /* responses to indivual fields */
+            var field_responses = {} // dict storing the field responses
+            var sections = $(".multiple.rating, .multiple, .small-input, .yes-no");
+            $.each(sections, function(i){
+                section = $(sections[i]);
+                field_id = section.find('input[name="field_id"]').val();
+                if (!section.hasClass("small-input")){
+                    response = section.find('.response').attr('response');
+                }
+                else {
+                    response = section.find('input[name="tt_response"]').val();
+                }
+                field_responses[field_id] = response;
+            });
+
+            /* feedback text */
+            var feedback_text = $(".large-input").find("textarea").val();
+
+            /* nps score */
+            var nps_score = $(".input-slider").find(".nps-score").text();
+			
+            /* customer details */
+            var customer_details = {
+                'name': $(".customer-details").find("input[name='name']").val(),
+                'email': $(".customer-details").find("input[name='email']").val(),
+                'mobile': $(".customer-details").find("input[name='phone']").val()
+            };
+
+            /* complete data to send to the server */
+            var data = {
+                'feedback_text': feedback_text,
+                'nps_score': nps_score,
+                'field_responses': field_responses,
+                'id': $("input[name='id']").val()
+            }
+			if (!customer_details.name == ""){
+				data.customer_name = customer_details.name
 			}
-			if (!serializedForm.email == ""){
-				data.customer_email = serializedForm.email
+			if (!customer_details.email == ""){
+				data.customer_email = customer_details.email
 			}
-			if (!serializedForm.phone == ""){
-				data.customer_mobile = serializedForm.phone
+			if (!customer_details.mobile == ""){
+				data.customer_mobile = customer_details.mobile
 			}
+
 			var feedbackForm = new FeedbackFormModel();
 			feedbackForm.save(data);
 			this.$el.html(this.successTemplate);
