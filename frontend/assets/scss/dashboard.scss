@@ -272,6 +272,20 @@
 input[type=checkbox] {
 	margin-bottom:0;
 }
+.clegend{
+	font-size:2em;
+	font-weight:300;
+}
+.clabel{
+	padding:0.5em;
+	color:$white;
+}
+.form-result{
+	margin-top:3em;
+	.row{
+		margin-bottom: 0.5em;
+	}
+}
 
 // Form styling
 /*.cform{
