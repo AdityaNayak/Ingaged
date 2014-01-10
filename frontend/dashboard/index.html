@@ -61,7 +61,7 @@
 							<input type="password" required id="password" name="password" />
 						</div>
 					</fieldset>
-					<div class="form-element text-right">
+					<div class="form-element">
 						<button id="login-submit" type="submit" class="small fullwidth primary">Log in</button>
 						<div class="button small fullwidth loading" style="display:none;">
 							<span class="alert-text">
@@ -313,31 +313,27 @@
 						</script>
 						<script type="text/template" id="analytics-settings-template">
 							<div class="row">
-							<div class="small-9 small-offset-3 columns">
-
-
-							<div class="small-6 small-offset-2 columns">
-							<div id="reportrange" class="rangepicker-box text-right">
-							<span ></span><i class="fi-calendar"></i>
+								<div class="small-9 small-offset-3 columns">
+									<div class="small-6 small-offset-2 columns">
+										<div id="reportrange" class="rangepicker-box text-right">
+											<span ></span><i class="fi-calendar"></i>
+										</div>
+									</div>
+									<div class="small-4 columns">
+										<div class="form-change">
+											<form>
+												<select>
+													<option>Form 1</option>
+													<option>Form 2</option>
+													<option>Form 3</option>
+												</select>
+											</form>
+										</div>
+									</div>
+								</div>
 							</div>
-							</div>
-							<div class="small-4 columns">
-							<div class="form-change">
-							<form>
-							<select>
-							<option>Form 1</option>
-							<option>Form 2</option>
-							<option>Form 3</option>
-							</select>
-							</form>
-							</div>
-							</div>
-							</div>
-							</div>
-
 						</script>
 						<script type="text/template" id="analytics-template">
-
 							<div class="row">
 								<h1>Analytics for Form 1 </h1>
 								<div class="small-3 columns panel">
@@ -357,55 +353,53 @@
 											<canvas id="canvas0" height="450" width="450"></canvas>
 										</div>
 										<div class="small-4 columns">
-
-									<div class="form-result">
-									<h4>Form Results</h4>
-										<div class="row">
-											<div class="small-9 columns">
-												<div class="clabel" style="background:#46BFBD;">Hindustan Times</div>
+											<div class="form-result">
+												<h4>Form Results</h4>
+												<div class="row">
+													<div class="small-9 columns">
+														<div class="clabel" style="background:#46BFBD;">Hindustan Times</div>
+													</div>
+													<div class="small-3 columns">
+														<div class="clegend" style="color:#46BFBD;">22</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="small-9 columns">
+														<div class="clabel" style="background:#FDB45C;">The Hindu</div>
+													</div>
+													<div class="small-3 columns">
+														<div class="clegend" style="color:#FDB45C;">27</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="small-9 columns">
+														<div class="clabel" style="background:#949FB1;">Live Mint</div>
+													</div>
+													<div class="small-3 columns">
+														<div class="clegend" style="color:#949FB1;"> 11</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="small-9 columns">
+														<div class="clabel" style="background:#4D5360;">New York Times</div>
+													</div>
+													<div class="small-3 columns">
+														<div class="clegend" style="color:#4D5360;"> 33</div>
+													</div>
+												</div>
 											</div>
-											<div class="small-3 columns">
-												<div class="clegend" style="color:#46BFBD;">22</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="small-9 columns">
-												<div class="clabel" style="background:#FDB45C;">The Hindu</div>
-											</div>
-											<div class="small-3 columns">
-												<div class="clegend" style="color:#FDB45C;">27</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="small-9 columns">
-												<div class="clabel" style="background:#949FB1;">Live Mint</div>
-											</div>
-											<div class="small-3 columns">
-												<div class="clegend" style="color:#949FB1;"> 11</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="small-9 columns">
-												<div class="clabel" style="background:#4D5360;">New York Times</div>
-											</div>
-											<div class="small-3 columns">
-												<div class="clegend" style="color:#4D5360;"> 33</div>
-											</div>
-										</div>
-									</div>
-										
 										</div>
 									</div>
 								</div>
 							</div>
 							<script>
-							var doughnutData0 = [
+								var doughnutData0 = [
 								{
 									value : 80,
 									color : "#46BFBD",
 									label: 'HELLO',
-							        labelColor: 'black',
-							        labelFontSize: '16'
+									labelColor: 'black',
+									labelFontSize: '16'
 								},
 								{
 									value : 100,
@@ -434,8 +428,8 @@
 
 								];
 								var myDoughnut0 = new Chart(document.getElementById("canvas0").getContext("2d")).Doughnut(doughnutData0,{
-								        labelAlign: 'center'
-								    });
+									labelAlign: 'center'
+								});
 							</script>
 						</script>
 
@@ -474,10 +468,10 @@
                             </span> //TODO: these attributes are currently not being supplied by the API -->
                             <input type="hidden" value="<%= form.get("id") %>">
                         </li>
-                    <% }); %>
-				</ul>
-			</div>	
-		</div>
+                        <% }); %>
+</ul>
+</div>	
+</div>
 </script>
 
 <script type="text/template" id="form-instances-side-list-template">
