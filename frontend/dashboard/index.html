@@ -163,7 +163,16 @@
 		<div class="small-7 columns feedback-column">
 			<ul class="feedback-list feedback-timeline">
 				<% _.each(feedbacks, function(feedback){ %>
-					<li class="row yellow">
+                    <li class="row 
+                    
+                    <% if (feedback.get('nps_score') <= 10 && feedback.get('nps_score') >= 9) {%>
+                        green
+                    <% } if(feedback.get('nps_score') <= 8 && feedback.get('nps_score') >= 7) { %>
+                        yellow
+                    <% } else { %>
+                        red
+                    <% } %>
+                    ">
 						<span class="small-1 cform columns">
 							<input id="check1" type="checkbox" name="check" value="check1">  
 						</span>
