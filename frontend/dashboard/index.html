@@ -319,35 +319,65 @@
 						<script type="text/template" id="analytics-template">
 
 							<div class="row">
-								<h3>Analytics for Form 1 </h3>
+								<h1>Analytics for Form 1 </h1>
 								<div class="small-3 columns panel">
-									<select>
-										<option>Form 1</option>
-										<option>Form 2</option>
-										<option>Form 3</option>
-									</select>
+									<div class="form-change">
+										<h4>Change Form</h4>
+										<form>
+										<select>
+											<option>Form 1</option>
+											<option>Form 2</option>
+											<option>Form 3</option>
+										</select>
+										</form>
+									</div>
+									<div class="form-result">
+									<h4>Form Results</h4>
+										<div class="row">
+											<div class="small-9 columns">
+												<div class="clabel" style="background:#46BFBD;">Hindustan Times</div>
+											</div>
+											<div class="small-3 columns">
+												<div class="clegend" style="color:#46BFBD;">22</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="small-9 columns">
+												<div class="clabel" style="background:#FDB45C;">The Hindu</div>
+											</div>
+											<div class="small-3 columns">
+												<div class="clegend" style="color:#FDB45C;">27</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="small-9 columns">
+												<div class="clabel" style="background:#949FB1;">Live Mint</div>
+											</div>
+											<div class="small-3 columns">
+												<div class="clegend" style="color:#949FB1;"> 11</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="small-9 columns">
+												<div class="clabel" style="background:#4D5360;">New York Times</div>
+											</div>
+											<div class="small-3 columns">
+												<div class="clegend" style="color:#4D5360;"> 33</div>
+											</div>
+										</div>
+									</div>
 								</div>
 								<div class="small-9 columns">
-								<div class="row">
-								<div class="small-6 columns small-offset-6">
-								<div id="reportrange" class="rangepicker-box text-right">
+									<div class="row">
+										<div class="small-6 columns small-offset-6">
+											<div id="reportrange" class="rangepicker-box text-right">
 												<span ></span><i class="fi-calendar"></i>
 											</div>
-											</div>
-								</div>
+										</div>
+									</div>
 									<div class="row">
-										<div class="small-8 columns">
+										<div class="small-8 columns text-center">
 											<canvas id="canvas0" height="450" width="450"></canvas>
-											<div class="row">
-												<span class="small-1 columns" style="background:#46BFBD;"> &nbsp; </span>
-												<span class="small-2 columns">Hindustan Times</span>
-												<span class="small-1 columns" style="background:#FDB45C;">&nbsp; </span>
-												<span class="small-2 columns">New York Times</span>
-												<span class="small-1 columns" style="background:#949FB1;">&nbsp; </span>
-												<span class="small-2 columns">Live Mint</span>
-												<span class="small-1 columns" style="background:#4D5360;">&nbsp; </span>
-												<span class="small-2 columns">The Hindu</span>
-											</div>
 										</div>
 										<div class="small-4 columns">
 											<div class="panel">
@@ -366,30 +396,43 @@
 								</div>
 							</div>
 							<script>
-								var doughnutData0 = [
-
+							var doughnutData0 = [
 								{
 									value : 80,
 									color : "#46BFBD",
-									label : 'Sleep',
-                labelColor : 'white',
-                labelFontSize : '16'
+									label: 'HELLO',
+        labelColor: 'black',
+        labelFontSize: '16'
 								},
 								{
 									value : 100,
-									color : "#FDB45C"
+									color : "#FDB45C",
+									label : 'Sleep5',
+									labelColor : 'white',
+									labelFontSize : '10',
+									labelAlign : 'left'
 								},
 								{
 									value : 40,
-									color : "#949FB1"
+									color : "#949FB1",
+									label : 'Sleep9',
+									labelColor : 'white',
+									labelFontSize : '10',
+									labelAlign : 'left'
 								},
 								{
 									value : 120,
-									color : "#4D5360"
+									color : "#4D5360",
+									label : 'Sleep6',
+									labelColor : 'white',
+									labelFontSize : '10',
+									labelAlign : 'left'
 								}
 
 								];
-								var myDoughnut0 = new Chart(document.getElementById("canvas0").getContext("2d")).Doughnut(doughnutData0);
+								var myDoughnut0 = new Chart(document.getElementById("canvas0").getContext("2d")).Doughnut(doughnutData0,{
+								        labelAlign: 'center'
+								    });
 							</script>
 						</script>
 
@@ -428,12 +471,10 @@
                             </span> //TODO: these attributes are currently not being supplied by the API -->
                             <input type="hidden" value="<%= form.get("id") %>">
                         </li>
-
-                        <% }); %>
-</ul>
-</div>	
-</div>
-
+                    <% }); %>
+				</ul>
+			</div>	
+		</div>
 </script>
 
 <script type="text/template" id="form-instances-side-list-template">
@@ -564,7 +605,7 @@
 		<script src="js/foundation/foundation.js"></script>
 		<script src="js/foundation/foundation.topbar.js"></script>
 		<script src="js/foundation/foundation.forms.js"></script>
-		<script src="js/plugins/chart.min.js"></script>
+		<script src="js/plugins/chart.js"></script>
 		<script src="js/plugins/moment.min.js"></script>
 		<script src="js/plugins/daterangepicker.js"></script>
 		<script src="js/plugins/jquery.tristate.min.js"></script>
