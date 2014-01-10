@@ -321,131 +321,80 @@
 							</aside>
 						</script>
 						<script type="text/template" id="analytics-settings-template">
-							<div class="row">
-							<div class="small-9 small-offset-3 columns">
+							<div class="row" id="analytics-settings">
+                                <div class="small-9 small-offset-3 columns">
 
 
-							<div class="small-6 small-offset-2 columns">
-							<div id="reportrange" class="rangepicker-box text-right">
-							<span ></span><i class="fi-calendar"></i>
-							</div>
-							</div>
-							<div class="small-4 columns">
-							<div class="form-change">
-							<form>
-							<select>
-							<option>Form 1</option>
-							<option>Form 2</option>
-							<option>Form 3</option>
-							</select>
-							</form>
-							</div>
-							</div>
-							</div>
+                                <div class="small-6 small-offset-2 columns">
+                                <div id="reportrange" class="rangepicker-box text-right">
+                                <span ></span><i class="fi-calendar"></i>
+                                </div>
+                                </div>
+                                <div class="small-4 columns">
+                                <div class="form-change">
+                                <form>
+                                <select>
+                                    <% _.each(forms, function(form) { %>
+                                        <option id="<%= form.get('id') %>"><%= form.get('name') %></option>
+                                    <% }); %>
+                                </select>
+                                </form>
+                                </div>
+                                </div>
+                                </div>
 							</div>
 
 						</script>
+                        <script type="text/template" id="analytics-choose-template">
+                            <div class="row" id="form-analytics">
+                                <h1>Choose a date and shit to do something.</h1>
+                            </div>
+                        </script>
 						<script type="text/template" id="analytics-template">
+                            <div class="row" id="form-analytics">
+                                <input type="hidden" value="<%= form_id %>" name="form_id">
+                                <input type="hidden" value="<%= form_name %>" name="form_name">
+                                <h1>Analytics for <%= form_name %></h1>
+                                <div class="small-3 columns panel">
+                                    <ul class="question-list naked">
+                                        <% _.each(analytics.get('analytics'), function(analytic){ %>
+                                            <% if (analytic.field.id == field_analytics.field.id){ %>
+                                                <li id="<%= analytic.field.id %>" class="active"><%= analytic.field.text %></li>
+                                            <% } else { %>
+                                                <li id="<%= analytic.field.id %>"><%= analytic.field.text %></li>
+                                            <% } %>
+                                        <% }); %>
+                                    </ul>
+                                </div>
+                                <div class="small-9 columns">
+                                    <div class="row">
+                                        <div class="small-8 columns text-center">
+                                            <canvas id="canvas0" height="450" width="450"></canvas>
+                                        </div>
+                                        <div class="small-4 columns">
 
-							<div class="row">
-								<h1>Analytics for Form 1 </h1>
-								<div class="small-3 columns panel">
-									<ul class="question-list naked">
-										<li class="active">Question 1 and some words to add content</li>
-										<li>Question 2 and some words to add content</li>
-										<li>Question 3 and some words to add content</li>
-										<li>Question 4 and some words to add content</li>
-										<li>Question 5 and some words to add content</li>
-										<li>Question 6 and some words to add content</li>
-										<li>Question 7 and some words to add content</li>
-									</ul>
-								</div>
-								<div class="small-9 columns">
-									<div class="row">
-										<div class="small-8 columns text-center">
-											<canvas id="canvas0" height="450" width="450"></canvas>
-										</div>
-										<div class="small-4 columns">
-
-									<div class="form-result">
-									<h4>Form Results</h4>
-										<div class="row">
-											<div class="small-9 columns">
-												<div class="clabel" style="background:#46BFBD;">Hindustan Times</div>
-											</div>
-											<div class="small-3 columns">
-												<div class="clegend" style="color:#46BFBD;">22</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="small-9 columns">
-												<div class="clabel" style="background:#FDB45C;">The Hindu</div>
-											</div>
-											<div class="small-3 columns">
-												<div class="clegend" style="color:#FDB45C;">27</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="small-9 columns">
-												<div class="clabel" style="background:#949FB1;">Live Mint</div>
-											</div>
-											<div class="small-3 columns">
-												<div class="clegend" style="color:#949FB1;"> 11</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="small-9 columns">
-												<div class="clabel" style="background:#4D5360;">New York Times</div>
-											</div>
-											<div class="small-3 columns">
-												<div class="clegend" style="color:#4D5360;"> 33</div>
-											</div>
-										</div>
-									</div>
-										
-										</div>
-									</div>
-								</div>
-							</div>
-							<script>
-							var doughnutData0 = [
-								{
-									value : 80,
-									color : "#46BFBD",
-									label: 'HELLO',
-							        labelColor: 'black',
-							        labelFontSize: '16'
-								},
-								{
-									value : 100,
-									color : "#FDB45C",
-									label : 'Sleep5',
-									labelColor : 'white',
-									labelFontSize : '10',
-									labelAlign : 'left'
-								},
-								{
-									value : 40,
-									color : "#949FB1",
-									label : 'Sleep9',
-									labelColor : 'white',
-									labelFontSize : '10',
-									labelAlign : 'left'
-								},
-								{
-									value : 120,
-									color : "#4D5360",
-									label : 'Sleep6',
-									labelColor : 'white',
-									labelFontSize : '10',
-									labelAlign : 'left'
-								}
-
-								];
-								var myDoughnut0 = new Chart(document.getElementById("canvas0").getContext("2d")).Doughnut(doughnutData0,{
-								        labelAlign: 'center'
-								    });
-							</script>
+                                    <div class="form-result">
+                                    <h4>Form Results</h4>
+                                        <% _.each(field_analytics.numbers, function(number){ %>
+                                            <div class="row">
+                                                <div class="small-9 columns">
+                                                    <div class="clabel" style="background:<%= number.color %>;">
+                                                        <%= number.text %>
+                                                    </div>
+                                                </div>
+                                                <div class="small-3 columns">
+                                                    <div class="clegend" style="color:<%= number.color %>;">
+                                                        <%= number.number %>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <% }); %>
+                                    </div>
+                                        
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 						</script>
 
 						<script type="text/template" id="feedback-forms-list-template">
