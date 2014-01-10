@@ -19,87 +19,126 @@
 <body>
 	<script type="text/template" id="feedback-form-template">
 		<ol class="section-list">
-			<div class="yes-no section row" data-anchor="">
-				<div class="row">
-					<li class="small-11 small-centered columns">
-						<h3>Was the check-in to your satisfaction?</h3>
-					</li> 
-				</div>
-				<div class="row">
-					<div class="small-10 columns small-centered">
-						<div class="row">
-							<div class="small-5 columns intr-color intr-btn yes">
-								<div><i class="fi-like"></i></div>
-								<div>Yes</div>
-							</div>
-							<div class="small-5 columns intr-color intr-btn no">
-								<div><i class="fi-dislike"></i></div>
-								<div>No</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="multiple section row" data-anchor="">
-				<div class="row">
-					<li class="small-11 small-centered columns">
-						<h3>Which newspaper would you like us to deliver to your room every morning?</h3>
-					</li>
-				</div>
-				<div class="row">
-					<div class="small-10 columns small-centered">
-						<ul>
-							<li class="intr intr-color">Hindustan Times</li>
-							<li class="intr intr-color">The Hindu</li>
-							<li class="intr intr-color">Live Mint</li>
-							<li class="intr intr-color">New York Times</li>
-						</ul>
-					</div>
-				</div>
-			</div>
-			<div class="multiple rating section row" data-anchor="">
-				<div class="row">
-					<li class="small-11 small-centered columns">
-						<h3>How would you rate our Ambience?</h3>
-					</li>
-				</div>
-				<div class="row">
-					<div class="small-10 columns small-centered">
-						<ul>
-							<li class="intr intr-color"><i class="fi-star"></i></li>
-							<li class="intr intr-color"><i class="fi-star"></i><i class="fi-star"></i></li>
-							<li class="intr intr-color"><i class="fi-star"></i><i class="fi-star"></i><i class="fi-star"></i>
-							</li>
-							<li class="intr intr-color"><i class="fi-star"></i><i class="fi-star"></i><i class="fi-star"></i><i class="fi-star"></i>
-							</li>
-							<li class="intr intr-color"><i class="fi-star"></i><i class="fi-star"></i><i class="fi-star"></i><i class="fi-star"></i><i class="fi-star"></i>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</div>
-			<div class="small-input section row" data-anchor="">
-				<li class="small-11 small-centered columns">
-					<div class="right hide sec intr-color done intr-btn">Done</div>  
-					<h3>What is your favorite music?</h3>
-				</li>
-				<div class="small-10 columns small-centered">
-					<input type="text">
-				</div>
-			</div>
+            <% var fields = form.get('fields') %>
+            <% _.each(fields, function(field){ %>
+            
+                <% if (field.type == 'YN') { %>
+                    <div class="yes-no section row" data-anchor="">
+                        <div class="row">
+                            <li class="small-11 small-centered columns">
+                                <h3><%= field.text %></h3>
+                            </li> 
+                        </div>
+                        <div class="row">
+                            <div class="small-10 columns small-centered">
+                                <div class="row">
+                                    <div class="small-5 columns intr-color intr-btn yes" response="YES">
+                                        <div><i class="fi-like"></i></div>
+                                        <div>Yes</div>
+                                    </div>
+                                    <div class="small-5 columns intr-color intr-btn no" response="NO">
+                                        <div><i class="fi-dislike"></i></div>
+                                        <div>No</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="field_id" value="<%= field.id %>">
+                    </div>
+                <% } %>
+
+                <% if (field.type == 'ST') { %>
+                    <div class="multiple rating section row" data-anchor="">
+                        <div class="row">
+                            <li class="small-11 small-centered columns">
+                                <h3><%= field.text %></h3>
+                            </li>
+                        </div>
+                        <div class="row">
+                            <div class="small-10 columns small-centered">
+                                <ul>
+                                    <li class="intr intr-color" response="1">
+                                        <i class="fi-star"></i>
+                                    </li>
+                                    <li class="intr intr-color" response="2">
+                                        <i class="fi-star"></i>
+                                        <i class="fi-star"></i>
+                                    </li>
+                                    <li class="intr intr-color" response="3">
+                                        <i class="fi-star"></i>
+                                        <i class="fi-star"></i>
+                                        <i class="fi-star"></i>
+                                    </li>
+                                    <li class="intr intr-color" response="4">
+                                        <i class="fi-star"></i>
+                                        <i class="fi-star"></i>
+                                        <i class="fi-star"></i>
+                                        <i class="fi-star"></i>
+                                    </li>
+                                    <li class="intr intr-color" response="5">
+                                        <i class="fi-star"></i>
+                                        <i class="fi-star"></i>
+                                        <i class="fi-star"></i>
+                                        <i class="fi-star"></i>
+                                        <i class="fi-star"></i>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <input type="hidden" name="field_id" value="<%= field.id %>">
+                    </div>
+                <% } %>
+
+                <% if (field.type == 'MT') { %>
+                    <div class="multiple section row" data-anchor="">
+                        <div class="row">
+                            <li class="small-11 small-centered columns">
+                                <h3><%= field.text %></h3>
+                            </li>
+                        </div>
+                        <div class="row">
+                            <div class="small-10 columns small-centered">
+                                <ul>
+                                    <% choices = field.choices %>
+                                    <% _.each(choices, function(choice) { %>
+                                        <li class="intr intr-color" response="<%= choice %>"><%= choice %></li>
+                                    <% }); %>
+                                </ul>
+                            </div>
+                        </div>
+                        <input type="hidden" name="field_id" value="<%= field.id %>">
+                    </div>
+                <% } %>                    
+
+                <% if (field.type == 'TT') { %>
+                    <div class="small-input section row" data-anchor="">
+                        <li class="small-11 small-centered columns">
+                            <div class="right hide sec intr-color done intr-btn">Done</div>  
+                            <h3><%= field.text %></h3>
+                        </li>
+                        <div class="small-10 columns small-centered">
+                            <input type="text" name="tt_response">
+                        </div>
+                        <input type="hidden" name="field_id" value="<%= field.id %>">
+                    </div>
+                <% } %>                    
+
+            <% }); %>
+
 			<div class="large-input section row" data-anchor="">
 				<li class="small-11 small-centered columns">
 					<div class="right hide sec intr-color done intr-btn">Done</div>  
-					<h3>Tell us more</h3>
+                    <h3><%= form.get('feedback_heading') %></h3>
 				</li>
 				<div class="small-10 columns small-centered">
 					<textarea></textarea>
 				</div>
 			</div>
+
 			<div class="customer-details section row" data-anchor="">
 				<li class="small-11 small-centered columns">
 					<div class="right hide sec intr-color done intr-btn">Done</div>  
-					<h3>Your details</h3> 
+                    <h3><%= form.get('customer_details_heading') %></h3> 
 				</li>
 				<div class="small-10 columns small-centered">
 					<label for="name">Name: </label>
@@ -110,18 +149,25 @@
 					<input type="tel" id="phone" name="phone" placeholder="xxx-xxx-xxxx" />
 				</div>
 			</div>
+
 			<div class="input-slider section row" data-anchor="">
 				<li class="small-11 small-centered columns">
 					<div class="right hide sec intr-color done intr-btn">Done</div>  
-					<h3>How likely are you to recommend us to your friends?</h3>
+                    <h3><%= form.get('nps_score_heading') %></h3>
 				</li>
 				<div class="small-10 small-centered columns">
 					<div id="show-serialization-field" class="text-center nps-score"> </div>
 					<div id="nps-rating"> 
 					</div>
 				</div>
-			</div> 
+            </div>
+
+            <div class="section row" data-anchor="">
+                <input type="button" value="This will submit the feedback." class="form-submit-btn">
+            </div>
+
 		</ol>
+        <input type="hidden" name="id" value="<%= instance_id %>">
 		<script src="js/plugins/jquery.nouislider.js"></script>
 		
 	</script>
