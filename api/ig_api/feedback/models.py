@@ -129,24 +129,57 @@ class FormModel(db.Document):
                     responses[str(f_id)]['responses'].append(response)
         # counting the number of responses for providing as analytics
         for f_id, response in responses.items():
+            #TODO: this is just a temproary work around
+            colors = ["#46BFBD", "#FDB45C", "#949FB1", "#4D5360", "#4E2350"]
             if response['field'].field_type == 'YN':
                 responses[f_id]['numbers'] = {
-                    'YES': response['responses'].count('YES'),
-                    'NO': response['responses'].count('NO')
+                    'YES': {
+                        'number': response['responses'].count('YES'),
+                        'color': colors.pop(),
+                        'text': 'YES'
+                    },
+                    'NO': {
+                        'number': response['responses'].count('NO'),
+                        'color': colors.pop(),
+                        'text': 'NO'
+                    }
                 }
             if response['field'].field_type == 'ST':
                 responses[f_id]['numbers'] = {
-                    '1': responses['responses'].count('1'),
-                    '2': responses['responses'].count('2'),
-                    '3': responses['responses'].count('3'),
-                    '4': responses['responses'].count('4'),
-                    '5': responses['responses'].count('5'),
+                    '1': {
+                        'number': response['responses'].count('1'),
+                        'color': colors.pop(),
+                        'text': '1 stars'
+                    },
+                    '2': {
+                        'number': response['responses'].count('2'),
+                        'color': colors.pop(),
+                        'text': '2 stars'
+                    },
+                    '3': {
+                        'number': response['responses'].count('3'),
+                        'color': colors.pop(),
+                        'text': '3 stars'
+                    },
+                    '4': {
+                        'number': response['responses'].count('4'),
+                        'color': colors.pop(),
+                        'text': '4 stars'
+                    },
+                    '5': {
+                        'number': response['responses'].count('5'),
+                        'color': colors.pop(),
+                        'text': '5 stars'
+                    },
                 }
             if response['field'].field_type == 'MT':
                 responses[f_id]['numbers'] = {}
                 for choice in response['field'].choices:
-                    responses[f_id]['analytics'][choice] = responses['responses'].count(choice)
-            responses[f_id].pop('responses')
+                    responses[f_id]['numbers'][choice] = {
+                            'number': response['responses'].count(choice),
+                            'color': colors.pop(),
+                            'text': choice
+                        }
 
         return responses
 
