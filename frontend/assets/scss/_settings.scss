@@ -142,28 +142,28 @@ $shiny-edge-size: 0 0px 0;
 // $include-html-alert-classes: $include-html-classes;
 
 // We use this to control alert padding.
-// $alert-padding-top: rem-calc(14);
-// $alert-padding-default-float: $alert-padding-top;
-// $alert-padding-opposite-direction: $alert-padding-top + rem-calc(10);
-// $alert-padding-bottom: $alert-padding-top;
+ $alert-padding-top: rem-calc(8);
+ $alert-padding-default-float: $alert-padding-top;
+ $alert-padding-opposite-direction: $alert-padding-top + rem-calc(10);
+ $alert-padding-bottom: $alert-padding-top;
 
 // We use these to control text style.
 // $alert-font-weight: normal;
 // $alert-font-size: rem-calc(13);
-// $alert-font-color: #fff;
+ $alert-font-color: $white;
 // $alert-font-color-alt: scale-color($secondary-color, $lightness: -66%);
 
 // We use this for close hover effect.
-// $alert-function-factor: -14%;
+ $alert-function-factor: -14%;
 
 // We use these to control border styles.
 // $alert-border-style: solid;
 // $alert-border-width: 1px;
-// $alert-border-color: scale-color($primary-color, $lightness: $alert-function-factor);
+ $alert-border-color: scale-color($primary-color, $lightness: $alert-function-factor);
 // $alert-bottom-margin: rem-calc(20);
 
 // We use these to style the close buttons
-// $alert-close-color: #333;
+ $alert-close-color: $black;
 // $alert-close-top: 50%;
 // $alert-close-position: rem-calc(5);
 // $alert-close-font-size: rem-calc(22);
@@ -172,7 +172,7 @@ $shiny-edge-size: 0 0px 0;
 // $alert-close-padding: 9px 6px 4px;
 
 // We use this to control border radius
-// $alert-radius: $global-radius;
+ $alert-radius: $global-radius;
 
 // Block Grid
 

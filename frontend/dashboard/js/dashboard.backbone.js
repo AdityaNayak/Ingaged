@@ -552,7 +552,6 @@ var feedbackFormCreationView = new FeedbackFormCreationView();
             });
         },
         render: function(options){
-            alert("this is something nice?");
             if (!$.cookie("username") && !$.cookie("password")){
                 router.navigate('', {trigger: true});
                 return

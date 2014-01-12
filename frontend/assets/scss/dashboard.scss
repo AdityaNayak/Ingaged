@@ -67,7 +67,7 @@
 }
 .alert-bar{
 	height:36px;
-	margin-bottom:0.5em;
+	margin-bottom:1.5em;
 }
 .alert-box.loading{
 	background:$white;
@@ -261,6 +261,7 @@
 	li{
 		border-bottom:1px solid $grey;
 		padding:0.5em 0;
+		cursor: pointer;
 		&.active, &:hover{
 			font-weight: 700;
 		}

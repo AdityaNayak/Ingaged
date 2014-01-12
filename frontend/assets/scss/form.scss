@@ -124,6 +124,9 @@ textarea{
 		display: none;
 	}
 }
+.response{
+	box-shadow:0 0 2px 2px $green;
+	}
 
 @media #{$small-up} { }
 @media #{$small-only} { }
@@ -142,10 +145,11 @@ textarea{
 		
 	}
 	.customer-details{
-	label{
-		display: block;
+		label{
+			display: block;
+		}
 	}
-}
+
 }
 @media #{$medium-only} {
 }
@@ -167,6 +171,3 @@ textarea{
 
 @media #{$xxlarge-up} { }
 @media #{$xxlarge-only} { }
-
-
-

@@ -64,7 +64,7 @@ $alert-radius: $global-radius !default;
 
   // We control which background color and border come through.
   background-color: $bg;
-  border-color: darken($bg, $alert-function-factor);
+  border-color: scale-color($bg, $lightness: $alert-function-factor);
 
   // We control the text color for you based on the background color.
   @if $bg-lightness > 70% { color: $alert-font-color-alt; }

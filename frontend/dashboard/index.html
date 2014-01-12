@@ -364,16 +364,19 @@
 						</script>
                         <script type="text/template" id="analytics-choose-template">
                             <div class="row" id="form-analytics">
-                                <h1>Choose a date and shit to do something.</h1>
+                            <div class="small-6 small-centered columns">
+	                            <div data-alert class="alert-box error">  Please select a form
+	                            </div>
+	                            </div>
                             </div>
                         </script>
 						<script type="text/template" id="analytics-template">
                             <div class="row" id="form-analytics">
                                 <input type="hidden" value="<%= form_id %>" name="form_id">
                                 <input type="hidden" value="<%= form_name %>" name="form_name">
-                                <h1>Analytics for <%= form_name %></h1>
+                                <h2>Analytics for <%= form_name %></h2>
                                 <div class="small-3 columns panel">
-                                    <ul class="question-list naked">
+                                    <ol class="question-list">
                                         <% _.each(analytics.get('analytics'), function(analytic){ %>
                                             <% if (analytic.field.id == field_analytics.field.id){ %>
                                                 <li id="<%= analytic.field.id %>" class="active"><%= analytic.field.text %></li>
@@ -381,7 +384,7 @@
                                                 <li id="<%= analytic.field.id %>"><%= analytic.field.text %></li>
                                             <% } %>
                                         <% }); %>
-                                    </ul>
+                                    </ol>
                                 </div>
                                 <div class="small-9 columns">
                                     <div class="row">
@@ -415,15 +418,19 @@
 						</script>
 
 						<script type="text/template" id="feedback-forms-list-template">
-							<div class="row">
-								<h2>Forms <a href="#/feedback_forms/new" class="button tiny">Create New Form</a></h2>
+							<div class="row collapse">
+							<div class="small-9 columns">
+								<h2>Forms <a href="#/feedback_forms/new" class="button right tiny">Create New Form</a></h2>
+								</div>
+								</div>
+								<div class="row">
 								<div class="small-9 columns">
 									<ul class="feedback-list list-header">
 										<li class="row">
 											<span class="small-1 cform columns"><input type="checkbox"></span>
-											<span class="small-2 columns">Name</span>
-											<!-- <span class="small-2 columns">Instance</span> 
-											<span class="small-3 columns">Description</span>
+											<span class="small-4 columns">Name</span>
+											<!-- <span class="small-2 columns">Instance</span> -->
+											<span class="small-7 columns">Description</span>
 											<!-- <span class="small-4 columns">
 											<span class="row collapse">
 												<span class="small-4 columns">This week</span>
@@ -439,7 +446,7 @@
             			<span class="small-1 columns"><input type="checkbox"></span>
             			<span class="small-4 columns"><%= form.get("name") %></span>
                             <!-- <span class="small-2 columns">Table 1</span> //TODO: just showing the list of instances on right side -->
-                            <span class="small-5 columns"><%= form.get("description") %></span>
+                            <span class="small-7 columns"><%= form.get("description") %></span>
                             <!-- <span class="small-4 columns">
                             <span class="row collapse">
                             	<span class="small-4 columns">16</span>
@@ -463,13 +470,13 @@
 				<a class="secondary" href="#/feedback_forms/<%= form_id %>/instances">View details</a>
 				<ul class="side-nav">
 					<% _.each(instances, function(instance){ %>
-						<li><%= instance.get("name") %><a class="secondary secondary-color" href="http://customer.ingagelive.com#/<%= instance.get('id') %>">View</a></li>
+						<li><%= instance.get("name") %><a class="secondary right" href="http://customer.ingagelive.com#/<%= instance.get('id') %>">View</a></li>
 						<% }); %>
 				</ul>
 				<% } else { %>
 					<h6>No Instances Associated</h6>
 					<% } %>
-					<a href="#/feedback_forms/<%= form_id %>/instances/new" class="button small">Create New Instance</a>
+					<a href="#/feedback_forms/<%= form_id %>/instances/new" class="button tiny">Create New Instance</a>
 				</div>
 			</div>
 		</script>
@@ -479,14 +486,14 @@
 				<div class="small-9 small-centered columns">
 					<div class="row">
 						<a class="secondary secondary-color" href="#/feedback_forms">Back to Form</a>
-						<h2>Instances attached to <em>"<%= form.get('name') %>"</em><a href="#/feedback_forms/<%= form.get('id') %>/instances/new" class="button small">Create New Instance</a></h2>
+						<h2>Instances attached to <em>"<%= form.get('name') %>"</em><a href="#/feedback_forms/<%= form.get('id') %>/instances/new" class="button right tiny">Create New Instance</a></h2>
 						<div class="small-12 columns">
 							<ul class="feedback-list list-header">
 								<li class="row read">
 									<span class="small-1 cform columns"><input type="checkbox"></span>
 									<span class="small-2 columns">Name</span>
 									<span class="small-2 columns">Location</span>
-									<span class="small-3 columns">Description </span>
+									<span class="small-7 columns">Description </span>
 								</li>
 							</ul>
 							<ul class="feedback-list">
@@ -495,8 +502,8 @@
 										<span class="small-1 cform columns"><input type="checkbox"></span>
 										<span class="small-2 columns"><%= instance.get("name") %></span>
 										<span class="small-2 columns"><%= instance.get("location") %></span>
-										<span class="small-3 columns"><%= instance.get("description") %></span>
-										<span class="small-3 columns"><a href="http://customer.ingagelive.com#/<%= instance.get('id') %>">View</a></span>
+										<span class="small-6 columns"><%= instance.get("description") %></span>
+										<span class="small-1 columns"><a href="http://customer.ingagelive.com#/<%= instance.get('id') %>">View</a></span>
 
 									</li>
 									<% }); %>
@@ -524,7 +531,7 @@
 								</div>
 							</fieldset>
 							<div class="form-element text-right">
-								<button type="submit" class="medium success">Create Form</button>
+								<button type="submit" class="medium">Create Form</button>
 							</div>
 						</form>   
 						<div class="small-4 small-offset-1 columns panel">
