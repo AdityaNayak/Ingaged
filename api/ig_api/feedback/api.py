@@ -321,7 +321,7 @@ class FeedbackAnalytics(Resource):
     def date_arg(value):
         try:
             year, month, day = value.split('-')
-            date = datetime.datetime(int(year), int(month), int(day))
+            date = datetime.datetime(int(year), int(month), int(day), hour=23, minute=59, second=59)
         except ValueError:
             raise ValueError("There was some problem with the date provided.")
 
