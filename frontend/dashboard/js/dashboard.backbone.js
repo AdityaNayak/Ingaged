@@ -235,8 +235,8 @@ var loginView = new LoginView();
         },
         changeForm: function(ev, field_id, start_date, end_date){
             if(!start_date && !end_date){
-                end_date = moment().format("YYYY-MM-DD");
-                start_date = moment().subtract({'days': 29}).format("YYYY-MM-DD");
+                end_date = moment().utc().format("YYYY-MM-DD");
+                start_date = moment().utc().subtract({'days': 29}).format("YYYY-MM-DD");
             }
             if (ev){
                 formID = $(ev.currentTarget).find(":selected").attr("id");

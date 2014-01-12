@@ -351,6 +351,7 @@
                                 <div class="form-change">
                                 <form>
                                 <select>
+                                        <option>Select a form</option>
                                     <% _.each(forms, function(form) { %>
                                         <option id="<%= form.get('id') %>"><%= form.get('name') %></option>
                                     <% }); %>
