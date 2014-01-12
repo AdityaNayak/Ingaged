@@ -165,9 +165,9 @@
 				<% _.each(feedbacks, function(feedback){ %>
                     <li class="row 
                     
-                    <% if (feedback.get('nps_score') <= 10 && feedback.get('nps_score') >= 9) {%>
+                    <% if (feedback.get('nps_score') == 10 || feedback.get('nps_score') == 9) {%>
                         green
-                    <% } if(feedback.get('nps_score') <= 8 && feedback.get('nps_score') >= 7) { %>
+                    <% } else if(feedback.get('nps_score') == 8 || feedback.get('nps_score') == 7) { %>
                         yellow
                     <% } else { %>
                         red
@@ -183,13 +183,15 @@
 									<strong><%= feedback.get("customer").name %></strong>
 									<% } else { %>
 										No Name
-										<% } %>
+                                    <% } %>
 									</span> - 
 									<span class="customer-message">
-										<%= feedback.get("text") %>
+										<%= feedback.get("feedback_text") %>
 									</span>
 								</span>
-								<span class="small-2 columns text-right secondary secondary-color"><%= $.timeago(new Date(feedback.get("received_at"))) %></span>
+                                <span class="small-2 columns text-right secondary secondary-color">
+                                    <%= $.timeago(new Date(feedback.get("received_at"))) %>
+                                </span>
 								<input type="hidden" name="feedback_id" value="<%= feedback.get('id') %>">
 							</li>
 							<% }); %>
@@ -275,7 +277,17 @@
                     </ul>
                 </div>
                 <div class="small-3 columns">
-                    <div class="feedback-score green">
+                    <div class="feedback-score
+
+                        <% if (feedback.get('nps_score') == 10 || feedback.get('nps_score') == 9) {%>
+                            green
+                        <% } else if(feedback.get('nps_score') == 8 || feedback.get('nps_score') == 7) { %>
+                            yellow
+                        <% } else { %>
+                            red
+                        <% } %>
+
+                        ">
                         <%= feedback.get('nps_score') %>
                     </div>
                     <div class="secondary-color secondary">

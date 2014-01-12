@@ -24,11 +24,11 @@ $( document ).ready(function() {
 	});
 
 	/* hostname of the api */
-	var api_root = 'localhost:5000'
+	var api_root = 'http://ingage.herokuapp.com'
 
 	/* feedback form model */
 	FeedbackFormModel = Backbone.Model.extend({
-		urlRoot: "http://" + api_root + "/customer/feedback",
+		urlRoot: api_root + "/customer/feedback",
 		parse: function(response, xhr){
 			return response.form;
 		},
