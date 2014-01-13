@@ -327,9 +327,8 @@ class FeedbackTimeline(Resource):
     def get(self):
         merchant = g.user.merchant
         args = self.get_parser.parse_args()
-        print args
+
         if args['nps_score_start'] and args['nps_score_end']:
-            print 'this is good'
             feedbacks = FeedbackModel.objects.filter(merchant=merchant, nps_score__gte=args['nps_score_start'], 
                     nps_score__lte=args['nps_score_end']).order_by("-received_at")
         else:
