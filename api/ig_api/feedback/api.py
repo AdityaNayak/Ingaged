@@ -306,12 +306,34 @@ class FeedbackTimeline(Resource):
         'feedbacks': fields.List(fields.Nested(feedback_obj))
     }
 
+    def nps_score_type(value, key):
+        try:
+            value = int(value)
+        except ValueError:
+            raise ValueError("'{0}' should be of int type.").format(key)
+
+        # nps score should be in the range of 1 to 10
+        if value < 1 or value > 10:
+            raise ValueError("'{0}' should be between 1 and 10.").format(key)
+
+        return value
+
+    get_parser = reqparse.RequestParser()
+    get_parser.add_argument('nps_score_start', required=False, type=nps_score_type, location='args')
+    get_parser.add_argument('nps_score_end', required=False, type=nps_score_type, location='args')
+
     @marshal_with(get_fields)
     @login_required('merchant')
     def get(self):
         merchant = g.user.merchant
-
-        feedbacks = FeedbackModel.objects.filter(merchant=merchant).order_by("-received_at")
+        args = self.get_parser.parse_args()
+        print args
+        if args['nps_score_start'] and args['nps_score_end']:
+            print 'this is good'
+            feedbacks = FeedbackModel.objects.filter(merchant=merchant, nps_score__gte=args['nps_score_start'], 
+                    nps_score__lte=args['nps_score_end']).order_by("-received_at")
+        else:
+            feedbacks = FeedbackModel.objects.filter(merchant=merchant).order_by("-received_at")
 
         return {'feedbacks': feedbacks}
 
