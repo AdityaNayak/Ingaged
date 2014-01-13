@@ -222,10 +222,10 @@ $shiny-edge-size: 0 0px 0;
 // $include-html-button-classes: $include-html-classes;
 
 // We use these to build padding for buttons.
-// $button-tny: rem-calc(10);
-// $button-sml: rem-calc(14);
-// $button-med: rem-calc(16);
-// $button-lrg: rem-calc(18);
+ $button-tny: rem-calc(8);
+ $button-sml: rem-calc(12);
+ $button-med: rem-calc(14);
+ $button-lrg: rem-calc(16);
 
 // We use this to control the display property.
 // $button-display: inline-block;
@@ -235,15 +235,15 @@ $shiny-edge-size: 0 0px 0;
 $button-font-family: $body-font-family;
 $button-font-color: $white;
 $button-font-color-alt: $black;
-// $button-font-tny: rem-calc(11);
-// $button-font-sml: rem-calc(13);
-// $button-font-med: rem-calc(16);
-// $button-font-lrg: rem-calc(20);
+ $button-font-tny: rem-calc(12);
+ $button-font-sml: rem-calc(14);
+ $button-font-med: rem-calc(16);
+ $button-font-lrg: rem-calc(20);
 $button-font-weight: 400;
 // $button-font-align: center;
 
 // We use these to control various hover effects.
-$button-function-factor: 5%;
+$button-function-factor: 10%;
 
 // We use these to control button border styles.
 $button-border-width: 0 0 3px 0;
