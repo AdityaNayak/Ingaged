@@ -338,3 +338,15 @@ border-color: scale-color($bluegreen, $lightness: -20%);
 		text-align: center;  
 		line-height: 15px;  
 	} */
+.vermachutiyahain{
+	&:after{
+		content:"Coming Soon";
+		position:absolute;
+		left:45%;
+		top:50%;
+		font-size: 2em;
+	}
+}
+#line{
+	opacity:0.5;
+}
