@@ -109,7 +109,8 @@ class FormModel(db.Document):
         """
         # all the feedbacks attached with the given instance ids
         if start_date and end_date: # add filter if `start_date` and `end_date` are provided
-            feedbacks = FeedbackModel.objects.filter(received_at__gte=start_date, received_at__lte=end_date)
+            feedbacks = FeedbackModel.objects.filter(received_at__gte=start_date, received_at__lte=end_date,
+                    form_instance__in=instance_ids)
         else:
             feedbacks = FeedbackModel.objects.filter(form_instance__in=instance_ids)
         # this dict will contain all the analytics and the corresponding fields

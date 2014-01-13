@@ -318,10 +318,13 @@ class FeedbackTimeline(Resource):
 
 class FeedbackAnalytics(Resource):
 
-    def date_arg(value):
+    def date_arg(value, key):
         try:
             year, month, day = value.split('-')
-            date = datetime.datetime(int(year), int(month), int(day), hour=23, minute=59, second=59)
+            if key == 'end_date':
+                date = datetime.datetime(int(year), int(month), int(day), hour=23, minute=59, second=59)
+            else: # if key == 'start_date'
+                date = datetime.datetime(int(year), int(month), int(day), hour=0, minute=0, second=0)
         except ValueError:
             raise ValueError("There was some problem with the date provided.")
 
