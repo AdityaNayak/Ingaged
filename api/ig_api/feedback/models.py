@@ -131,7 +131,7 @@ class FormModel(db.Document):
         # counting the number of responses for providing as analytics
         for f_id, response in responses.items():
             #TODO: this is just a temproary work around
-            colors = ["#46BFBD", "#FDB45C", "#949FB1", "#4D5360", "#4E2350"]
+            colors = ['#4D5361', '#FFB553', '#3EBFBE', '#949FB2', '#FA4444', '#736d64']
             if response['field'].field_type == 'YN':
                 responses[f_id]['numbers'] = {
                     'YES': {
