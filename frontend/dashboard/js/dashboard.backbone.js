@@ -44,8 +44,20 @@ $( document ).ready(function() {
     }
 
     /* collection storing the list of feedbacks which come in the timeline */
-    var FeedbackTimelineCollection = Backbone.Collection.extend({
-        url: api_root + "/dashboard/timeline",
+    FeedbackTimelineCollection = Backbone.Collection.extend({
+        initialize: function(nps_score_start, nps_score_end){
+            this.nps_score_start = nps_score_start;
+            this.nps_score_end = nps_score_end;
+        },
+        url: function(){
+            if (this.nps_score_start && this.nps_score_end){
+                console.log("got nps scores");
+                return api_root + "/dashboard/timeline" + "?nps_score_start=" + this.nps_score_start +
+                        "&nps_score_end=" + this.nps_score_end;
+            } else {
+                return api_root + "/dashboard/timeline";
+            }
+        },
         parse: function(response, xhr){
             return response.feedbacks;
         }
@@ -157,7 +169,20 @@ var loginView = new LoginView();
         events: {
             'click ul.feedback-timeline li.row': 'showCustomerDetails',
             'click #logout-link': logoutUser,
-            'click #timeline-refresh-button': 'refreshTimeline'
+            'click #timeline-refresh-button': 'refreshTimeline',
+            'click .nps-score-filter li a': 'npsScoreFilter'
+        },
+        npsScoreFilter: function(ev){
+            ev.preventDefault();
+            var target = $(ev.currentTarget);
+            var that = this;
+            if (target.hasClass("promoters")) {
+                that.render(9, 10);
+            } else if (target.hasClass("passive")) {
+                that.render(7, 8);
+            } else {
+                that.render(1, 6);
+            }
         },
         refreshTimeline: function(ev){
             this.render();
@@ -176,14 +201,14 @@ var loginView = new LoginView();
             }
             toAppendTo.append(template);
         },
-        render: function(){
+        render: function(nps_score_start, nps_score_end){
             if (!$.cookie("username") && !$.cookie("password")){
                 router.navigate('', {trigger: true});
                 return
             }
             var that = this;
             // fetching feedback timeline
-            feedbackTimelineCollection = new FeedbackTimelineCollection();
+            feedbackTimelineCollection = new FeedbackTimelineCollection(nps_score_start, nps_score_end);
             feedbackTimelineCollection.credentials = {
                 username: $.cookie("username"),
                 password: $.cookie("password")
