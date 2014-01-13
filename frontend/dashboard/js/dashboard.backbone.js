@@ -31,7 +31,7 @@ $( document ).ready(function() {
     });
     
     /* hostname of the api server */
-    var api_root = 'https://ingage.herokuapp.com'
+    var api_root = 'http://localhost:5000'
 
 
     /* logs out the user on the click of the logout link */
@@ -156,7 +156,11 @@ var loginView = new LoginView();
         el: '.main-app',
         events: {
             'click ul.feedback-timeline li.row': 'showCustomerDetails',
-            'click #logout-link': logoutUser
+            'click #logout-link': logoutUser,
+            'click #timeline-refresh-button': 'refreshTimeline'
+        },
+        refreshTimeline: function(ev){
+            this.render();
         },
         showCustomerDetails: function(ev){
             var feedbackID = $(ev.currentTarget).find("input[type=hidden]")[0].value;
