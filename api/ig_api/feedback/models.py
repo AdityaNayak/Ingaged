@@ -109,7 +109,8 @@ class FormModel(db.Document):
         """
         # all the feedbacks attached with the given instance ids
         if start_date and end_date: # add filter if `start_date` and `end_date` are provided
-            feedbacks = FeedbackModel.objects.filter(received_at__gte=start_date, received_at__lte=end_date)
+            feedbacks = FeedbackModel.objects.filter(received_at__gte=start_date, received_at__lte=end_date,
+                    form_instance__in=instance_ids)
         else:
             feedbacks = FeedbackModel.objects.filter(form_instance__in=instance_ids)
         # this dict will contain all the analytics and the corresponding fields
@@ -130,7 +131,7 @@ class FormModel(db.Document):
         # counting the number of responses for providing as analytics
         for f_id, response in responses.items():
             #TODO: this is just a temproary work around
-            colors = ["#46BFBD", "#FDB45C", "#949FB1", "#4D5360", "#4E2350"]
+            colors = ['#4D5361', '#FFB553', '#3EBFBE', '#949FB2', '#FA4444', '#736d64']
             if response['field'].field_type == 'YN':
                 responses[f_id]['numbers'] = {
                     'YES': {

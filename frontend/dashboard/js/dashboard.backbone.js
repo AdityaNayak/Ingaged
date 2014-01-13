@@ -31,7 +31,7 @@ $( document ).ready(function() {
     });
     
     /* hostname of the api server */
-    var api_root = 'https://ingage.herokuapp.com'
+    var api_root = 'http://localhost:5000'
 
 
     /* logs out the user on the click of the logout link */
@@ -156,7 +156,11 @@ var loginView = new LoginView();
         el: '.main-app',
         events: {
             'click ul.feedback-timeline li.row': 'showCustomerDetails',
-            'click #logout-link': logoutUser
+            'click #logout-link': logoutUser,
+            'click #timeline-refresh-button': 'refreshTimeline'
+        },
+        refreshTimeline: function(ev){
+            this.render();
         },
         showCustomerDetails: function(ev){
             var feedbackID = $(ev.currentTarget).find("input[type=hidden]")[0].value;
@@ -233,11 +237,11 @@ var loginView = new LoginView();
             });
         
         },
-        changeForm: function(ev, field_id, start_date, end_date){
-            if(!start_date && !end_date){
-                end_date = moment().utc().format("YYYY-MM-DD");
-                start_date = moment().utc().subtract({'days': 29}).format("YYYY-MM-DD");
-            }
+        changeForm: function(ev, field_id){
+            start_date = startDateRangePicker.format("YYYY-MM-DD");
+            end_date = endDateRangePicker.format("YYYY-MM-DD");
+            console.log("start date:", start_date);
+            console.log("end date:", end_date);
             if (ev){
                 formID = $(ev.currentTarget).find(":selected").attr("id");
                 formName = $(ev.currentTarget).find(":selected").val();
@@ -310,9 +314,11 @@ var loginView = new LoginView();
                 that.$el.append(template);
                 that.$el.prepend(headerTemplate);
                 that.$el.append(footerTemplate);
+                startDateRangePicker = moment().subtract('days', 29);
+                endDateRangePicker = moment();
                 $('#reportrange').daterangepicker({
-                    startDate: moment().subtract('days', 29),
-                    endDate: moment(),
+                    startDate: startDateRangePicker,
+                    endDate: endDateRangePicker,
                     minDate: '01/01/2012',
                     maxDate: '12/31/2014',
                     dateLimit: { days: 60 },
@@ -344,13 +350,11 @@ var loginView = new LoginView();
                     }
                 },
                 function(start, end) {
-                    var start_date = start.format("YYYY-MM-DD");
-                    var end_date = end.format("YYYY-MM-DD");
+                    startDateRangePicker = start;
+                    endDateRangePicker = end;
                     var field_id = $("li.active").attr("id");
                     if ($("input[name='form_id']")){
-                        that.changeForm(ev=false, field_id=field_id, start_date=start_date, end_date=end_date); 
-                    } else {
-                        console.log("this is great!!!");
+                        that.changeForm(ev=false, field_id=field_id);
                     }
                     $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
                 }
