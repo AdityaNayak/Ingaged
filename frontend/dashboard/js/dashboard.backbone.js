@@ -51,7 +51,6 @@ $( document ).ready(function() {
         },
         url: function(){
             if (this.nps_score_start && this.nps_score_end){
-                console.log("got nps scores");
                 return api_root + "/dashboard/timeline" + "?nps_score_start=" + this.nps_score_start +
                         "&nps_score_end=" + this.nps_score_end;
             } else {
@@ -265,8 +264,6 @@ var loginView = new LoginView();
         changeForm: function(ev, field_id){
             start_date = startDateRangePicker.format("YYYY-MM-DD");
             end_date = endDateRangePicker.format("YYYY-MM-DD");
-            console.log("start date:", start_date);
-            console.log("end date:", end_date);
             if (ev){
                 formID = $(ev.currentTarget).find(":selected").attr("id");
                 formName = $(ev.currentTarget).find(":selected").val();
