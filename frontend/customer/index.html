@@ -1,106 +1,188 @@
 <!DOCTYPE html>
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no">
-    <title>Customer Feedback</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no">
+	<title>Customer Feedback</title>
 
-    <link rel="stylesheet" href="css/form.css">
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<!--    <script src="js/custom.modernizr.js"></script> -->
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.2/underscore-min.js" type="text/javascript"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.2/backbone-min.js"></script>
-    <script src="js/customer.backbone.js"></script>
+	<link rel="stylesheet" href="../assets/css/form.css">
+
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.1/jquery.min.js"></script>
+	<!--    <script src="js/custom.modernizr.js"></script> -->
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.2/underscore-min.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.2/backbone-min.js"></script>
+	<script src="js/vendor/backbone.touch.js"></script>
+	<script src="js/customer.backbone.js"></script>
+	<!-- <script src="js/jquery.mobile-events.min.js"></script> -->
+	<script src="js/plugins/jquery.fullPage.js"></script>
 </head>
 <body>
+	<script type="text/template" id="feedback-form-template">
+		<ol class="section-list">
+            <% var fields = form.get('fields') %>
+            <% _.each(fields, function(field){ %>
+            
+                <% if (field.type == 'YN') { %>
+                    <div class="yes-no section row" data-anchor="">
+                        <div class="row">
+                            <li class="small-11 small-centered columns">
+                                <h3><%= field.text %></h3>
+                            </li> 
+                        </div>
+                        <div class="row">
+                            <div class="small-10 columns small-centered">
+                                <div class="row">
+                                    <div class="small-5 columns intr-color intr-btn yes" response="YES">
+                                        <div><i class="fi-like"></i></div>
+                                        <div>Yes</div>
+                                    </div>
+                                    <div class="small-5 columns intr-color intr-btn no" response="NO">
+                                        <div><i class="fi-dislike"></i></div>
+                                        <div>No</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="field_id" value="<%= field.id %>">
+                    </div>
+                <% } %>
 
-    <script type="text/template" id="feedback-form-template">
-        <div class="row header">
-            <div class= "small-4 small-offset-8 columns">
-                <img src="<%= form.get('merchant').logo %>"> <!-- height fixed, width variable -->
-            </div>
-        </div>
-        <div class="row">
-            <div class="small-12 medium-10 medium-centered large-8 columns">
-               <div class="rateit" id="rateit5" data-rateit-min="2">
-            </div>
-            <div>
-                <span id="value5"></span>
-                <span id="hover5"></span>
-            </div>
-            </div>
-        </div>
-        <div class="row hide">
-            <div class="small-12 medium-10 medium-centered large-8 columns">
-                <div id="sample-create"></div>
-                <div id="show-serialization-field"> </div>
-            </div>
-        </div>
-        <div class="row hide">
-            <div class="small-12 medium-10 medium-centered large-8 columns">
-                <div data-alert class="alert-box error" style="display:none;">
-                Please write something
-                </div>
-                <form id="comment-form" name="comment-form">
-                    <fieldset class="commentsection">
-                        <h3><%= form.get("question") %></h3>
-                        <div class="form-element">
-                            <textarea id="comment" name="comment" required placeholder="Write your feedback here" autofocus="autofocus"></textarea>
+                <% if (field.type == 'ST') { %>
+                    <div class="multiple rating section row" data-anchor="">
+                        <div class="row">
+                            <li class="small-11 small-centered columns">
+                                <h3><%= field.text %></h3>
+                            </li>
                         </div>
-                        <div class="form-element text-right">
-                            <a class="button green" id="next">Next Section </a>
+                        <div class="row">
+                            <div class="small-10 columns small-centered">
+                                <ul>
+                                    <li class="intr intr-color" response="1">
+                                        <i class="fi-star"></i>
+                                    </li>
+                                    <li class="intr intr-color" response="2">
+                                        <i class="fi-star"></i>
+                                        <i class="fi-star"></i>
+                                    </li>
+                                    <li class="intr intr-color" response="3">
+                                        <i class="fi-star"></i>
+                                        <i class="fi-star"></i>
+                                        <i class="fi-star"></i>
+                                    </li>
+                                    <li class="intr intr-color" response="4">
+                                        <i class="fi-star"></i>
+                                        <i class="fi-star"></i>
+                                        <i class="fi-star"></i>
+                                        <i class="fi-star"></i>
+                                    </li>
+                                    <li class="intr intr-color" response="5">
+                                        <i class="fi-star"></i>
+                                        <i class="fi-star"></i>
+                                        <i class="fi-star"></i>
+                                        <i class="fi-star"></i>
+                                        <i class="fi-star"></i>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-                    </fieldset>
-                    <fieldset class="contactdetails hide">
-                        <h3>Contact Details</h3>
-                        <p>Let us show you our appreciation for your feedback. Do leave your contact details.</p>
-                        <div class="form-element">
-                            <label for="name">Name: </label>
-                            <input type="text" id="name" name="name" placeholder="Your Name" />
-                            <label for="email">Email: </label>
-                            <input type="email" id="email" name="email" placeholder="you@email.com" />
-                            <label for="phone">Phone: </label>
-                            <input type="tel" id="phone" name="phone" placeholder="xxx-xxx-xxxx" />
-                            <input type="hidden" name="id" value="<%= instance_id %>">
-                        </div>
-                        <div class="form-element text-right">
-                            <button type="submit" class="success">Submit Feedback</button>
-                        </div>
-                    </fieldset>
-                </form>       
-            </div>
-        </div>
-        <script>
-        $("#sample-create").noUiSlider({
-                range: [0, 10],
-                start: 7,
-                step: 1,
-                handles: 1,
-                resolution: 1,
-                serialization: {
-                    to: [ $("#show-serialization-field"),"html" ]
-                }
-            });
-        </script>
-    </script>
+                        <input type="hidden" name="field_id" value="<%= field.id %>">
+                    </div>
+                <% } %>
 
-    <script type="text/template" id="feedback-form-not-exists-template">
-        <div class="row">
-            <h1>The Feedback Form Does Not Exist.</h1>
-        </div>
-    </script>
+                <% if (field.type == 'MT') { %>
+                    <div class="multiple section row" data-anchor="">
+                        <div class="row">
+                            <li class="small-11 small-centered columns">
+                                <h3><%= field.text %></h3>
+                            </li>
+                        </div>
+                        <div class="row">
+                            <div class="small-10 columns small-centered">
+                                <ul>
+                                    <% choices = field.choices %>
+                                    <% _.each(choices, function(choice) { %>
+                                        <li class="intr intr-color" response="<%= choice %>"><%= choice %></li>
+                                    <% }); %>
+                                </ul>
+                            </div>
+                        </div>
+                        <input type="hidden" name="field_id" value="<%= field.id %>">
+                    </div>
+                <% } %>                    
 
-    <script type="text/template" id="feedback-form-success-template">
-        <div class="row">
-            <div class="small-12 medium-10 medium-centered large-8 columns">
-                <div data-alert class="alert-box success">
-                Feedback submitted successfully
-                </div>
-                <h3 class="text-center">Thank you</h3>
+                <% if (field.type == 'TT') { %>
+                    <div class="small-input section row" data-anchor="">
+                        <li class="small-11 small-centered columns">
+                            <div class="right hide sec intr-color done intr-btn">Done</div>  
+                            <h3><%= field.text %></h3>
+                        </li>
+                        <div class="small-10 columns small-centered">
+                            <input type="text" name="tt_response">
+                        </div>
+                        <input type="hidden" name="field_id" value="<%= field.id %>">
+                    </div>
+                <% } %>                    
+
+            <% }); %>
+			<div class="input-slider section row" data-anchor="">
+				<li class="small-11 small-centered columns">
+					<div class="right sec intr-color done intr-btn">Done</div>  
+                    <h3><%= form.get('nps_score_heading') %></h3>
+				</li>
+				<div class="small-10 small-centered columns">
+					<div id="show-serialization-field" class="text-center nps-score"> </div>
+					<div id="nps-rating"> 
+					</div>
+				</div>
             </div>
-        </div>
-    </script>
-    <script src="js/jquery.nouislider.js"></script>
-    <script src="js/jquery.rateit.js"></script> 
+			<div class="large-input section row" data-anchor="">
+				<li class="small-11 small-centered columns">
+					<div class="right hide sec intr-color done intr-btn">Done</div>  
+                    <h3><%= form.get('feedback_heading') %></h3>
+				</li>
+				<div class="small-10 columns small-centered">
+					<textarea></textarea>
+				</div>
+			</div>
+
+			<div class="customer-details section row" data-anchor="">
+				<li class="small-11 small-centered columns">
+					<div id="form-submit-btn" class="right hide button small">Submit</div>  
+                    <h3><%= form.get('customer_details_heading') %></h3> 
+				</li>
+				<div class="small-10 columns small-centered">
+					<label for="name">Name: </label>
+					<input type="text" id="name" name="name" placeholder="Your Name" />
+					<label for="email">Email: </label>
+					<input type="email" id="email" name="email" placeholder="you@email.com" />
+					<label for="phone">Phone: </label>
+					<input type="tel" id="phone" name="phone" placeholder="xxx-xxx-xxxx" />
+				</div>
+			</div>
+
+		</ol>
+        <input type="hidden" name="id" value="<%= instance_id %>">
+		<script src="js/plugins/jquery.nouislider.js"></script>
+		
+	</script>
+
+	<script type="text/template" id="feedback-form-not-exists-template">
+		<div class="row">
+			<div class="small-11 small-centered columns">
+				<h3>The Feedback Form Does Not Exist.</h3>
+			</div>
+		</div>
+	</script>
+
+	<script type="text/template" id="feedback-form-success-template">
+		<div class="row">
+			<div class="small-11 small-centered columns">
+				<div data-alert class="alert-box success">
+					Feedback submitted successfully
+				</div>
+				<h3 class="text-center">Thank you</h3>
+			</div>
+		</div>
+	</script>
 </body>
 </html>

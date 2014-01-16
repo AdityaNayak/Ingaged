@@ -48,3 +48,10 @@ coverage.xml
 
 # Sphinx documentation
 docs/_build/
+
+#Temp file
+.TMP
+
+#Gitfiles
+.bak
+.orig

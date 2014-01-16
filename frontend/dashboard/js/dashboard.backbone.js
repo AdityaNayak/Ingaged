@@ -26,6 +26,7 @@ $( document ).ready(function() {
             "feedback_forms/new": "newFeedbackForm",
             "feedback_forms/:form_id/instances": "formInstancesList",
             "feedback_forms/:form_id/instances/new": "newFormInstances",
+            "analytics": "analytics",
         }
     });
     
@@ -43,8 +44,19 @@ $( document ).ready(function() {
     }
 
     /* collection storing the list of feedbacks which come in the timeline */
-    var FeedbackTimelineCollection = Backbone.Collection.extend({
-        url: api_root + "/dashboard/timeline",
+    FeedbackTimelineCollection = Backbone.Collection.extend({
+        initialize: function(nps_score_start, nps_score_end){
+            this.nps_score_start = nps_score_start;
+            this.nps_score_end = nps_score_end;
+        },
+        url: function(){
+            if (this.nps_score_start && this.nps_score_end){
+                return api_root + "/dashboard/timeline" + "?nps_score_start=" + this.nps_score_start +
+                        "&nps_score_end=" + this.nps_score_end;
+            } else {
+                return api_root + "/dashboard/timeline";
+            }
+        },
         parse: function(response, xhr){
             return response.feedbacks;
         }
@@ -59,7 +71,7 @@ $( document ).ready(function() {
     });
 
     /* collection of instances of a form */
-    var FormInstancesCollection = Backbone.Collection.extend({
+    FormInstancesCollection = Backbone.Collection.extend({
         initialize: function(options){
             this.id = options.id;
         },
@@ -80,12 +92,26 @@ $( document ).ready(function() {
     });
 
     /* model of the instance attached to the feedback form */
-    var InstanceModel = Backbone.Model.extend({
+    InstanceModel = Backbone.Model.extend({
         initialize: function(props){
             this.form_id = props.form_id;
         },
         urlRoot: function(){
             return api_root + "/dashboard/forms/" + this.form_id + "/instances"
+        }
+    });
+
+    /* model storing the analytics of the form */
+    FormAnalyticsModel = Backbone.Model.extend({
+        initialize: function(props){
+            this.instance_ids = props.instance_ids;
+            this.form_id = props.form_id;
+            this.start_date = props.start_date;
+            this.end_date = props.end_date;
+        },
+        urlRoot: function(){
+            return api_root + '/dashboard/forms/' + this.form_id + '/analytics?instance_ids=' + this.instance_ids + 
+                                '&start_date=' + this.start_date + '&end_date=' + this.end_date
         }
     });
 
@@ -141,7 +167,24 @@ var loginView = new LoginView();
         el: '.main-app',
         events: {
             'click ul.feedback-timeline li.row': 'showCustomerDetails',
-            'click #logout-link': logoutUser
+            'click #logout-link': logoutUser,
+            'click #timeline-refresh-button': 'refreshTimeline',
+            'click .nps-score-filter li a': 'npsScoreFilter'
+        },
+        npsScoreFilter: function(ev){
+            ev.preventDefault();
+            var target = $(ev.currentTarget);
+            var that = this;
+            if (target.hasClass("promoters")) {
+                that.render(9, 10);
+            } else if (target.hasClass("passive")) {
+                that.render(7, 8);
+            } else {
+                that.render(1, 6);
+            }
+        },
+        refreshTimeline: function(ev){
+            this.render();
         },
         showCustomerDetails: function(ev){
             var feedbackID = $(ev.currentTarget).find("input[type=hidden]")[0].value;
@@ -157,14 +200,14 @@ var loginView = new LoginView();
             }
             toAppendTo.append(template);
         },
-        render: function(){
+        render: function(nps_score_start, nps_score_end){
             if (!$.cookie("username") && !$.cookie("password")){
                 router.navigate('', {trigger: true});
                 return
             }
             var that = this;
             // fetching feedback timeline
-            feedbackTimelineCollection = new FeedbackTimelineCollection();
+            feedbackTimelineCollection = new FeedbackTimelineCollection(nps_score_start, nps_score_end);
             feedbackTimelineCollection.credentials = {
                 username: $.cookie("username"),
                 password: $.cookie("password")
@@ -178,11 +221,174 @@ var loginView = new LoginView();
                     that.$el.prepend(headerTemplate);
                     that.$el.append(footerTemplate);
                     $(document).foundation(); 
+                    $(window).scroll(function() {
+				        var scroll = $(window).scrollTop();
+				        if (scroll >= 550) {
+				            $("#details").addClass("stickit");
+				        } else {
+				            $("#details").removeClass("stickit");
+				        }
+				    });
                 }
             });
         }
     });
-var feedbackTimelineView = new FeedbackTimelineView();
+    var feedbackTimelineView = new FeedbackTimelineView();
+
+    /* Analytics View */
+    var AnalyticsView = Backbone.View.extend({
+        el: '.main-app',
+        events: {
+            'click #logout-link': logoutUser,
+            'change .form-change select': 'changeForm',
+            'click .question-list li': 'changeFormFieldAnalytics'
+        },
+        changeFormFieldAnalytics: function(ev){
+            field_id = $(ev.currentTarget).attr('id');
+            this.changeForm(ev=false, field_id=field_id);
+        },
+        donutScript: function(fieldAnalytics){
+            data = [];
+            for (i in fieldAnalytics.numbers){
+                data.push({
+                    value: fieldAnalytics.numbers[i].number,
+                    color: fieldAnalytics.numbers[i].color
+                });
+            }
+            var doughnutData0 = data;
+            var myDoughnut0 = new Chart(document.getElementById("canvas0").getContext("2d")).Doughnut(doughnutData0,{
+                labelAlign: 'center'
+            });
+        
+        },
+        changeForm: function(ev, field_id){
+            start_date = startDateRangePicker.format("YYYY-MM-DD");
+            end_date = endDateRangePicker.format("YYYY-MM-DD");
+            if (ev){
+                formID = $(ev.currentTarget).find(":selected").attr("id");
+                formName = $(ev.currentTarget).find(":selected").val();
+            } else {
+                formID = $('input[name="form_id"]').val();
+                formName = $('input[name="form_name"]').val();
+            }
+            formInstancesCollection = new FormInstancesCollection({id: formID});
+            formInstancesCollection.credentials = {
+                username: $.cookie("username"),
+                password: $.cookie("password")
+            };
+            var that = this;
+            formInstancesCollection.fetch({
+                success: function(instances){
+                    instanceIDs = '';
+                    for (i in instances.models){
+                        if (i == 0){
+                            instanceIDs = instanceIDs + instances.models[i].id;
+                        } else {
+                            instanceIDs = instanceIDs + ',' + instances.models[i].id;
+                        }
+                    }
+                    analyticsModel = new FormAnalyticsModel({form_id: formID, instance_ids: instanceIDs, start_date: start_date,
+                                                                end_date: end_date});
+                    analyticsModel.credentials = {
+                        username: $.cookie("username"),
+                        password: $.cookie("password")
+                    };
+                    analyticsModel.fetch({
+                        success: function(analytics){
+                            if (!field_id){
+                                fieldAnalytics = analytics.attributes.analytics[0];
+                            } else {
+                                for (i in analytics.attributes.analytics){
+                                    if (analytics.attributes.analytics[i].field.id == field_id){
+                                        fieldAnalytics = analytics.attributes.analytics[i];
+                                    }    
+                                }
+                            }
+                            var template = _.template($("#analytics-template").html(), {analyticsExist: true, 
+                                analytics: analytics, field_analytics: fieldAnalytics, form_id: formID, form_name: formName});
+                            $("#form-analytics").replaceWith(template);
+                            that.donutScript(fieldAnalytics);
+                        }
+                    });
+                }
+            });
+        },
+        render: function(){
+            if (!$.cookie("username") && !$.cookie("password")){
+                router.navigate('', {trigger: true});
+                return
+            }
+
+            // fetch feedback forms
+            feedbackFormsCollection = new FeedbackFormsCollection();
+            feedbackFormsCollection.credentials = {
+                username: $.cookie("username"),
+                password: $.cookie("password")
+            };
+            var that = this;
+            feedbackFormsCollection.fetch({
+                success: function(forms){
+                var template = _.template($("#analytics-choose-template").html(), {analyticsExist: false});
+                var settingstemplate = _.template($("#analytics-settings-template").html(), {forms: forms.models});
+                var headerTemplate = _.template($("#header-template").html(), {username: $.cookie("username")});
+                var footerTemplate = _.template($("#footer-template").html(), {});
+                that.$el.html(settingstemplate);
+                that.$el.append(template);
+                that.$el.prepend(headerTemplate);
+                that.$el.append(footerTemplate);
+                startDateRangePicker = moment().subtract('days', 29);
+                endDateRangePicker = moment();
+                $('#reportrange').daterangepicker({
+                    startDate: startDateRangePicker,
+                    endDate: endDateRangePicker,
+                    minDate: '01/01/2012',
+                    maxDate: '12/31/2014',
+                    dateLimit: { days: 60 },
+                    showDropdowns: true,
+                    showWeekNumbers: false,
+                    timePicker: false,
+                    timePickerIncrement: 1,
+                    timePicker12Hour: true,
+                    ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                    'Last 7 Days': [moment().subtract('days', 6), moment()],
+                    'Last 30 Days': [moment().subtract('days', 29), moment()],
+                    'This Month': [moment().startOf('month'), moment()],
+                    'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')],
+                    'This Year': [moment().startOf('year'), moment()]
+                    },
+                    opens: 'left',
+                    format: 'MM/DD/YYYY',
+                    separator: ' to ',
+                    locale: {
+                        applyLabel: 'Submit',
+                        fromLabel: 'From',
+                        toLabel: 'To',
+                        customRangeLabel: 'Custom Range',
+                        daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr','Sa'],
+                        monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                        firstDay: 1
+                    }
+                },
+                function(start, end) {
+                    startDateRangePicker = start;
+                    endDateRangePicker = end;
+                    var field_id = $("li.active").attr("id");
+                    if ($("input[name='form_id']")){
+                        that.changeForm(ev=false, field_id=field_id);
+                    }
+                    $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                }
+		  );
+		  //Set the initial state of the picker label
+		  $('#reportrange span').html(moment().subtract('days', 29).format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+                }
+            });
+        }
+    });
+    var AnalyticsView = new AnalyticsView();
+
 
     /* view of list of feedbacks */
     var FeedbackFormsView = Backbone.View.extend({
@@ -370,10 +576,8 @@ var feedbackFormCreationView = new FeedbackFormCreationView();
                     return
                 }    
             });
-            console.log(instanceDetails);
         },
         render: function(options){
-            alert("this is something nice?");
             if (!$.cookie("username") && !$.cookie("password")){
                 router.navigate('', {trigger: true});
                 return
