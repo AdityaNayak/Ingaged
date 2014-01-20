@@ -119,7 +119,13 @@ $( document ).ready(function() {
     var LoginView = Backbone.View.extend({
         el: '.main-app',
         events: {
-            'submit #login-form': 'loginUser'
+            'submit #login-form': 'loginUser',
+            'click #load-signup, #contact-signup': 'showSignup'
+        },
+        showSignup: function(ev){
+            ev.preventDefault();
+            $('#login-form').fadeOut(300);
+            $('#signup-form').fadeIn(300).delay(300);
         },
         loginUser: function(ev){
             ev.preventDefault();

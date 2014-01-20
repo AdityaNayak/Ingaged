@@ -34,19 +34,19 @@
 				</ul>
 				<section class="top-bar-section">
 					<ul class="right">
-						<li><a href="mailto:ingage@mutinylabs.in">Contact</a></li>      
+						<li id="contact-signup"><a href="mailto:ingage@mutinylabs.in">Contact</a></li>      
 					</ul>
 				</section>
 			</header>
 		</div>
 		<div class="row login">
-			<div class="small-4 columns">
+			<div class="large-4 medium-6 columns hide-for-small-only">
 				<p class="primary-message">Your in-venue customer experience management system</p>
 			</div>
-			<div class="small-3 small-offset-1 columns">
+			<div class="large-3 large-offset-1 columns hide show-for-large-up">
 				<img src="images/phone.png" >
 			</div>
-			<div class="small-3 small-offet-1 columns panel">
+			<div class="large-3 large-offet-1 small-12 medium-6 columns panel">
 				<div class="login-alert">
 					<div class="alert-box error" style="display: none;" data-alert="">
 						Incorrect Username/Password
@@ -77,13 +77,27 @@
 							</span>
 						</div>
 					</div>
+				</form>
+				<form id="signup-form" name="signup-form" class="signup-form hide">
+					<fieldset>
+						<div class="form-element">
+							<label for="name">Name: </label>
+							<input type="text" required id="name" name="name" />
+							<label for="email">Email: </label>
+							<input type="email" required id="email" name="email" />
+						</div>
+					</fieldset>
+					<div class="form-element">
+						<button id="signup-submit" type="submit" class="small fullwidth primary">Sign Up</button>
+					</div>
 				</form>    
 				<div class="signup fullwidth text-center secondary">
-				<a href="#">Sign Up for a 30 Days free trial</a>
+				<a id="load-signup" href="#">Sign Up for a 30 Days free trial</a>
 				</div>
 			</div>
 		</div>
-	</div>
+		
+	
 </script>
 
 <script type="text/template" id="header-template">

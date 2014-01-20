@@ -142,28 +142,28 @@ $shiny-edge-size: 0 0px 0;
 // $include-html-alert-classes: $include-html-classes;
 
 // We use this to control alert padding.
- $alert-padding-top: rem-calc(8);
- $alert-padding-default-float: $alert-padding-top;
- $alert-padding-opposite-direction: $alert-padding-top + rem-calc(10);
- $alert-padding-bottom: $alert-padding-top;
+$alert-padding-top: rem-calc(8);
+$alert-padding-default-float: $alert-padding-top;
+$alert-padding-opposite-direction: $alert-padding-top + rem-calc(10);
+$alert-padding-bottom: $alert-padding-top;
 
 // We use these to control text style.
 // $alert-font-weight: normal;
 // $alert-font-size: rem-calc(13);
- $alert-font-color: $white;
+$alert-font-color: $white;
 // $alert-font-color-alt: scale-color($secondary-color, $lightness: -66%);
 
 // We use this for close hover effect.
- $alert-function-factor: -14%;
+$alert-function-factor: -14%;
 
 // We use these to control border styles.
 // $alert-border-style: solid;
 // $alert-border-width: 1px;
- $alert-border-color: scale-color($primary-color, $lightness: $alert-function-factor);
+$alert-border-color: scale-color($primary-color, $lightness: $alert-function-factor);
 // $alert-bottom-margin: rem-calc(20);
 
 // We use these to style the close buttons
- $alert-close-color: $black;
+$alert-close-color: $black;
 // $alert-close-top: 50%;
 // $alert-close-position: rem-calc(5);
 // $alert-close-font-size: rem-calc(22);
@@ -172,7 +172,7 @@ $shiny-edge-size: 0 0px 0;
 // $alert-close-padding: 9px 6px 4px;
 
 // We use this to control border radius
- $alert-radius: $global-radius;
+$alert-radius: $global-radius;
 
 // Block Grid
 
@@ -222,10 +222,10 @@ $shiny-edge-size: 0 0px 0;
 // $include-html-button-classes: $include-html-classes;
 
 // We use these to build padding for buttons.
- $button-tny: rem-calc(8);
- $button-sml: rem-calc(12);
- $button-med: rem-calc(14);
- $button-lrg: rem-calc(16);
+$button-tny: rem-calc(8);
+$button-sml: rem-calc(12);
+$button-med: rem-calc(14);
+$button-lrg: rem-calc(16);
 
 // We use this to control the display property.
 // $button-display: inline-block;
@@ -235,10 +235,10 @@ $shiny-edge-size: 0 0px 0;
 $button-font-family: $body-font-family;
 $button-font-color: $white;
 $button-font-color-alt: $black;
- $button-font-tny: rem-calc(12);
- $button-font-sml: rem-calc(14);
- $button-font-med: rem-calc(16);
- $button-font-lrg: rem-calc(20);
+$button-font-tny: rem-calc(12);
+$button-font-sml: rem-calc(14);
+$button-font-med: rem-calc(16);
+$button-font-lrg: rem-calc(20);
 $button-font-weight: 400;
 // $button-font-align: center;
 
@@ -250,7 +250,7 @@ $button-border-width: 0 0 3px 0;
 $button-border-style: solid;
 
 // We use this to set the default radius used throughout the core.
- $button-radius: $global-radius;
+$button-radius: $global-radius;
 // $button-round: $global-rounded;
 
 // We use this to set default opacity for disabled buttons.
@@ -405,10 +405,10 @@ $input-include-glowing-effect: false;
 
 // We use these to style the fieldset border and spacing.
 // $fieldset-border-style: solid;
- $fieldset-border-width: 0px;
+$fieldset-border-width: 0px;
 $fieldset-border-color: $lightgrey;
- $fieldset-padding: 0px;
- $fieldset-margin: 0px;
+$fieldset-padding: 0px;
+$fieldset-margin: 0px;
 
 // We use these to style the legends when you use them
 // $legend-bg: #fff;
@@ -1033,7 +1033,7 @@ $topbar-bg-color: $white;
 $topbar-bg: $topbar-bg-color;
 
 // Height and margin
-$topbar-height: 80px;
+$topbar-height: 72px;
 // $topbar-margin-bottom: 0;
 
 // Control Input height for top bar
@@ -1043,7 +1043,7 @@ $topbar-title-weight: $white;
 // $topbar-title-font-size: rem-calc(17);
 
 // Style the top bar dropdown elements
- $topbar-dropdown-bg: $white;
+$topbar-dropdown-bg: $white;
 // $topbar-dropdown-link-color: #fff;
 // $topbar-dropdown-link-bg: #333;
 // $topbar-dropdown-toggle-size: 5px;
@@ -1053,9 +1053,9 @@ $topbar-title-weight: $white;
 // Set the link colors and styles for top-level nav
 $topbar-link-color: $black;
 $topbar-link-color-hover: $white;
- $topbar-link-color-active: $white;
+$topbar-link-color-active: $white;
 // $topbar-link-weight: normal;
-$topbar-link-font-size: rem-calc(16);
+$topbar-link-font-size: rem-calc(14);
 // $topbar-link-hover-lightness: -10%; // Darken by 10%
 $topbar-link-bg-hover: $red;
 $topbar-link-bg-active: $red;
@@ -1074,10 +1074,11 @@ $topbar-link-bg-active: $red;
 // $topbar-menu-link-transform: uppercase;
 // $topbar-menu-link-font-size: rem-calc(13);
 // $topbar-menu-link-weight: bold;
-// $topbar-menu-link-color: #fff;
-// $topbar-menu-icon-color: #fff;
+$topbar-menu-link-color: $black;
+$topbar-menu-icon-color: $black;;
 // $topbar-menu-link-color-toggled: #888;
 // $topbar-menu-icon-color-toggled: #888;
+
 
 // Transitions and breakpoint styles
 // $topbar-transition-speed: 300ms;
