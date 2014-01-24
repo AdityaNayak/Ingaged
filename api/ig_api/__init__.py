@@ -39,11 +39,17 @@ AWS_S3_LOGO_BUCKET = 'logos-dev-ingage'
 AWS_S3_DEFAULT_LOGO_FILE = os.path.join(current_dir, 'config/default-logo.png') # path to default logo of the merchant. absolute path.
 AWS_S3_DEFAULT_LOGO_KEY_NAME = 'default-logo.png'
 AWS_S3_DEFAULT_LOGO_URL = 'https://{0}.s3.amazonaws.com/{1}'.format(AWS_S3_LOGO_BUCKET, AWS_S3_DEFAULT_LOGO_KEY_NAME)
+ADMIN_EMAIL = 'me@rishabhverma.me'
 TRANSACTIONAL_EMAILS = {
     'new_merchant_new_user': { # this is sent to a new user who is created while creating a merchant
         'subject': 'Wecome to InGage Dashboard',
         'template': 'emails/new_merchant_user.html',
-        'from': 'InGage <ingage@mutinylabs.in>',
+        'from': 'InGage <ingage@mutinylabs.in>'
+    },
+    'signup_request': { # this is sent to the admin when a user requests for a sign up
+        'subject': 'Sign Up Request for InGage',
+        'template': 'emails/signup_request.html',
+        'from': 'InGage <ingage@mutinylabs.in>'
     },
 }
 
@@ -83,3 +89,7 @@ from ig_api.merchants.models import *
 # feedback (dashboard & customer facing feedback collection)
 from ig_api.feedback.api import *
 from ig_api.feedback.models import *
+
+# extras (miscellaneous stuff)
+from ig_api.misc.api import *
+from ig_api.misc.models import *

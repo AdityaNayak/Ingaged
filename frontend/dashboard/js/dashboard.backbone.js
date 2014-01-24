@@ -91,6 +91,11 @@ $( document ).ready(function() {
         }
     });
 
+    /* model for sign up requests */
+    SignupRequestModel = Backbone.Model.extend({
+        urlRoot: api_root + "/dashboard/signup_request"
+    });
+
     /* model of the instance attached to the feedback form */
     InstanceModel = Backbone.Model.extend({
         initialize: function(props){
@@ -120,7 +125,20 @@ $( document ).ready(function() {
         el: '.main-app',
         events: {
             'submit #login-form': 'loginUser',
-            'click #load-signup, #contact-signup': 'showSignup'
+            'click #load-signup, #contact-signup': 'showSignup',
+            'submit #signup-form': 'sendSignupRequest'
+        },
+        sendSignupRequest: function(ev){
+            ev.preventDefault();
+            var customerDetails = $(ev.currentTarget).serializeObject();
+            console.log(customerDetails);
+            var signupRequestModel = new SignupRequestModel();
+            signupRequestModel.save(customerDetails, {
+                success: function(data){
+                    //TODO: show the feeedback to the user properly
+                    alert("The sign up details were sent sucessfully.");
+                }
+            });
         },
         showSignup: function(ev){
             ev.preventDefault();
