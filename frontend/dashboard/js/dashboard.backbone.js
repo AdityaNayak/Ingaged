@@ -630,30 +630,37 @@ var feedbackFormCreationView = new FeedbackFormCreationView();
 
     router.on('route:login', function(){
         loginView.render();
+        document.title = "Ingage Dashboard";
     });
 
     router.on('route:feedbackTimeline', function(){
         feedbackTimelineView.render();
+        document.title = "Feedback Timeline | Ingage Dashboard";
     });
 
     router.on('route:analytics', function(){
         AnalyticsView.render();
+        document.title = "Form Analytics | Ingage Dashboard";
     });
 
     router.on('route:feedbackForms', function(){
         feedbackFormsView.render();
+        document.title = "All Forms | Ingage Dashboard";
     });
 
     router.on('route:formInstancesList', function(form_id){
         feedbackFormInstancesView.render({formID: form_id});
+        document.title = "All Instances | Ingage Dashboard";
     });
 
     router.on('route:newFeedbackForm', function(){
         feedbackFormCreationView.render();
+        document.title = "Create a Form | Ingage Dashboard";
     });
 
     router.on('route:newFormInstances', function(form_id){
         newInstanceCreationView.render({formID: form_id});
+        document.title = "Create an Instance | Ingage Dashboard";
     });
 
     Backbone.history.start();
