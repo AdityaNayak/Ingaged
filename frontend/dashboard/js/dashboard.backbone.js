@@ -178,13 +178,17 @@ $( document ).ready(function() {
                 router.navigate('timeline', {trigger: true});
                 return false
             }
+
+            // change the title
+            document.title = "Ingage Dashboard";
+
             var template = _.template($("#login-template").html(), {});
             var footerTemplate = _.template($("#footer-template").html(), {});
             this.$el.html(template);
             this.$el.append(footerTemplate);
         }
     });
-var loginView = new LoginView();
+    var loginView = new LoginView();
 
     /* timeline of various feedbacks */
     var FeedbackTimelineView = Backbone.View.extend({
@@ -229,6 +233,11 @@ var loginView = new LoginView();
                 router.navigate('', {trigger: true});
                 return
             }
+
+            // change the title
+            document.title = "Feedback Timeline | Ingage Dashboard";
+            
+
             var that = this;
             // fetching feedback timeline
             feedbackTimelineCollection = new FeedbackTimelineCollection(nps_score_start, nps_score_end);
@@ -343,6 +352,9 @@ var loginView = new LoginView();
                 return
             }
 
+            // change the title
+            document.title = "Feedback Timeline | Ingage Dashboard";
+
             // fetch feedback forms
             feedbackFormsCollection = new FeedbackFormsCollection();
             feedbackFormsCollection.credentials = {
@@ -448,6 +460,10 @@ var loginView = new LoginView();
                 router.navigate('', {trigger: true});
                 return
             }
+
+            // change the title
+            document.title = "All Forms | Ingage Dashboard";
+
             var that = this;
             feedbackFormsCollection = new FeedbackFormsCollection();
             feedbackFormsCollection.credentials = {
@@ -479,23 +495,28 @@ var loginView = new LoginView();
                 router.navigate('', {trigger: true});
                 return
             }
+
+            // change the title
+            document.title = "All Instances | Ingage Dashboard";
+
             var that = this;
             var form = new FormModel({id: options.formID});
             form.credentials = {
-                username: $.cookie("username"),
-                password: $.cookie("password")
+                username: $.cookie('username'),
+                password: $.cookie('password')
             };
             form.fetch({
                 success: function(){
                     formInstancesCollection = new FormInstancesCollection({id: options.formID});
                     formInstancesCollection.credentials = {
-                        username: $.cookie("username"),
-                        password: $.cookie("password")
+                        username: $.cookie('username'),
+                        password: $.cookie('password')
                     };
                     formInstancesCollection.fetch({
                         success: function(instances){
-                            var template = _.template($("#form-instances-list-template").html(), {instances: instances.models, form: form});
-                            var headerTemplate = _.template($("#header-template").html(), {username: $.cookie("username")});
+                            var template = _.template($("#form-instances-list-template").html(),
+                                {instances: instances.models, form: form});
+                            var headerTemplate = _.template($("#header-template").html(), {username: $.cookie('username')});
                             var footerTemplate = _.template($("#footer-template").html(), {});
                             that.$el.html(template);
                             that.$el.prepend(headerTemplate);
@@ -504,36 +525,9 @@ var loginView = new LoginView();
                     });
                 }   
             });
-
-        
-        var that = this;
-        var form = new FormModel({id: options.formID});
-        form.credentials = {
-            username: $.cookie('username'),
-            password: $.cookie('password')
-        };
-        form.fetch({
-            success: function(){
-                formInstancesCollection = new FormInstancesCollection({id: options.formID});
-                formInstancesCollection.credentials = {
-                    username: $.cookie('username'),
-                    password: $.cookie('password')
-                };
-                formInstancesCollection.fetch({
-                    success: function(instances){
-                        var template = _.template($("#form-instances-list-template").html(), {instances: instances.models, form: form});
-                        var headerTemplate = _.template($("#header-template").html(), {username: $.cookie('username')});
-                        var footerTemplate = _.template($("#footer-template").html(), {});
-                        that.$el.html(template);
-                        that.$el.prepend(headerTemplate);
-                        that.$el.append(footerTemplate);
-                    }    
-                });
-            }   
-        });
-}
-});
-var feedbackFormInstancesView = new FeedbackFormInstancesView();
+        }
+    });
+    var feedbackFormInstancesView = new FeedbackFormInstancesView();
 
     var FeedbackFormCreationView = Backbone.View.extend({
         el: '.main-app',
@@ -561,22 +555,19 @@ var feedbackFormInstancesView = new FeedbackFormInstancesView();
                 router.navigate('', {trigger: true});
                 return
             }
+
+            // change the title
+            document.title = "Create a Form | Ingage Dashboard";
+
             var template = _.template($("#form-creation-form-template").html(), {});
-            var headerTemplate = _.template($("#header-template").html(), {username: $.cookie("username")});
+            var headerTemplate = _.template($("#header-template").html(), {username: $.cookie('username')});
             var footerTemplate = _.template($("#footer-template").html(), {});
             this.$el.html(template);
             this.$el.prepend(headerTemplate);
             this.$el.append(footerTemplate);
-        
-        var template = _.template($("#form-creation-form-template").html(), {});
-        var headerTemplate = _.template($("#header-template").html(), {username: $.cookie('username')});
-        var footerTemplate = _.template($("#footer-template").html(), {});
-        this.$el.html(template);
-        this.$el.prepend(headerTemplate);
-        this.$el.append(footerTemplate);
-    }
-});
-var feedbackFormCreationView = new FeedbackFormCreationView();
+        }
+    });
+    var feedbackFormCreationView = new FeedbackFormCreationView();
 
 
     /* view for creation of a new instance attached to a form */
@@ -606,6 +597,10 @@ var feedbackFormCreationView = new FeedbackFormCreationView();
                 router.navigate('', {trigger: true});
                 return
             }
+            
+            // change the title
+            document.title = "Create an Instance | Ingage Dashboard";
+
             var that = this;
             var form = new FormModel({id: options.formID});
             form.credentials = {
