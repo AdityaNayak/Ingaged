@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import datetime
+import datetime, math
 
 from flask import g
 from flask.ext.restful import Resource, reqparse, fields, marshal_with
@@ -303,6 +303,10 @@ class FeedbackTimeline(Resource):
 
     get_fields = {
         'error': fields.Boolean(default=False),
+        'total_pages': fields.Integer,
+        'total_results': fields.Integer,
+        'current_page': fields.Integer,
+        'rpp': fields.Integer,
         'feedbacks': fields.List(fields.Nested(feedback_obj))
     }
 
@@ -319,6 +323,10 @@ class FeedbackTimeline(Resource):
         return value
 
     get_parser = reqparse.RequestParser()
+    # pagination related args (required)
+    get_parser.add_argument('page', required=True, type=int, location='args')
+    get_parser.add_argument('rpp', required=True, type=int, location='args')
+    # nps score related args (not required)
     get_parser.add_argument('nps_score_start', required=False, type=nps_score_type, location='args')
     get_parser.add_argument('nps_score_end', required=False, type=nps_score_type, location='args')
 
@@ -328,13 +336,25 @@ class FeedbackTimeline(Resource):
         merchant = g.user.merchant
         args = self.get_parser.parse_args()
 
+        # number of results to skip (using mongoengine)
+        skip_number = (args['page'] - 1) * args['rpp']
+
         if args['nps_score_start'] and args['nps_score_end']:
             feedbacks = FeedbackModel.objects.filter(merchant=merchant, nps_score__gte=args['nps_score_start'], 
                     nps_score__lte=args['nps_score_end']).order_by("-received_at")
         else:
             feedbacks = FeedbackModel.objects.filter(merchant=merchant).order_by("-received_at")
+            total_results = feedbacks.count() # total number of feedbacks returned
+            feedbacks = feedbacks.skip(skip_number).limit(args['rpp'])
+            total_pages = math.ceil(float(total_results) / args['rpp']) # total number of pages formed w.r.t rpp
 
-        return {'feedbacks': feedbacks}
+        return {
+            'feedbacks': feedbacks,
+            'total_pages': total_pages, 
+            'current_page': args['page'], 
+            'rpp': args['rpp'],
+            'total_results': total_results
+        }
 
 
 class FeedbackAnalytics(Resource):
