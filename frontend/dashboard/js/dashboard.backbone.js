@@ -17,22 +17,8 @@ $( document ).ready(function() {
         return o;
     };
 
-    /* all the routes of the merchant dashboard */
-    var Router = Backbone.Router.extend({
-        routes: {
-            "": "login",
-            "timeline": "feedbackTimeline",
-            "feedback_forms": "feedbackForms",
-            "feedback_forms/new": "newFeedbackForm",
-            "feedback_forms/:form_id/instances": "formInstancesList",
-            "feedback_forms/:form_id/instances/new": "newFormInstances",
-            "analytics": "analytics",
-        }
-    });
-    
     /* hostname of the api server */
-    var api_root = 'https://ingage.herokuapp.com'
-
+    var api_root = 'http://localhost:5000'
 
     /* logs out the user on the click of the logout link */
     logoutUser = function(ev){
@@ -270,6 +256,7 @@ $( document ).ready(function() {
 
             // fetch the timeline from the server
             feedbackTimelineCollection.fetch({
+                async:false,
                 success: function(feedbacks){
 
                     // pages numbers (for navigation in timeline) to show in the templates
@@ -304,6 +291,7 @@ $( document ).ready(function() {
 				            $("#details").removeClass("stickit");
 				        }
 				    });
+				    console.log("this is done now");
 
                 }
             });
@@ -406,6 +394,7 @@ $( document ).ready(function() {
             };
             var that = this;
             feedbackFormsCollection.fetch({
+                async: false,
                 success: function(forms){
                 var template = _.template($("#analytics-choose-template").html(), {analyticsExist: false});
                 var settingstemplate = _.template($("#analytics-settings-template").html(), {forms: forms.models});
@@ -514,6 +503,7 @@ $( document ).ready(function() {
                 password: $.cookie("password")
             };
             feedbackFormsCollection.fetch({
+                async: false,
                 success: function(forms){
                     var template = _.template($("#feedback-forms-list-template").html(), {forms: forms.models});
                     var headerTemplate = _.template($("#header-template").html(), {username: $.cookie("username")});
@@ -664,7 +654,28 @@ $( document ).ready(function() {
     });
     var newInstanceCreationView = new NewInstanceCreationView();
 
-    var router = new Router();
+    /* all the routes of the merchant dashboard */
+    var Router = Backbone.Router.extend({
+        routes: {
+            "": "login",
+            "timeline": "feedbackTimeline",
+            "feedback_forms": "feedbackForms",
+            "feedback_forms/new": "newFeedbackForm",
+            "feedback_forms/:form_id/instances": "formInstancesList",
+            "feedback_forms/:form_id/instances/new": "newFormInstances",
+            "analytics": "analytics",
+        },
+    });
+
+    var highlightNavLinks = function(route){
+        var selector = $("#nav-" + route);
+        if (!selector.hasClass("active")){
+            $(".top-bar-secion .active").removeClass("active");
+            $(selector).addClass("active");
+        }
+    };
+
+    router = new Router();
 
     router.on('route:login', function(){
         loginView.render();
@@ -672,14 +683,17 @@ $( document ).ready(function() {
 
     router.on('route:feedbackTimeline', function(){
         feedbackTimelineView.render();
+        highlightNavLinks("timeline");
     });
 
     router.on('route:analytics', function(){
         AnalyticsView.render();
+        highlightNavLinks("analytics");
     });
 
     router.on('route:feedbackForms', function(){
         feedbackFormsView.render();
+        highlightNavLinks("feedback_forms");
     });
 
     router.on('route:formInstancesList', function(form_id){

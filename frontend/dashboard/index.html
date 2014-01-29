@@ -100,55 +100,53 @@
 				</div>
 			</div>
 		</div>
-		
-	
-</script>
+    </script>
 
-<script type="text/template" id="header-template">
-	<div class="contain-to-grid">
-		<header class="top-bar" data-topbar>
-			<ul class="title-area">
-				<li class="name">
-					<h1><a href="http://ingagelive.com"><img src="images/logo.png" alt="Ingage Dashboard"></a></h1>
-				</li>
-				<li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
-			</ul>
-			<section class="top-bar-section">
-				<ul class="right">
-					<li class="secondary-color namesyntax">Welcome <%= username %></li>
-					<li><a href="#/timeline" >Dashboard</a></li>
-					<li><a href="#/analytics" >Analytics</a></li>
-					<li><a href="#/feedback_forms" >System</a></li>
-					<li><a href="#" id="logout-link">Log Out</a></li>      
-				</ul>
-			</section>
-		</header>
-	</div>
-	<div class="row">
-		<div class="small-6 small-centered columns">
-			<div class="alert-bar">
-				<div id="loading-bar" data-alert="" class="alert-box loading" style="display:none;">
-					<span class="alert-text">
-						Loading
-						<span class="spinner-css">      
-							<span class="side sp_left">
-								<span class="fill"></span>
-							</span>
-							<span class="side sp_right">
-								<span class="fill"></span>
-							</span>
-						</span>
-					</span>
-				</div>
-			</div>
-		</div>
-	</div>
-	<script>
-     $(".top-bar-section ul li>a").click(function(){ //
-     	$("#loading-bar").fadeIn(300);
-     });
- </script>
-</script>
+    <script type="text/template" id="header-template">
+        <div class="contain-to-grid">
+            <header class="top-bar" data-topbar>
+                <ul class="title-area">
+                    <li class="name">
+                        <h1><a href="http://ingagelive.com"><img src="images/logo.png" alt="Ingage Dashboard"></a></h1>
+                    </li>
+                    <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+                </ul>
+                <section class="top-bar-section">
+                    <ul class="right">
+                        <li class="secondary-color namesyntax">Welcome <%= username %></li>
+                        <li id="nav-timeline"><a href="#/timeline" >Dashboard</a></li>
+                        <li id="nav-analytics"><a href="#/analytics" >Analytics</a></li>
+                        <li id="nav-feedback_forms"><a href="#/feedback_forms" >System</a></li>
+                        <li><a href="#" id="logout-link">Log Out</a></li>      
+                    </ul>
+                </section>
+            </header>
+        </div>
+        <div class="row">
+            <div class="small-6 small-centered columns">
+                <div class="alert-bar">
+                    <div id="loading-bar" data-alert="" class="alert-box loading" style="display:none;">
+                        <span class="alert-text">
+                            Loading
+                            <span class="spinner-css">      
+                                <span class="side sp_left">
+                                    <span class="fill"></span>
+                                </span>
+                                <span class="side sp_right">
+                                    <span class="fill"></span>
+                                </span>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            $(".top-bar-section ul li>a").click(function(){ //
+                $("#loading-bar").fadeIn(300);
+            });
+        </script>
+    </script>
 
 <script type="text/template" id="feedback-timeline-template">
 
