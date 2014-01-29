@@ -4,6 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
+
 	<title>Ingage Dashboard</title>
 
 	<link rel="stylesheet" href="../assets/css/dashboard.css">
@@ -17,6 +18,7 @@
 	<script src="js/jquery.cookie.js"></script>
 	<script src="http://timeago.yarp.com/jquery.timeago.js"></script>
 	<script src="js/dashboard.backbone.js"></script>
+    <script src="js/backbone.paginator.js"></script>
 </head>
 
 <body>
@@ -222,15 +224,11 @@
 </ul>
 <div class="pagination-centered">
 	<ul class="pagination">
-		<li class="arrow unavailable"><a href="">&laquo;</a></li>
-		<li class="current"><a href="">1</a></li>
-		<li><a href="">2</a></li>
-		<li><a href="">3</a></li>
-		<li><a href="">4</a></li>
-		<li class="unavailable"><a href="">&hellip;</a></li>
-		<li><a href="">12</a></li>
-		<li><a href="">13</a></li>
-		<li class="arrow"><a href="">&raquo;</a></li>
+        <li class="arrow unavailable">&laquo;</li>
+        <% _.each(pagesToShow, function(page){ %>
+            <li class=<% page == currentPage ? print('"current"') : print('""') %>><a href="#"><%= page %></a></li>
+        <% }); %>
+        <li class="arrow unavailable">&raquo;</li>
 	</ul>
 </div>
 </div>

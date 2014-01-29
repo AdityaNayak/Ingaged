@@ -31,7 +31,7 @@ $( document ).ready(function() {
     });
     
     /* hostname of the api server */
-    var api_root = 'https://ingage.herokuapp.com'
+    var api_root = 'http://localhost:5000'
 
 
     /* logs out the user on the click of the logout link */
@@ -43,13 +43,17 @@ $( document ).ready(function() {
         return false
     }
 
+    /* feedback timeline feedback model */
+    var FeedbackModel = Backbone.Model.extend({});
+
     /* collection storing the list of feedbacks which come in the timeline */
-    FeedbackTimelineCollection = Backbone.Collection.extend({
+    var FeedbackTimelineCollection = Backbone.Collection.extend({
+        model: FeedbackModel,
         initialize: function(nps_score_start, nps_score_end){
             this.nps_score_start = nps_score_start;
             this.nps_score_end = nps_score_end;
         },
-        url: function(){
+        urlRoot: function(){
             if (this.nps_score_start && this.nps_score_end){
                 return api_root + "/dashboard/timeline" + "?nps_score_start=" + this.nps_score_start +
                         "&nps_score_end=" + this.nps_score_end;
@@ -58,9 +62,11 @@ $( document ).ready(function() {
             }
         },
         parse: function(response, xhr){
+            this.actAs_Paginatable_totalItems = response.total_results;
             return response.feedbacks;
         }
     });
+    Backbone.actAs.Paginatable.init(FeedbackTimelineCollection, FeedbackModel);
 
     /* collection of the list of feedback forms of the merchant */
     var FeedbackFormsCollection = Backbone.Collection.extend({
@@ -197,7 +203,15 @@ $( document ).ready(function() {
             'click ul.feedback-timeline li.row': 'showCustomerDetails',
             'click #logout-link': logoutUser,
             'click #timeline-refresh-button': 'refreshTimeline',
-            'click .nps-score-filter li a': 'npsScoreFilter'
+            'click .nps-score-filter li a': 'npsScoreFilter',
+            'click .pagination li a': 'changePageTimeline'
+        },
+        changePageTimeline: function(ev){
+            ev.preventDefault();
+            var target = $(ev.currentTarget);
+            var pageNumber = target.text();
+            console.log(pageNumber);
+            this.render(null, null, Number(pageNumber));
         },
         npsScoreFilter: function(ev){
             ev.preventDefault();
@@ -228,7 +242,7 @@ $( document ).ready(function() {
             }
             toAppendTo.append(template);
         },
-        render: function(nps_score_start, nps_score_end){
+        render: function(nps_score_start, nps_score_end, currentPage){
             if (!$.cookie("username") && !$.cookie("password")){
                 router.navigate('', {trigger: true});
                 return
@@ -237,22 +251,50 @@ $( document ).ready(function() {
             // change the title
             document.title = "Feedback Timeline | Ingage Dashboard";
             
-
-            var that = this;
             // fetching feedback timeline
+            var that = this;
             feedbackTimelineCollection = new FeedbackTimelineCollection(nps_score_start, nps_score_end);
+
+            // pagination properties of the collection
+            currentPage = currentPage || 1;
+            feedbackTimelineCollection.actAs_Paginatable_currentPage_attr = "page";
+            feedbackTimelineCollection.actAs_Paginatable_itemsPerPage_attr = "rpp";
+            feedbackTimelineCollection.currentPage(currentPage);
+            feedbackTimelineCollection.itemsPerPage(3);
+
+            // basic auth credentials
             feedbackTimelineCollection.credentials = {
                 username: $.cookie("username"),
                 password: $.cookie("password")
             };
+
+            // fetch the timeline from the server
             feedbackTimelineCollection.fetch({
                 success: function(feedbacks){
-                    var template = _.template($("#feedback-timeline-template").html(), {feedbacks: feedbacks.models});
+
+                    // pages numbers (for navigation in timeline) to show in the templates
+                    paginationInfo = feedbacks.paginationInfo();
+                    pagesToShow = [];
+                    leftSide = _.range(1, paginationInfo.currentPage);
+                    rightSide = _.range(paginationInfo.currentPage+1, paginationInfo.totalPages+1);
+                    for (var i=0; i < leftSide.length; i++){
+                        pagesToShow.push(leftSide[i]);
+                    }
+                    pagesToShow.push(paginationInfo.currentPage);
+                    for (var i=0; i<rightSide.length; i++){
+                        pagesToShow.push(rightSide[i]);
+                    }
+
+                    // mumbo jumbo of templates
+                    var template = _.template($("#feedback-timeline-template").html(),
+                        {feedbacks: feedbacks.models, pagesToShow: pagesToShow, currentPage: paginationInfo.currentPage});
                     var headerTemplate = _.template($("#header-template").html(), {username: $.cookie("username")});
                     var footerTemplate = _.template($("#footer-template").html(), {});
                     that.$el.html(template);
                     that.$el.prepend(headerTemplate);
                     that.$el.append(footerTemplate);
+                    
+                    // jquery shit
                     $(document).foundation(); 
                     $(window).scroll(function() {
 				        var scroll = $(window).scrollTop();
@@ -262,6 +304,7 @@ $( document ).ready(function() {
 				            $("#details").removeClass("stickit");
 				        }
 				    });
+
                 }
             });
         }
