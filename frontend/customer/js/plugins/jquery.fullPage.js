@@ -88,7 +88,7 @@
 				}
 				
 				//scrolling the page to the section with no animation
-				//$('html, body').scrollTop(element.position().top);
+				$('html, body').scrollTop(element.position().top);
 			}
 			
 		};
@@ -306,8 +306,8 @@
 		var screenWidthvar= screen.availWidth;
 		var touchStartY = 0;
 		var touchStartX = 0;
-		var touchEndY = screenWidthvar/12;
-		var touchEndX = 0;
+		var touchEndY = screenWidthvar/16;
+		var touchEndX = screenWidthvar/2;
 	
 		/* Detecting touch events 
 		

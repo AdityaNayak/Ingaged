@@ -44,12 +44,6 @@ $( document ).ready(function() {
 			'click input,textarea': 'showDone',
 			'click .intr-btn, .intr': 'nextSection',
 			'click #form-submit-btn': 'submitFeedback',
-			'click #nps-rating': 'disableautoscroll',
-		},
-		disableautoscroll: function(ev){
-			ev.preventDefault();
-			$.fn.fullpage.setAutoScrolling(false);
-			console.log("it works");
 		},
 		nextSection: function(ev){
 			var previousResponse = $(ev.currentTarget).parent().find(".response");
@@ -144,12 +138,12 @@ $( document ).ready(function() {
 				        navigation: false,
 				        slidesNavigation: false,
 				        loopBottom: false,
-				        loopTop: false,
+				        loopTop: true,
 				        loopHorizontal: false,
 				        autoScrolling: true,
 				        scrollOverflow: false,
 				        css3: true,
-				        paddingTop: '10px',
+				        paddingTop: '3em',
 				        paddingBottom: '10px',
 
 				    });
