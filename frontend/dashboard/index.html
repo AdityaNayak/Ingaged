@@ -424,6 +424,9 @@
 
                         <div class="form-result">
                             <h4>Form Results</h4>
+
+                            <p><strong>Total Responses:</strong> <%= field_analytics.total_responses %></p>
+
                             <% _.each(field_analytics.numbers, function(number){ %>
                                 <div class="row">
                                     <div class="small-9 columns">
