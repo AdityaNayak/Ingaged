@@ -373,7 +373,8 @@ class FeedbackAnalytics(Resource):
 
     get_fields = {
         'error': fields.Boolean(default=False),
-        'analytics': fields.List(fields.Nested(analytics_obj))
+        'analytics': fields.List(fields.Nested(analytics_obj)),
+        'no_analytics': fields.Boolean(default=False)
     }
 
     get_parser = reqparse.RequestParser()
@@ -399,7 +400,14 @@ class FeedbackAnalytics(Resource):
         else:
             analytics = form.get_analytics(instances)
 
-        return {'analytics': [v for k,v in analytics.items()]}
+        # check if all numbers are `0` in analytics
+        numbers = []
+        for analytic in  analytics.values():
+            for number in analytic['numbers'].values():
+                numbers.append(number['number'])
+        no_analytics = False if sum(numbers) > 0 else True
+
+        return {'analytics': [v for k,v in analytics.items()], 'no_analytics': no_analytics}
 
 ## Registering Endpoints
 
