@@ -359,6 +359,11 @@ $( document ).ready(function() {
                     };
                     analyticsModel.fetch({
                         success: function(analytics){
+                            if (analytics.attributes.no_analytics){
+                                var template = _.template($("#analytics-do-not-exist-template").html());
+                                $("#form-analytics").replaceWith(template);
+                                return
+                            }
                             if (!field_id){
                                 fieldAnalytics = analytics.attributes.analytics[0];
                             } else {
