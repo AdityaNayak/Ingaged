@@ -17,22 +17,8 @@ $( document ).ready(function() {
         return o;
     };
 
-    /* all the routes of the merchant dashboard */
-    var Router = Backbone.Router.extend({
-        routes: {
-            "": "login",
-            "timeline": "feedbackTimeline",
-            "feedback_forms": "feedbackForms",
-            "feedback_forms/new": "newFeedbackForm",
-            "feedback_forms/:form_id/instances": "formInstancesList",
-            "feedback_forms/:form_id/instances/new": "newFormInstances",
-            "analytics": "analytics",
-        }
-    });
-    
     /* hostname of the api server */
-    var api_root = 'https://ingage.herokuapp.com'
-
+    var api_root = 'http://localhost:5000'
 
     /* logs out the user on the click of the logout link */
     logoutUser = function(ev){
@@ -43,13 +29,17 @@ $( document ).ready(function() {
         return false
     }
 
+    /* feedback timeline feedback model */
+    var FeedbackModel = Backbone.Model.extend({});
+
     /* collection storing the list of feedbacks which come in the timeline */
-    FeedbackTimelineCollection = Backbone.Collection.extend({
+    var FeedbackTimelineCollection = Backbone.Collection.extend({
+        model: FeedbackModel,
         initialize: function(nps_score_start, nps_score_end){
             this.nps_score_start = nps_score_start;
             this.nps_score_end = nps_score_end;
         },
-        url: function(){
+        urlRoot: function(){
             if (this.nps_score_start && this.nps_score_end){
                 return api_root + "/dashboard/timeline" + "?nps_score_start=" + this.nps_score_start +
                         "&nps_score_end=" + this.nps_score_end;
@@ -58,9 +48,11 @@ $( document ).ready(function() {
             }
         },
         parse: function(response, xhr){
+            this.actAs_Paginatable_totalItems = response.total_results;
             return response.feedbacks;
         }
     });
+    Backbone.actAs.Paginatable.init(FeedbackTimelineCollection, FeedbackModel);
 
     /* collection of the list of feedback forms of the merchant */
     var FeedbackFormsCollection = Backbone.Collection.extend({
@@ -178,13 +170,17 @@ $( document ).ready(function() {
                 router.navigate('timeline', {trigger: true});
                 return false
             }
+
+            // change the title
+            document.title = "Ingage Dashboard";
+
             var template = _.template($("#login-template").html(), {});
             var footerTemplate = _.template($("#footer-template").html(), {});
             this.$el.html(template);
             this.$el.append(footerTemplate);
         }
     });
-var loginView = new LoginView();
+    var loginView = new LoginView();
 
     /* timeline of various feedbacks */
     var FeedbackTimelineView = Backbone.View.extend({
@@ -193,7 +189,15 @@ var loginView = new LoginView();
             'click ul.feedback-timeline li.row': 'showCustomerDetails',
             'click #logout-link': logoutUser,
             'click #timeline-refresh-button': 'refreshTimeline',
-            'click .nps-score-filter li a': 'npsScoreFilter'
+            'click .nps-score-filter li a': 'npsScoreFilter',
+            'click .pagination li a': 'changePageTimeline'
+        },
+        changePageTimeline: function(ev){
+            ev.preventDefault();
+            var target = $(ev.currentTarget);
+            var pageNumber = target.text();
+            console.log(pageNumber);
+            this.render(null, null, Number(pageNumber));
         },
         npsScoreFilter: function(ev){
             ev.preventDefault();
@@ -224,26 +228,60 @@ var loginView = new LoginView();
             }
             toAppendTo.append(template);
         },
-        render: function(nps_score_start, nps_score_end){
+        render: function(nps_score_start, nps_score_end, currentPage){
             if (!$.cookie("username") && !$.cookie("password")){
                 router.navigate('', {trigger: true});
                 return
             }
-            var that = this;
+
+            // change the title
+            document.title = "Feedback Timeline | Ingage Dashboard";
+            
             // fetching feedback timeline
+            var that = this;
             feedbackTimelineCollection = new FeedbackTimelineCollection(nps_score_start, nps_score_end);
+
+            // pagination properties of the collection
+            currentPage = currentPage || 1;
+            feedbackTimelineCollection.actAs_Paginatable_currentPage_attr = "page";
+            feedbackTimelineCollection.actAs_Paginatable_itemsPerPage_attr = "rpp";
+            feedbackTimelineCollection.currentPage(currentPage);
+            feedbackTimelineCollection.itemsPerPage(3);
+
+            // basic auth credentials
             feedbackTimelineCollection.credentials = {
                 username: $.cookie("username"),
                 password: $.cookie("password")
             };
+
+            // fetch the timeline from the server
             feedbackTimelineCollection.fetch({
+                async:false,
                 success: function(feedbacks){
-                    var template = _.template($("#feedback-timeline-template").html(), {feedbacks: feedbacks.models});
+
+                    // pages numbers (for navigation in timeline) to show in the templates
+                    paginationInfo = feedbacks.paginationInfo();
+                    pagesToShow = [];
+                    leftSide = _.range(1, paginationInfo.currentPage);
+                    rightSide = _.range(paginationInfo.currentPage+1, paginationInfo.totalPages+1);
+                    for (var i=0; i < leftSide.length; i++){
+                        pagesToShow.push(leftSide[i]);
+                    }
+                    pagesToShow.push(paginationInfo.currentPage);
+                    for (var i=0; i<rightSide.length; i++){
+                        pagesToShow.push(rightSide[i]);
+                    }
+
+                    // mumbo jumbo of templates
+                    var template = _.template($("#feedback-timeline-template").html(),
+                        {feedbacks: feedbacks.models, pagesToShow: pagesToShow, currentPage: paginationInfo.currentPage});
                     var headerTemplate = _.template($("#header-template").html(), {username: $.cookie("username")});
                     var footerTemplate = _.template($("#footer-template").html(), {});
                     that.$el.html(template);
                     that.$el.prepend(headerTemplate);
                     that.$el.append(footerTemplate);
+                    
+                    // jquery shit
                     $(document).foundation(); 
                     $(window).scroll(function() {
 				        var scroll = $(window).scrollTop();
@@ -253,6 +291,8 @@ var loginView = new LoginView();
 				            $("#details").removeClass("stickit");
 				        }
 				    });
+				    console.log("this is done now");
+
                 }
             });
         }
@@ -343,6 +383,9 @@ var loginView = new LoginView();
                 return
             }
 
+            // change the title
+            document.title = "Feedback Timeline | Ingage Dashboard";
+
             // fetch feedback forms
             feedbackFormsCollection = new FeedbackFormsCollection();
             feedbackFormsCollection.credentials = {
@@ -351,6 +394,7 @@ var loginView = new LoginView();
             };
             var that = this;
             feedbackFormsCollection.fetch({
+                async: false,
                 success: function(forms){
                 var template = _.template($("#analytics-choose-template").html(), {analyticsExist: false});
                 var settingstemplate = _.template($("#analytics-settings-template").html(), {forms: forms.models});
@@ -448,6 +492,10 @@ var loginView = new LoginView();
                 router.navigate('', {trigger: true});
                 return
             }
+
+            // change the title
+            document.title = "All Forms | Ingage Dashboard";
+
             var that = this;
             feedbackFormsCollection = new FeedbackFormsCollection();
             feedbackFormsCollection.credentials = {
@@ -455,6 +503,7 @@ var loginView = new LoginView();
                 password: $.cookie("password")
             };
             feedbackFormsCollection.fetch({
+                async: false,
                 success: function(forms){
                     var template = _.template($("#feedback-forms-list-template").html(), {forms: forms.models});
                     var headerTemplate = _.template($("#header-template").html(), {username: $.cookie("username")});
@@ -479,23 +528,28 @@ var loginView = new LoginView();
                 router.navigate('', {trigger: true});
                 return
             }
+
+            // change the title
+            document.title = "All Instances | Ingage Dashboard";
+
             var that = this;
             var form = new FormModel({id: options.formID});
             form.credentials = {
-                username: $.cookie("username"),
-                password: $.cookie("password")
+                username: $.cookie('username'),
+                password: $.cookie('password')
             };
             form.fetch({
                 success: function(){
                     formInstancesCollection = new FormInstancesCollection({id: options.formID});
                     formInstancesCollection.credentials = {
-                        username: $.cookie("username"),
-                        password: $.cookie("password")
+                        username: $.cookie('username'),
+                        password: $.cookie('password')
                     };
                     formInstancesCollection.fetch({
                         success: function(instances){
-                            var template = _.template($("#form-instances-list-template").html(), {instances: instances.models, form: form});
-                            var headerTemplate = _.template($("#header-template").html(), {username: $.cookie("username")});
+                            var template = _.template($("#form-instances-list-template").html(),
+                                {instances: instances.models, form: form});
+                            var headerTemplate = _.template($("#header-template").html(), {username: $.cookie('username')});
                             var footerTemplate = _.template($("#footer-template").html(), {});
                             that.$el.html(template);
                             that.$el.prepend(headerTemplate);
@@ -504,36 +558,9 @@ var loginView = new LoginView();
                     });
                 }   
             });
-
-        
-        var that = this;
-        var form = new FormModel({id: options.formID});
-        form.credentials = {
-            username: $.cookie('username'),
-            password: $.cookie('password')
-        };
-        form.fetch({
-            success: function(){
-                formInstancesCollection = new FormInstancesCollection({id: options.formID});
-                formInstancesCollection.credentials = {
-                    username: $.cookie('username'),
-                    password: $.cookie('password')
-                };
-                formInstancesCollection.fetch({
-                    success: function(instances){
-                        var template = _.template($("#form-instances-list-template").html(), {instances: instances.models, form: form});
-                        var headerTemplate = _.template($("#header-template").html(), {username: $.cookie('username')});
-                        var footerTemplate = _.template($("#footer-template").html(), {});
-                        that.$el.html(template);
-                        that.$el.prepend(headerTemplate);
-                        that.$el.append(footerTemplate);
-                    }    
-                });
-            }   
-        });
-}
-});
-var feedbackFormInstancesView = new FeedbackFormInstancesView();
+        }
+    });
+    var feedbackFormInstancesView = new FeedbackFormInstancesView();
 
     var FeedbackFormCreationView = Backbone.View.extend({
         el: '.main-app',
@@ -561,22 +588,19 @@ var feedbackFormInstancesView = new FeedbackFormInstancesView();
                 router.navigate('', {trigger: true});
                 return
             }
+
+            // change the title
+            document.title = "Create a Form | Ingage Dashboard";
+
             var template = _.template($("#form-creation-form-template").html(), {});
-            var headerTemplate = _.template($("#header-template").html(), {username: $.cookie("username")});
+            var headerTemplate = _.template($("#header-template").html(), {username: $.cookie('username')});
             var footerTemplate = _.template($("#footer-template").html(), {});
             this.$el.html(template);
             this.$el.prepend(headerTemplate);
             this.$el.append(footerTemplate);
-        
-        var template = _.template($("#form-creation-form-template").html(), {});
-        var headerTemplate = _.template($("#header-template").html(), {username: $.cookie('username')});
-        var footerTemplate = _.template($("#footer-template").html(), {});
-        this.$el.html(template);
-        this.$el.prepend(headerTemplate);
-        this.$el.append(footerTemplate);
-    }
-});
-var feedbackFormCreationView = new FeedbackFormCreationView();
+        }
+    });
+    var feedbackFormCreationView = new FeedbackFormCreationView();
 
 
     /* view for creation of a new instance attached to a form */
@@ -606,6 +630,10 @@ var feedbackFormCreationView = new FeedbackFormCreationView();
                 router.navigate('', {trigger: true});
                 return
             }
+            
+            // change the title
+            document.title = "Create an Instance | Ingage Dashboard";
+
             var that = this;
             var form = new FormModel({id: options.formID});
             form.credentials = {
@@ -626,7 +654,28 @@ var feedbackFormCreationView = new FeedbackFormCreationView();
     });
     var newInstanceCreationView = new NewInstanceCreationView();
 
-    var router = new Router();
+    /* all the routes of the merchant dashboard */
+    var Router = Backbone.Router.extend({
+        routes: {
+            "": "login",
+            "timeline": "feedbackTimeline",
+            "feedback_forms": "feedbackForms",
+            "feedback_forms/new": "newFeedbackForm",
+            "feedback_forms/:form_id/instances": "formInstancesList",
+            "feedback_forms/:form_id/instances/new": "newFormInstances",
+            "analytics": "analytics",
+        },
+    });
+
+    var highlightNavLinks = function(route){
+        var selector = $("#nav-" + route);
+        if (!selector.hasClass("active")){
+            $(".top-bar-secion .active").removeClass("active");
+            $(selector).addClass("active");
+        }
+    };
+
+    router = new Router();
 
     router.on('route:login', function(){
         loginView.render();
@@ -634,14 +683,17 @@ var feedbackFormCreationView = new FeedbackFormCreationView();
 
     router.on('route:feedbackTimeline', function(){
         feedbackTimelineView.render();
+        highlightNavLinks("timeline");
     });
 
     router.on('route:analytics', function(){
         AnalyticsView.render();
+        highlightNavLinks("analytics");
     });
 
     router.on('route:feedbackForms', function(){
         feedbackFormsView.render();
+        highlightNavLinks("feedback_forms");
     });
 
     router.on('route:formInstancesList', function(form_id){

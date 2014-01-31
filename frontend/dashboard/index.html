@@ -4,6 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
+
 	<title>Ingage Dashboard</title>
 
 	<link rel="stylesheet" href="../assets/css/dashboard.css">
@@ -17,6 +18,7 @@
 	<script src="js/jquery.cookie.js"></script>
 	<script src="http://timeago.yarp.com/jquery.timeago.js"></script>
 	<script src="js/dashboard.backbone.js"></script>
+    <script src="js/backbone.paginator.js"></script>
 </head>
 
 <body>
@@ -98,55 +100,53 @@
 				</div>
 			</div>
 		</div>
-		
-	
-</script>
+    </script>
 
-<script type="text/template" id="header-template">
-	<div class="contain-to-grid">
-		<header class="top-bar" data-topbar>
-			<ul class="title-area">
-				<li class="name">
-					<h1><a href="http://ingagelive.com"><img src="images/logo.png" alt="Ingage Dashboard"></a></h1>
-				</li>
-				<li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
-			</ul>
-			<section class="top-bar-section">
-				<ul class="right">
-					<li class="secondary-color namesyntax">Welcome <%= username %></li>
-					<li><a href="#/timeline" >Dashboard</a></li>
-					<li><a href="#/analytics" >Analytics</a></li>
-					<li><a href="#/feedback_forms" >System</a></li>
-					<li><a href="#" id="logout-link">Log Out</a></li>      
-				</ul>
-			</section>
-		</header>
-	</div>
-	<div class="row">
-		<div class="small-6 small-centered columns">
-			<div class="alert-bar">
-				<div id="loading-bar" data-alert="" class="alert-box loading" style="display:none;">
-					<span class="alert-text">
-						Loading
-						<span class="spinner-css">      
-							<span class="side sp_left">
-								<span class="fill"></span>
-							</span>
-							<span class="side sp_right">
-								<span class="fill"></span>
-							</span>
-						</span>
-					</span>
-				</div>
-			</div>
-		</div>
-	</div>
-	<script>
-     $(".top-bar-section ul li>a").click(function(){ //
-     	$("#loading-bar").fadeIn(300);
-     });
- </script>
-</script>
+    <script type="text/template" id="header-template">
+        <div class="contain-to-grid">
+            <header class="top-bar" data-topbar>
+                <ul class="title-area">
+                    <li class="name">
+                        <h1><a href="http://ingagelive.com"><img src="images/logo.png" alt="Ingage Dashboard"></a></h1>
+                    </li>
+                    <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+                </ul>
+                <section class="top-bar-section">
+                    <ul class="right">
+                        <li class="secondary-color namesyntax">Welcome <%= username %></li>
+                        <li id="nav-timeline"><a href="#/timeline" >Dashboard</a></li>
+                        <li id="nav-analytics"><a href="#/analytics" >Analytics</a></li>
+                        <li id="nav-feedback_forms"><a href="#/feedback_forms" >System</a></li>
+                        <li><a href="#" id="logout-link">Log Out</a></li>      
+                    </ul>
+                </section>
+            </header>
+        </div>
+        <div class="row">
+            <div class="small-6 small-centered columns">
+                <div class="alert-bar">
+                    <div id="loading-bar" data-alert="" class="alert-box loading" style="display:none;">
+                        <span class="alert-text">
+                            Loading
+                            <span class="spinner-css">      
+                                <span class="side sp_left">
+                                    <span class="fill"></span>
+                                </span>
+                                <span class="side sp_right">
+                                    <span class="fill"></span>
+                                </span>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            $(".top-bar-section ul li>a").click(function(){ //
+                $("#loading-bar").fadeIn(300);
+            });
+        </script>
+    </script>
 
 <script type="text/template" id="feedback-timeline-template">
 
@@ -222,15 +222,11 @@
 </ul>
 <div class="pagination-centered">
 	<ul class="pagination">
-		<li class="arrow unavailable"><a href="">&laquo;</a></li>
-		<li class="current"><a href="">1</a></li>
-		<li><a href="">2</a></li>
-		<li><a href="">3</a></li>
-		<li><a href="">4</a></li>
-		<li class="unavailable"><a href="">&hellip;</a></li>
-		<li><a href="">12</a></li>
-		<li><a href="">13</a></li>
-		<li class="arrow"><a href="">&raquo;</a></li>
+        <li class="arrow unavailable">&laquo;</li>
+        <% _.each(pagesToShow, function(page){ %>
+            <li class=<% page == currentPage ? print('"current"') : print('""') %>><a href="#"><%= page %></a></li>
+        <% }); %>
+        <li class="arrow unavailable">&raquo;</li>
 	</ul>
 </div>
 </div>
