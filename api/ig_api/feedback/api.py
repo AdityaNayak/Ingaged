@@ -109,6 +109,7 @@ feedback_obj = {
 
 analytics_obj = {
     'numbers': fields.Raw,
+    'total_responses': fields.Integer,
     'field': fields.Nested(field_obj)
 }
 
