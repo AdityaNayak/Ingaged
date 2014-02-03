@@ -253,6 +253,49 @@ class FeedbackModel(db.Document):
 
     meta = {'collection': 'feedbacks'}
 
+    @staticmethod
+    def get_timeline(merchant, nps_score_start=None, nps_score_end=None, start_date=None, end_date=None, instances=None):
+        """Returns the MongoEngine queryset for the timeline filtered on basis of
+        various filters ordered in a reverse chronogical order.
+
+        Note: This method does not take care of any sort of filters. They can be implemented using the
+              queryset returned by this method.
+
+        Keyword Arguments:
+        
+        merchant: (required) Whose timeline is to be returned?
+
+        nps_score_start: (optional) Starting (inclusive) range of NPS score. (between 0 to 10)
+        nps_score_end (optional) Ending (inclusive) range of NPS score. (between 0 to 10)
+
+        start_date: (optional) Results returned would be from dates equal to or greater than this date. (datetime.datetime)
+        end_date: (optional) Results returned would be from dates equal to or less than this date. (datetime.datetime)
+
+        instances: (optional) List of instances of whose results need to be returned.
+        """
+
+        # get all feedbacks (without a filter) for the merchant
+        feedbacks = FeedbackModel.objects.filter(merchant=merchant)
+
+        # filter on basis of nps score if provided
+        if nps_score_start and nps_score_end:
+            feedbacks = FeedbackModel.objects.filter(merchant=merchant, nps_score__gte=args['nps_score_start'], 
+                    nps_score__lte=args['nps_score_end'])
+
+        # filter on basis of start and end date
+        if start_date and end_date:
+            feedbacks = feedbacks.filter(merchant=merchant, received_at__gte=start_date,
+                    received_at__lte=end_date)
+
+        # filter on basis of instances
+        if instances:
+            feedbacks = feedbacks.filter(form_instance__in=instances)
+
+        # order the feedback query set by received date
+        feedbacks = feedbacks.order_by("-received_at")
+
+        return feedbacks
+
     @property
     def responses(self):
         """This method returns a list of responses given to the

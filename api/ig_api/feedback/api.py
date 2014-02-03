@@ -1,19 +1,50 @@
 # -*- coding: utf-8 -*-
-import datetime, math
+import datetime, math, csv, StringIO
 
 from flask import g
 from flask.ext.restful import Resource, reqparse, fields, marshal_with
+from flask.ext.restful.fields import get_value
 from bson.objectid import ObjectId
 from pymongo.errors import InvalidId
 
 from ig_api import api, db
 from ig_api.error_codes import abort_error
+from ig_api.helpers import upload_s3
 from ig_api.authentication import login_required
 from ig_api.feedback.models import (FormModel, InstanceModel, FormException, InstanceException,
         FormFieldSubModel, FeedbackModel, FeedbackException)
 
 
 ## Helpers
+def nps_score_type(value, key):
+    try:
+        value = int(value)
+    except ValueError:
+        raise ValueError("'{0}' should be of int type.").format(key)
+
+    # nps score should be in the range of 1 to 10
+    if value < 1 or value > 10:
+        raise ValueError("'{0}' should be between 1 and 10.").format(key)
+
+    return value
+
+def date_arg(value, key):
+    """This is the date argument for Flask-Restful.
+    
+    Processes the date given in 'YYYY-MM-DD' format and returns a `datetime.datetime`
+    object from it.
+    """
+    try:
+        year, month, day = value.split('-')
+        if key == 'end_date':
+            date = datetime.datetime(int(year), int(month), int(day), hour=23, minute=59, second=59)
+        else: # if key == 'start_date'
+            date = datetime.datetime(int(year), int(month), int(day), hour=0, minute=0, second=0)
+    except ValueError:
+        raise ValueError("There was some problem with the date provided.")
+
+    return date
+
 def form_id_exists(form_id):
     """Checks for the existence of the form with the given form ID or
     aborts the request with the code '4001'. Incase the form exists,
@@ -298,6 +329,118 @@ class CustomerFeedback(Resource):
 
         return {'success': True}
 
+class FeedbackTimelineExport(Resource):
+
+    get_fields = {
+        'error': fields.Boolean(default=False),
+        'csv_url': fields.Url,
+    }
+
+    get_parser = reqparse.RequestParser()
+    # nps score related args (not required)
+    get_parser.add_argument('nps_score_start', required=False, type=nps_score_type, location='args')
+    get_parser.add_argument('nps_score_end', required=False, type=nps_score_type, location='args')
+    # start & end date for date based filtering (required)
+    get_parser.add_argument('start_date', required=True, type=date_arg, location='args')
+    get_parser.add_argument('end_date', required=True, type=date_arg, location='args')
+    # form ID filter (required)
+    get_parser.add_argument('form_id', required=True, type=unicode, location='args')
+
+    @marshal_with(get_fields)
+    @login_required('merchant')
+    def get(self):
+        args = self.get_parser.parse_args()
+
+        # NPS score filters
+        nps_score_start = nps_score_end = None
+        if args['nps_score_start'] and args['nps_score_end']:
+            nps_score_start = args['nps_score_start']
+            nps_score_end = args['nps_score_end']
+
+        # add time based filters
+        start_date = args['start_date']
+        end_date = args['end_date']
+
+        # list of instance IDs associated with given form IDs
+        form = form_id_exists(args['form_id'])
+        instances = []
+        instances_ = InstanceModel.objects.filter(form=form)
+        instances.extend(instances_)
+
+        # get the feedbacks
+        feedbacks_ = FeedbackModel.get_timeline(
+                        merchant = g.user.merchant,
+                        nps_score_start = nps_score_start,
+                        nps_score_end = nps_score_end,
+                        start_date = start_date,
+                        end_date = end_date,
+                        instances = instances
+                    )
+
+        # contructing list of dicts for CSVs
+        form_fields = dict([(str(i.id), i.text) for i in form.fields]) # dict of titles of form fields
+        feedbacks = [] # this list will contain dicts of all feedbacks for csv
+        for f in feedbacks_:
+            # all feedback details excluding the responses
+            f_ = {
+
+                # general feedback details
+                'Feedback Text': get_value('feedback_text', f),
+                'Feedback Score': get_value('nps_score', f),
+                
+                # date & time info
+                'Date': get_value('received_at', f).strftime('%d-%m-%Y'),
+                'Time': get_value('received_at', f).strftime('%H:%M'),
+
+                # customer details
+                'Customer Name': get_value('customer.name', f),
+                'Customer Mobile': get_value('customer.mobile', f),
+                'Customer E-mail': get_value('customer.email', f),
+                
+                # form and instance details
+                'Form Name': get_value('form_instance.form.name', f),
+                'Instance Name': get_value('form_instance.name', f),
+                'Instance Location': get_value('form_instance.location', f),
+
+            }
+            # adding the details of the responses of the feedback
+            responses = {}
+            for k,v in form_fields.items():
+                responses[v] = f.field_responses.get(k)
+            f_.update(responses)
+
+            # appending to the list of all feedbacks
+            feedbacks.append(f_)
+
+        # keys for the CSV file
+        keys = [
+            'Date',
+            'Time',
+            'Customer Name',
+            'Customer Mobile',
+            'Customer E-mail',
+            'Form Name',
+            'Instance Name',
+            'Instance Location',
+            'Feedback Text',
+            'Feedback Score'
+        ]
+        # adding the title of the questions of the form as CSV columns
+        for title in form_fields.values():
+            keys.append(title)
+        # writing to a StringIO object
+        f = StringIO.StringIO()
+        dict_writer = csv.DictWriter(f, keys)
+        dict_writer.writer.writerow(keys)
+        dict_writer.writerows(feedbacks)
+
+        # uploading to S3
+        headers = {'Content-Disposition': 'attachment; filename=timeline-export.csv'}
+        key_name = 'timeline-export-{0}.csv'.format(g.user.merchant.id)
+        url = upload_s3(f, key_name, 'application/octet-stream', 'ingage-csv-exports', headers)
+
+        return {'csv_url': url}
+
 
 class FeedbackTimeline(Resource):
 
@@ -310,18 +453,6 @@ class FeedbackTimeline(Resource):
         'feedbacks': fields.List(fields.Nested(feedback_obj))
     }
 
-    def nps_score_type(value, key):
-        try:
-            value = int(value)
-        except ValueError:
-            raise ValueError("'{0}' should be of int type.").format(key)
-
-        # nps score should be in the range of 1 to 10
-        if value < 1 or value > 10:
-            raise ValueError("'{0}' should be between 1 and 10.").format(key)
-
-        return value
-
     get_parser = reqparse.RequestParser()
     # pagination related args (required)
     get_parser.add_argument('page', required=True, type=int, location='args')
@@ -329,47 +460,67 @@ class FeedbackTimeline(Resource):
     # nps score related args (not required)
     get_parser.add_argument('nps_score_start', required=False, type=nps_score_type, location='args')
     get_parser.add_argument('nps_score_end', required=False, type=nps_score_type, location='args')
+    # start & end date for date based filtering (not required)
+    get_parser.add_argument('start_date', required=False, type=date_arg, location='args')
+    get_parser.add_argument('end_date', required=False, type=date_arg, location='args')
+    # form ID filter (not required)
+    get_parser.add_argument('form_ids', required=False, type=unicode, location='args')
 
     @marshal_with(get_fields)
     @login_required('merchant')
     def get(self):
-        merchant = g.user.merchant
         args = self.get_parser.parse_args()
 
         # number of results to skip (using mongoengine)
         skip_number = (args['page'] - 1) * args['rpp']
 
+        # NPS score filters
+        nps_score_start = nps_score_end = None
         if args['nps_score_start'] and args['nps_score_end']:
-            feedbacks = FeedbackModel.objects.filter(merchant=merchant, nps_score__gte=args['nps_score_start'], 
-                    nps_score__lte=args['nps_score_end']).order_by("-received_at")
-        else:
-            feedbacks = FeedbackModel.objects.filter(merchant=merchant).order_by("-received_at")
-            total_results = feedbacks.count() # total number of feedbacks returned
-            feedbacks = feedbacks.skip(skip_number).limit(args['rpp'])
-            total_pages = math.ceil(float(total_results) / args['rpp']) # total number of pages formed w.r.t rpp
+            nps_score_start = args['nps_score_start']
+            nps_score_end = args['nps_score_end']
+
+        # add time based filters if given as arguments
+        start_date = end_date = None
+        if args['start_date'] and args['end_date']:
+            start_date = args['start_date']
+            end_date = args['end_date']
+
+        # list of instance IDs associated with given form IDs
+        instances = None
+        if args['form_ids']:
+            form_ids = args['form_ids'].split(',')
+            instances = []
+            for id in form_ids:
+                form = form_id_exists(id)
+                instances_ = InstanceModel.objects.filter(form=form)
+                instances.extend(instances_)
+
+        # get the feedbacks
+        feedbacks = FeedbackModel.get_timeline(
+                        merchant = g.user.merchant,
+                        nps_score_start = nps_score_start,
+                        nps_score_end = nps_score_end,
+                        start_date = start_date,
+                        end_date = end_date,
+                        instances = instances
+                    )
+
+        # pagination related stuff
+        total_results = feedbacks.count() # total number of feedbacks returned
+        feedbacks = feedbacks.skip(skip_number).limit(args['rpp']) # skipping on basis of page number
+        total_pages = math.ceil(float(total_results) / args['rpp']) # total number of pages formed w.r.t rpp
 
         return {
             'feedbacks': feedbacks,
-            'total_pages': total_pages, 
-            'current_page': args['page'], 
+            'total_pages': total_pages,
+            'current_page': args['page'],
             'rpp': args['rpp'],
             'total_results': total_results
         }
 
 
 class FeedbackAnalytics(Resource):
-
-    def date_arg(value, key):
-        try:
-            year, month, day = value.split('-')
-            if key == 'end_date':
-                date = datetime.datetime(int(year), int(month), int(day), hour=23, minute=59, second=59)
-            else: # if key == 'start_date'
-                date = datetime.datetime(int(year), int(month), int(day), hour=0, minute=0, second=0)
-        except ValueError:
-            raise ValueError("There was some problem with the date provided.")
-
-        return date
 
     get_fields = {
         'error': fields.Boolean(default=False),
@@ -409,6 +560,7 @@ api.add_resource(Form, '/dashboard/forms/<form_id>')
 api.add_resource(FormInstanceList, '/dashboard/forms/<form_id>/instances')
 api.add_resource(FormInstance, '/dashboard/forms/<form_id>/instances/<instance_id>')
 api.add_resource(FeedbackTimeline, '/dashboard/timeline')
+api.add_resource(FeedbackTimelineExport, '/dashboard/timeline/csv_export')
 api.add_resource(FeedbackAnalytics, '/dashboard/forms/<form_id>/analytics')
 
 # customer facing
