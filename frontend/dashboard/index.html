@@ -172,19 +172,20 @@
     	<div class="row collapse">
     		<dl class="sub-nav action-nav small-12 columns">
     			<dd class="checkbox-dd cform">
-    				<input id="check1" type="checkbox" name="check" value="check1">  <a href="#">Select</a>
+    				<input id="selectall" type="checkbox" name="check" value="check1">Select
     			</dd>
-    			<dd><a href="#">Mark as Read</a></dd>
+    			<dd>Unread (30)</dd>
+    			<dd>Mark as Read</dd>
     			<dd><i class="fi-trash"></i></dd>
     			<dd data-dropdown="hover1">Filters</dd>		
     			<ul id="hover1" class="tiny f-dropdown nps-score-filter" data-dropdown-content>			    
-    				<li><a href="#" style="border-left-color:#5eb95e;" class="promoters">Promoters</a></li>
-    				<li><a href="#" style="border-left-color:#fbb82d;" class="passive">Passive</a></li>
-    				<li><a href="#" style="border-left-color:#dd514c;" class="detractors">Detractors</a></li>
+    				<li style="border-left-color:#5eb95e;" class="promoters">Promoters</li>
+    				<li style="border-left-color:#fbb82d;" class="passive">Passive</li>
+    				<li style="border-left-color:#dd514c;" class="detractors">Detractors</li>
     			</ul>
+    			</dd>
     			<dd id="timeline-refresh-button"><i class="fi-refresh"></i></dd>
     			<dd><i class="fi-page-export-csv"></i></dd>
-    			
     		</dl>
     	</div>
 
@@ -203,7 +204,7 @@
     								<% } %>
     								">
     								<span class="small-1 cform columns">
-    									<input id="check1" type="checkbox" name="check" value="check1">  
+    									<input class="chkb" type="checkbox" name="check" value="check1">  
     								</span>
     								<span class="small-2 columns"><%= feedback.get("instance").location %></span>
     								<span class="small-7 columns feedback-content">
