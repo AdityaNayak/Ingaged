@@ -219,8 +219,10 @@
 		padding:0.5em 1em;
 		background: lighten($grey,15%);
 		border:1px solid $grey;
+		cursor: pointer;
 		&:hover{
 			box-shadow: 0 0 1px $grey;
+			cursor: pointer;
 		}
 		a:hover{
 			color:$black;
