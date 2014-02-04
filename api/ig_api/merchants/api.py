@@ -12,7 +12,7 @@ from pymongo.errors import InvalidId
 
 from ig_api import api, db, app
 from ig_api.error_codes import abort_error
-from ig_api.helpers import FileStorageArgument, DateTimeFieldType, DateTimeField
+from ig_api.helpers import FileStorageArgument, DateTimeFieldType, DateTimeField, upload_s3
 from ig_api.authentication import login_required
 from ig_api.authentication.models import MerchantUserException
 from ig_api.merchants.models import MerchantModel, PaymentModel, MerchantException
@@ -21,35 +21,6 @@ __all__ = ['MerchantList', 'Merchant', 'MerchantUploadLogo']
 
 
 ## Helpers
-def upload_s3(file, key_name, content_type, bucket_name):
-    """Uploads a given StringIO object to S3. Closes the file after upload.
-
-    Returns the URL for the image.
-
-    Note: The acl for the file is set as 'public-acl' for the file uploaded.
-
-    Keyword Arguments:
-    file -- StringIO object which needs to be uploaded.
-    key_name -- key name to be kept in S3.
-    content_type -- content type that needs to be set for the S3 object.
-    bucket_name -- name of the bucket where file needs to be uploaded.
-    """
-    # create connection
-    conn = S3Connection(app.config['AWS_ACCESS_KEY_ID'], app.config['AWS_SECRET_ACCESS_KEY'])
-
-    # upload the file after getting the right bucket
-    bucket = conn.get_bucket(bucket_name)
-    obj = S3Key(bucket)
-    obj.name = key_name
-    obj.content_type = content_type
-    obj.set_contents_from_string(file.getvalue())
-    obj.set_acl('public-read')
-
-    # close stringio object
-    file.close()
-
-    return obj.generate_url(expires_in=0, query_auth=False)
-
 def logo_s3_setup():
     """This simple helper function creates a new bucket for the logos
     and uploads the default logo to that bucket.
