@@ -79,7 +79,8 @@ form_obj = {
     'merchant': fields.Nested(merchant_obj),
     'customer_details_heading': fields.String,
     'feedback_heading': fields.String,
-    'nps_score_heading': fields.String
+    'nps_score_heading': fields.String,
+    'incremental_id': fields.Boolean
 }
 
 instance_obj = {
@@ -146,6 +147,7 @@ class FormList(Resource):
     post_parser.add_argument('feedback_heading', required=True, type=unicode, location='json')
     post_parser.add_argument('nps_score_heading', required=True, type=unicode, location='json')
     post_parser.add_argument('customer_details_heading', required=True, type=unicode, location='json')
+    post_parser.add_argument('incremental_id', required=True, type=bool, location='json')
     post_parser.add_argument('fields', required=True, type=form_fields, location='json')
     get_fields = {
         'error': fields.Boolean(default=False),
@@ -268,7 +270,9 @@ class CustomerFeedback(Resource):
 
     put_fields = {
         'error': fields.Boolean(default=False),
-        'success': fields.Boolean
+        'success': fields.Boolean,
+        'counter': fields.Integer,
+        'has_counter': fields.Boolean
     }
 
     @marshal_with(get_fields)
@@ -293,11 +297,12 @@ class CustomerFeedback(Resource):
         
         # save customer feedback
         try:
-            FeedbackModel.create(args['nps_score'], args['feedback_text'], args['field_responses'], instance, customer_details)
+            feedback = FeedbackModel.create(args['nps_score'], args['feedback_text'], args['field_responses'], \
+                    instance, customer_details)
         except FeedbackException:
             abort_error(4004)
 
-        return {'success': True}
+        return {'success': True, 'counter': feedback.counter, 'has_counter': feedback.has_counter}
 
 
 class FeedbackTimeline(Resource):
