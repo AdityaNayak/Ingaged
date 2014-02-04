@@ -18,7 +18,7 @@
 	<script src="js/jquery.cookie.js"></script>
 	<script src="http://timeago.yarp.com/jquery.timeago.js"></script>
 	<script src="js/dashboard.backbone.js"></script>
-    <script src="js/backbone.paginator.js"></script>
+	<script src="js/backbone.paginator.js"></script>
 </head>
 
 <body>
@@ -96,137 +96,143 @@
 					</div>
 				</form>    
 				<div class="signup fullwidth text-center secondary">
-				<a id="load-signup" href="#">Sign Up for a 30 Days free trial</a>
+					<a id="load-signup" href="#">Sign Up for a 30 Days free trial</a>
 				</div>
 			</div>
 		</div>
-    </script>
+	</script>
 
-    <script type="text/template" id="header-template">
-        <div class="contain-to-grid">
-            <header class="top-bar" data-topbar>
-                <ul class="title-area">
-                    <li class="name">
-                        <h1><a href="http://ingagelive.com"><img src="images/logo.png" alt="Ingage Dashboard"></a></h1>
-                    </li>
-                    <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
-                </ul>
-                <section class="top-bar-section">
-                    <ul class="right">
-                        <li class="secondary-color namesyntax">Welcome <%= username %></li>
-                        <li id="nav-timeline"><a href="#/timeline" >Dashboard</a></li>
-                        <li id="nav-analytics"><a href="#/analytics" >Analytics</a></li>
-                        <li id="nav-feedback_forms"><a href="#/feedback_forms" >System</a></li>
-                        <li><a href="#" id="logout-link">Log Out</a></li>      
-                    </ul>
-                </section>
-            </header>
-        </div>
-        <div class="row">
-            <div class="small-6 small-centered columns">
-                <div class="alert-bar">
-                    <div id="loading-bar" data-alert="" class="alert-box loading" style="display:none;">
-                        <span class="alert-text">
-                            Loading
-                            <span class="spinner-css">      
-                                <span class="side sp_left">
-                                    <span class="fill"></span>
-                                </span>
-                                <span class="side sp_right">
-                                    <span class="fill"></span>
-                                </span>
-                            </span>
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <script>
+	<script type="text/template" id="header-template">
+		<div class="contain-to-grid">
+			<header class="top-bar" data-topbar>
+				<ul class="title-area">
+					<li class="name">
+						<h1><a href="http://ingagelive.com"><img src="images/logo.png" alt="Ingage Dashboard"></a></h1>
+					</li>
+					<li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+				</ul>
+				<section class="top-bar-section">
+					<ul class="right">
+						<li class="secondary-color namesyntax">Welcome <%= username %></li>
+						<li id="nav-timeline"><a href="#/timeline" >Dashboard</a></li>
+						<li id="nav-analytics"><a href="#/analytics" >Analytics</a></li>
+						<li id="nav-feedback_forms"><a href="#/feedback_forms" >System</a></li>
+						<li><a href="#" id="logout-link">Log Out</a></li>      
+					</ul>
+				</section>
+			</header>
+		</div>
+		<div class="row">
+			<div class="small-6 small-centered columns">
+				<div class="alert-bar">
+					<div id="loading-bar" data-alert="" class="alert-box loading" style="display:none;">
+						<span class="alert-text">
+							Loading
+							<span class="spinner-css">      
+								<span class="side sp_left">
+									<span class="fill"></span>
+								</span>
+								<span class="side sp_right">
+									<span class="fill"></span>
+								</span>
+							</span>
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
             $(".top-bar-section ul li>a").click(function(){ //
-                $("#loading-bar").fadeIn(300);
+            	$("#loading-bar").fadeIn(300);
             });
         </script>
     </script>
 
-<script type="text/template" id="feedback-timeline-template">
+    <script type="text/template" id="feedback-timeline-template">
 
-	<div class="row">
-		<div class="small-12 columns panel vermachutiyahain">
-			<canvas id="line" data-type="Line" width="1160" height="260"></canvas>
-		</div>
-		<!-- <div class="small-3 columns">
-			<h5>Select location</h5>
-			<select>
-				<option>Location 1</option>
-				<option>Location 2</option>
-				<option>Location 3</option>
-				<option>Location 4</option>
-			</select> 
-		</div>-->
-		<hr>
-	</div>
+    	<div class="row">
+    		<div class="small-8 columns panel vermachutiyahain">
+    			<canvas id="line" data-type="Line" width="760" height="260"></canvas>
+    		</div>
+    		<div class="small-4 columns">
+    			<div id="reportrange" class="rangepicker-box text-right">
+    				<span ></span><i class="fi-calendar"></i>
+    			</div>
+    			<!-- <h5>Select location</h5>
+    			<select>
+    				<option>Location 1</option>
+    				<option>Location 2</option>
+    				<option>Location 3</option>
+    				<option>Location 4</option>
+    			</select> -->
+    		</div>
+    		<hr>
+    	</div>
 
-	<div class="row collapse">
-		<dl class="sub-nav action-nav small-12 columns">
-			<dd class="checkbox-dd cform">
-				<input id="check1" type="checkbox" name="check" value="check1">  <a href="#">Select</a>
-			</dd>
-			<dd><a href="#">Mark as Read</a></dd>
-			<dd><i class="fi-trash"></i></dd>
-			<dd data-dropdown="hover1">Filters</dd>		
-			<ul id="hover1" class="tiny f-dropdown nps-score-filter" data-dropdown-content>			    
-				  <li><a href="#" style="border-left-color:#5eb95e;" class="promoters">Promoters</a></li>
-				  <li><a href="#" style="border-left-color:#fbb82d;" class="passive">Passive</a></li>
-				  <li><a href="#" style="border-left-color:#dd514c;" class="detractors">Detractors</a></li>
-				</ul>
-			<dd id="timeline-refresh-button"><i class="fi-refresh"></i></dd>
-		</dl>
-	</div>
+    	<div class="row collapse">
+    		<dl class="sub-nav action-nav small-12 columns">
+    			<dd class="checkbox-dd cform">
+    				<input id="selectall" type="checkbox" name="check" value="check1">Select
+    			</dd>
+    			<dd>Unread (30)</dd>
+    			<dd>Mark as Read</dd>
+    			<dd><i class="fi-trash"></i></dd>
+    			<dd data-dropdown="hover1">Filters</dd>		
+    			<ul id="hover1" class="tiny f-dropdown nps-score-filter" data-dropdown-content>			    
+    				<li style="border-left-color:#5eb95e;" class="promoters">Promoters</li>
+    				<li style="border-left-color:#fbb82d;" class="passive">Passive</li>
+    				<li style="border-left-color:#dd514c;" class="detractors">Detractors</li>
+    			</ul>
+    		</dd>
+    		<dd id="timeline-refresh-button"><i class="fi-refresh"></i></dd>
+    		<dd><i class="fi-page-export-csv"></i></dd>
+    	</dl>
+    </div>
 
-	<div class="row">
-		<div class="small-7 columns feedback-column">
-			<ul class="feedback-list feedback-timeline">
-				<% _.each(feedbacks, function(feedback){ %>
-					<li class="row 
+    <div class="row">
+    	<div class="small-7 columns feedback-column">
+    		<ul class="feedback-list feedback-timeline">
+    			<% _.each(feedbacks, function(feedback){ %>
+    				<li class="row 
 
-					<% if (feedback.get('nps_score') == 10 || feedback.get('nps_score') == 9) {%>
-						green
-						<% } else if(feedback.get('nps_score') == 8 || feedback.get('nps_score') == 7) { %>
-							yellow
-							<% } else { %>
-								red
-								<% } %>
-								">
-								<span class="small-1 cform columns">
-									<input id="check1" type="checkbox" name="check" value="check1">  
-								</span>
-								<span class="small-2 columns"><%= feedback.get("instance").location %></span>
-								<span class="small-7 columns feedback-content">
-									<span class="customer-name namesyntax">
-										<% if (feedback.get("customer").name) { %>
-											<strong><%= feedback.get("customer").name %></strong>
-											<% } else { %>
-												No Name
-												<% } %>
-											</span> - 
-											<span class="customer-message">
-												<%= feedback.get("feedback_text") %>
-											</span>
-										</span>
-										<span class="small-2 columns text-right secondary secondary-color">
-											<%= $.timeago(new Date(feedback.get("received_at"))) %>
-										</span>
-										<input type="hidden" name="feedback_id" value="<%= feedback.get('id') %>">
-									</li>
-									<% }); %>
+    				<% if (feedback.get('nps_score') == 10 || feedback.get('nps_score') == 9) {%>
+    					green
+    					<% } else if(feedback.get('nps_score') == 8 || feedback.get('nps_score') == 7) { %>
+    						yellow
+    						<% } else { %>
+    							red
+    							<% } %>
+    							">
+    							<span class="small-1 cform columns">
+    								<input class="chkb" type="checkbox" name="check" value="check1">  
+    							</span>
+    							<span class="small-2 columns"><%= feedback.get("instance").location %></span>
+    							<span class="small-7 columns feedback-content">
+    								<span class="customer-name namesyntax">
+    									<% if (feedback.get("customer").name) { %>
+    										<strong><%= feedback.get("customer").name %></strong>
+    										<% } else { %>
+    											No Name
+    											<% } %>
+    										</span> - 
+    										<span class="customer-message">
+    											<%= feedback.get("feedback_text") %>
+    										</span>
+    									</span>
+    									<span class="small-2 columns text-right secondary secondary-color">
+    										<%= $.timeago(new Date(feedback.get("received_at"))) %>
+    									</span>
+    									<input type="hidden" name="feedback_id" value="<%= feedback.get('id') %>">
+    								</li>
+    								<% }); %>
 </ul>
 <div class="pagination-centered">
 	<ul class="pagination">
-        <li class="arrow unavailable">&laquo;</li>
-        <% _.each(pagesToShow, function(page){ %>
-            <li class=<% page == currentPage ? print('"current"') : print('""') %>><a href="#"><%= page %></a></li>
-        <% }); %>
-        <li class="arrow unavailable">&raquo;</li>
+		<li class="arrow unavailable">&laquo;</li>
+		<% _.each(pagesToShow, function(page){ %>
+			<li class=<% page == currentPage ? print('"current"') : print('""') %>><a href="#"><%= page %></a></li>
+			<% }); %>
+		<li class="arrow unavailable">&raquo;</li>
 	</ul>
 </div>
 </div>
@@ -357,11 +363,10 @@
 										</div>
 									</aside>
 								</script>
+
 								<script type="text/template" id="analytics-settings-template">
 									<div class="row" id="analytics-settings">
 										<div class="small-9 small-offset-3 columns">
-
-
 											<div class="small-6 small-offset-2 columns">
 												<div id="reportrange" class="rangepicker-box text-right">
 													<span ></span><i class="fi-calendar"></i>
@@ -382,6 +387,7 @@
 										</div>
 									</div>
 								</script>
+
 								<script type="text/template" id="analytics-choose-template">
 									<div class="row" id="form-analytics">
 										<div class="small-6 small-centered columns">
@@ -390,6 +396,15 @@
 										</div>
 									</div>
 								</script>
+
+								<script type="text/template" id="analytics-do-not-exist-template">
+									<div class="row" id="form-analytics">
+										<div class="small-6 small-centered columns">
+											<div data-alert class="alert-box error">No analytics exist for this form.</div>
+										</div>
+									</div>
+								</script>
+
 								<script type="text/template" id="analytics-template">
 									<div class="row" id="form-analytics">
 										<input type="hidden" value="<%= form_id %>" name="form_id">
@@ -412,9 +427,18 @@
 													<canvas id="canvas0" height="450" width="450"></canvas>
 												</div>
 												<div class="small-4 columns">
-
 													<div class="form-result">
 														<h4>Form Results</h4>
+														<hr>
+														<div class="row">
+															<div class="small-9 ttl-text columns">
+																Total Responses:
+															</div>
+															<div class="small-3 ttl-number columns">
+																<%= field_analytics.total_responses %>
+															</div>
+														</div>
+														<hr>
 														<% _.each(field_analytics.numbers, function(number){ %>
 															<div class="row">
 																<div class="small-9 columns">
@@ -538,30 +562,30 @@
 			<div class="row">
 				<h2>Coming Soon</h2>
 				
-				</div>
-	</script>
+			</div>
+		</script>
 
-	<script type="text/template" id="instance-creation-form-template">
-		<div class="small-9 small-centered columns">
-			<div class="row">
-				<h2> Create a New instance for <em><%= form.get("name") %></em></h2>
-				<form id="instances-form" name="login-form" class="small-6 columns panel">
-					<fieldset>
-						<div class="form-element">
-							<label for="name">Instance Name:</label>
-							<input type="text" id="name" required placeholder="eg. feedback for new menu" name="name" />
-							<label for="name">Instance Location:</label>
-							<input type="text" id="location" required placeholder="eg. Table No.1" name="location" />
-							<label for="name">Instance Description:</label>
-							<textarea id="description" class="form-textarea" required name="description" placeholder="eg. Tablet kept at the table"></textarea>
-							<input type="hidden" value="<%= form.get('id') %>" name="form_id">
+		<script type="text/template" id="instance-creation-form-template">
+			<div class="small-9 small-centered columns">
+				<div class="row">
+					<h2> Create a New instance for <em><%= form.get("name") %></em></h2>
+					<form id="instances-form" name="login-form" class="small-6 columns panel">
+						<fieldset>
+							<div class="form-element">
+								<label for="name">Instance Name:</label>
+								<input type="text" id="name" required placeholder="eg. feedback for new menu" name="name" />
+								<label for="name">Instance Location:</label>
+								<input type="text" id="location" required placeholder="eg. Table No.1" name="location" />
+								<label for="name">Instance Description:</label>
+								<textarea id="description" class="form-textarea" required name="description" placeholder="eg. Tablet kept at the table"></textarea>
+								<input type="hidden" value="<%= form.get('id') %>" name="form_id">
+							</div>
+						</fieldset>
+						<div class="form-element text-right">
+							<button type="submit" class="small primary">Create instance</button>
 						</div>
-					</fieldset>
-					<div class="form-element text-right">
-						<button type="submit" class="small primary">Create instance</button>
-					</div>
-				</form>   
-				<!-- <div class="small-5 small-offset-1 columns panel">
+					</form>   
+					<!-- <div class="small-5 small-offset-1 columns panel">
 					<p>Place to show hints based on what input is on focus</p>
 				</div> -->
 			</div>
