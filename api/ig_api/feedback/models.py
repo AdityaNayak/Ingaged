@@ -145,6 +145,7 @@ class FormModel(db.Document):
                         'text': 'NO'
                     }
                 }
+                responses[f_id]['total_responses'] = sum([i['number'] for i in responses[f_id]['numbers'].values()])
             if response['field'].field_type == 'ST':
                 responses[f_id]['numbers'] = {
                     '1': {
@@ -173,6 +174,7 @@ class FormModel(db.Document):
                         'text': '5 stars'
                     },
                 }
+                responses[f_id]['total_responses'] = sum([i['number'] for i in responses[f_id]['numbers'].values()])
             if response['field'].field_type == 'MT':
                 responses[f_id]['numbers'] = {}
                 for choice in response['field'].choices:
@@ -180,7 +182,8 @@ class FormModel(db.Document):
                             'number': response['responses'].count(choice),
                             'color': colors.pop(),
                             'text': choice
-                        }
+                    }
+                    responses[f_id]['total_responses'] = sum([i['number'] for i in responses[f_id]['numbers'].values()])
 
         return responses
 
