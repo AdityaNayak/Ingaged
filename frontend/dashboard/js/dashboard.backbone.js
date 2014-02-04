@@ -128,14 +128,16 @@ $( document ).ready(function() {
             signupRequestModel.save(customerDetails, {
                 success: function(data){
                     //TODO: show the feeedback to the user properly
-                    alert("The sign up details were sent sucessfully.");
+                    $("#signup-submit").fadeOut(300);
+                    $("#signup-confirm").delay(300).fadeIn(300);
                 }
             });
         },
         showSignup: function(ev){
             ev.preventDefault();
             $('#login-form').fadeOut(300);
-            $('#signup-form').fadeIn(300).delay(300);
+            $('#load-signup').fadeOut(300);
+            $('#signup-form').delay(300).fadeIn(300);
         },
         loginUser: function(ev){
             ev.preventDefault();
