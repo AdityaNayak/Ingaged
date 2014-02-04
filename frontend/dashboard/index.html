@@ -183,48 +183,48 @@
     				<li style="border-left-color:#fbb82d;" class="passive">Passive</li>
     				<li style="border-left-color:#dd514c;" class="detractors">Detractors</li>
     			</ul>
-    			</dd>
-    			<dd id="timeline-refresh-button"><i class="fi-refresh"></i></dd>
-    			<dd><i class="fi-page-export-csv"></i></dd>
-    		</dl>
-    	</div>
+    		</dd>
+    		<dd id="timeline-refresh-button"><i class="fi-refresh"></i></dd>
+    		<dd><i class="fi-page-export-csv"></i></dd>
+    	</dl>
+    </div>
 
-    	<div class="row">
-    		<div class="small-7 columns feedback-column">
-    			<ul class="feedback-list feedback-timeline">
-    				<% _.each(feedbacks, function(feedback){ %>
-    					<li class="row 
+    <div class="row">
+    	<div class="small-7 columns feedback-column">
+    		<ul class="feedback-list feedback-timeline">
+    			<% _.each(feedbacks, function(feedback){ %>
+    				<li class="row 
 
-    					<% if (feedback.get('nps_score') == 10 || feedback.get('nps_score') == 9) {%>
-    						green
-    						<% } else if(feedback.get('nps_score') == 8 || feedback.get('nps_score') == 7) { %>
-    							yellow
-    							<% } else { %>
-    								red
-    								<% } %>
-    								">
-    								<span class="small-1 cform columns">
-    									<input class="chkb" type="checkbox" name="check" value="check1">  
-    								</span>
-    								<span class="small-2 columns"><%= feedback.get("instance").location %></span>
-    								<span class="small-7 columns feedback-content">
-    									<span class="customer-name namesyntax">
-    										<% if (feedback.get("customer").name) { %>
-    											<strong><%= feedback.get("customer").name %></strong>
-    											<% } else { %>
-    												No Name
-    												<% } %>
-    											</span> - 
-    											<span class="customer-message">
-    												<%= feedback.get("feedback_text") %>
-    											</span>
+    				<% if (feedback.get('nps_score') == 10 || feedback.get('nps_score') == 9) {%>
+    					green
+    					<% } else if(feedback.get('nps_score') == 8 || feedback.get('nps_score') == 7) { %>
+    						yellow
+    						<% } else { %>
+    							red
+    							<% } %>
+    							">
+    							<span class="small-1 cform columns">
+    								<input class="chkb" type="checkbox" name="check" value="check1">  
+    							</span>
+    							<span class="small-2 columns"><%= feedback.get("instance").location %></span>
+    							<span class="small-7 columns feedback-content">
+    								<span class="customer-name namesyntax">
+    									<% if (feedback.get("customer").name) { %>
+    										<strong><%= feedback.get("customer").name %></strong>
+    										<% } else { %>
+    											No Name
+    											<% } %>
+    										</span> - 
+    										<span class="customer-message">
+    											<%= feedback.get("feedback_text") %>
     										</span>
-    										<span class="small-2 columns text-right secondary secondary-color">
-    											<%= $.timeago(new Date(feedback.get("received_at"))) %>
-    										</span>
-    										<input type="hidden" name="feedback_id" value="<%= feedback.get('id') %>">
-    									</li>
-    									<% }); %>
+    									</span>
+    									<span class="small-2 columns text-right secondary secondary-color">
+    										<%= $.timeago(new Date(feedback.get("received_at"))) %>
+    									</span>
+    									<input type="hidden" name="feedback_id" value="<%= feedback.get('id') %>">
+    								</li>
+    								<% }); %>
 </ul>
 <div class="pagination-centered">
 	<ul class="pagination">
@@ -427,12 +427,18 @@
 													<canvas id="canvas0" height="450" width="450"></canvas>
 												</div>
 												<div class="small-4 columns">
-
 													<div class="form-result">
 														<h4>Form Results</h4>
-
-														<p><strong>Total Responses:</strong> <%= field_analytics.total_responses %></p>
-
+														<hr>
+														<div class="row">
+															<div class="small-9 ttl-text columns">
+																Total Responses:
+															</div>
+															<div class="small-3 ttl-number columns">
+																<%= field_analytics.total_responses %>
+															</div>
+														</div>
+														<hr>
 														<% _.each(field_analytics.numbers, function(number){ %>
 															<div class="row">
 																<div class="small-9 columns">

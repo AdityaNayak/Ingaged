@@ -241,8 +241,8 @@
 			border-left-width:3px;
 			border-left-style:solid;
 			&:hover{
-			color:$black;
-			font-weight: 700;
+				color:$black;
+				font-weight: 700;
 			}
 		}
 	}
@@ -309,14 +309,20 @@ input[type=checkbox] {
 	color:$white;
 }
 .form-result{
-	margin-top:3em;
 	.row{
 		margin-bottom: 0.5em;
 	}
 }
+.ttl-text{
+	margin-top:0.75em;
+}
+.ttl-number{
+	font-size:2em;
+	color:$green;
+}
 .button.config{
-background-color: $bluegreen;
-border-color: scale-color($bluegreen, $lightness: -20%);
+	background-color: $bluegreen;
+	border-color: scale-color($bluegreen, $lightness: -20%);
 }
 
 // Form styling
@@ -343,22 +349,22 @@ border-color: scale-color($bluegreen, $lightness: -20%);
 		color: #f3f3f3;  
 		text-align: center;  
 		line-height: 15px;  
-	} */
-.vermachutiyahain{
-	&:after{
-		content:"Coming Soon";
-		position:absolute;
-		left:45%;
-		top:50%;
-		font-size: 2em;
-	}
-}
-#line{
-	opacity:0.5;
-}
+		} */
+		.vermachutiyahain{
+			&:after{
+				content:"Coming Soon";
+				position:absolute;
+				left:45%;
+				top:50%;
+				font-size: 2em;
+			}
+		}
+		#line{
+			opacity:0.5;
+		}
 
-@media #{$large-up} {
-	.top-bar .title-area{
-		width: 30%;
-	}
-}
+		@media #{$large-up} {
+			.top-bar .title-area{
+				width: 30%;
+			}
+		}
