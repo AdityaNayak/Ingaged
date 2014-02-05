@@ -42,11 +42,12 @@ for bucket in all_buckets:
 upload_to_existing_bucket = raw_input("Would you like to upload the files to an existing bucket? (y/n) ")
 if upload_to_existing_bucket is 'y':
     bucket_name = raw_input("Please input the bucket name: ")
+    bucket = conn.get_bucket(bucket_name)
 elif upload_to_existing_bucket is 'n':
     bucket_name = raw_input("Please input the name of the new bucket: ")
+    bucket = conn.create_bucket(bucket_name)
 else:
     sys.exit("You did not enter a valid choice.")
-bucket = conn.create_bucket(bucket_name)
 
 # uploading all assets
 print "\n\nBeginning to upload {0} assets.".format(len(assets_filenames))
