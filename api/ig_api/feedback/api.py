@@ -334,7 +334,7 @@ class FeedbackTimelineExport(Resource):
 
     get_fields = {
         'error': fields.Boolean(default=False),
-        'csv_url': fields.Url,
+        'csv_url': fields.String,
     }
 
     get_parser = reqparse.RequestParser()
@@ -369,7 +369,7 @@ class FeedbackTimelineExport(Resource):
         instances.extend(instances_)
 
         # get the feedbacks
-        feedbacks_ = FeedbackModel.get_timeline(
+        feedbacks_, all_start_date, all_end_date = FeedbackModel.get_timeline(
                         merchant = g.user.merchant,
                         nps_score_start = nps_score_start,
                         nps_score_end = nps_score_end,
