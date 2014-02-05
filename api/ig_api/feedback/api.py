@@ -451,6 +451,10 @@ class FeedbackTimeline(Resource):
         'total_results': fields.Integer,
         'current_page': fields.Integer,
         'rpp': fields.Integer,
+        'start_date': fields.DateTime,
+        'end_date': fields.DateTime,
+        'all_start_date': fields.DateTime,
+        'all_end_date': fields.DateTime,
         'feedbacks': fields.List(fields.Nested(feedback_obj))
     }
 
@@ -498,7 +502,7 @@ class FeedbackTimeline(Resource):
                 instances.extend(instances_)
 
         # get the feedbacks
-        feedbacks = FeedbackModel.get_timeline(
+        feedbacks, all_start_date, all_end_date = FeedbackModel.get_timeline(
                         merchant = g.user.merchant,
                         nps_score_start = nps_score_start,
                         nps_score_end = nps_score_end,
@@ -506,6 +510,10 @@ class FeedbackTimeline(Resource):
                         end_date = end_date,
                         instances = instances
                     )
+
+        # start date and end date (with the current filters but without page numbers)
+        start_date = feedbacks.skip(len(feedbacks)-1).limit(1)[0].received_at
+        end_date = feedbacks[0].received_at
 
         # pagination related stuff
         total_results = feedbacks.count() # total number of feedbacks returned
@@ -517,7 +525,11 @@ class FeedbackTimeline(Resource):
             'total_pages': total_pages,
             'current_page': args['page'],
             'rpp': args['rpp'],
-            'total_results': total_results
+            'total_results': total_results,
+            'start_date': start_date,
+            'end_date': end_date,
+            'all_start_date': all_start_date,
+            'all_end_date': all_end_date,
         }
 
 

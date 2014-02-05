@@ -275,15 +275,22 @@ class FeedbackModel(db.Document):
         end_date: (optional) Results returned would be from dates equal to or less than this date. (datetime.datetime)
 
         instances: (optional) List of instances of whose results need to be returned.
+
+        Return Value: Returns a tuple of (feedbacks, all_start_date, all_end_date) where start_date and end_date are
+                      beginning and end dates of all feedbacks of the given merchant.
         """
 
-        # get all feedbacks (without a filter) for the merchant
-        feedbacks = FeedbackModel.objects.filter(merchant=merchant)
+        # get all feedbacks (without a filter) for the merchant in reverse chronological order
+        feedbacks = FeedbackModel.objects.filter(merchant=merchant).order_by('-received_at')
+
+        # start & end date (this is start and end date of all feedbacks of this merchant)
+        all_start_date = feedbacks.skip(len(feedbacks)-1).limit(1)[0].received_at
+        all_end_date = feedbacks[0].received_at
 
         # filter on basis of nps score if provided
         if nps_score_start and nps_score_end:
-            feedbacks = FeedbackModel.objects.filter(merchant=merchant, nps_score__gte=args['nps_score_start'], 
-                    nps_score__lte=args['nps_score_end'])
+            feedbacks = FeedbackModel.objects.filter(merchant=merchant, nps_score__gte=nps_score_start,
+                    nps_score__lte=nps_score_end)
 
         # filter on basis of start and end date
         if start_date and end_date:
@@ -294,10 +301,7 @@ class FeedbackModel(db.Document):
         if instances:
             feedbacks = feedbacks.filter(form_instance__in=instances)
 
-        # order the feedback query set by received date
-        feedbacks = feedbacks.order_by("-received_at")
-
-        return feedbacks
+        return feedbacks, all_start_date, all_end_date
 
     @property
     def responses(self):
