@@ -184,11 +184,11 @@
     				<li><a href="#" style="border-left-color:#fbb82d;" class="passive">Passive</a></li>
     				<li><a href="#" style="border-left-color:#dd514c;" class="detractors">Detractors</a></li>
     			</ul>
-	    		<dd data-dropdown="hover2">Export<i class="fi-page-export-csv"></i></dd>
+	    		<dd data-dropdown="hover2">Export <i class="fi-page-export-csv"></i></dd>
 	    		<ul id="hover2" class="tiny f-dropdown form-filter" data-dropdown-content>			    
-    				<li><a href="#">Form1</a></li>
-    				<li><a href="#">Form1</a></li>
-    				
+                    <% _.each(forms, function(form){ %>
+                        <li><a href="#" data-id="<%= form.get('id') %>"><%= form.get('name') %></a></li>
+                    <% }); %>
     			</ul>
 	    		<dd id="timeline-refresh-button"><i class="fi-refresh"></i></dd>
 	    	</dl>
