@@ -172,23 +172,27 @@
 
     	<div class="row collapse">
     		<dl class="sub-nav action-nav small-12 columns">
-    			<dd class="checkbox-dd cform">
+    			<!-- <dd class="checkbox-dd cform">
     				<input id="selectall" type="checkbox" name="check" value="check1">Select
     			</dd>
     			<dd>Unread (30)</dd>
     			<dd>Mark as Read</dd>
-    			<dd><i class="fi-trash"></i></dd>
+    			<dd><i class="fi-trash"></i></dd> -->
     			<dd data-dropdown="hover1">Filters</dd>		
     			<ul id="hover1" class="tiny f-dropdown nps-score-filter" data-dropdown-content>			    
-    				<li style="border-left-color:#5eb95e;" class="promoters">Promoters</li>
-    				<li style="border-left-color:#fbb82d;" class="passive">Passive</li>
-    				<li style="border-left-color:#dd514c;" class="detractors">Detractors</li>
+    				<li><a href="#" style="border-left-color:#5eb95e;" class="promoters">Promoters</a></li>
+    				<li><a href="#" style="border-left-color:#fbb82d;" class="passive">Passive</a></li>
+    				<li><a href="#" style="border-left-color:#dd514c;" class="detractors">Detractors</a></li>
     			</ul>
-    		</dd>
-    		<dd id="timeline-refresh-button"><i class="fi-refresh"></i></dd>
-    		<dd><i class="fi-page-export-csv"></i></dd>
-    	</dl>
-    </div>
+	    		<dd data-dropdown="hover2">Export <i class="fi-page-export-csv"></i></dd>
+	    		<ul id="hover2" class="tiny f-dropdown form-filter" data-dropdown-content>			    
+                    <% _.each(forms, function(form){ %>
+                        <li><a href="#" data-id="<%= form.get('id') %>"><%= form.get('name') %></a></li>
+                    <% }); %>
+    			</ul>
+	    		<dd id="timeline-refresh-button"><i class="fi-refresh"></i></dd>
+	    	</dl>
+	    </div>
 
     <div class="row">
     	<div class="small-7 columns feedback-column">
