@@ -98,14 +98,25 @@ customer_obj = {
 }
 
 feedback_obj = {
+
+    # unique feedback ID
     'id': fields.String,
-    'received_at': fields.DateTime,
-    'customer': fields.Nested(customer_obj),
+    
+    # form & instance objects
     'instance': fields.Nested(instance_obj, attribute='form_instance'),
     'form': fields.Nested(form_obj, attribute='form_instance.form'),
+
+    # feedback information
     'nps_score': fields.Integer,
     'feedback_text': fields.String,
-    'responses': FeedbackResponseField
+    'received_at': fields.DateTime,
+    'customer': fields.Nested(customer_obj),
+    'responses': FeedbackResponseField,
+
+    # counter infromation (for forms which generate a feedback ID)
+    'has_counter': fields.Boolean,
+    'counter': fields.Integer,
+
 }
 
 analytics_obj = {

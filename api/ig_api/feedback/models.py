@@ -130,7 +130,12 @@ class FormModel(db.Document):
 
     @property
     def counter(self):
-        return FormIncrementCounter.objects.get(form=self)
+        try:
+            counter = FormIncrementCounter.objects.get(form=self)
+        except db.DoesNotExist:
+            counter = None
+
+        return counter
 
     def get_analytics(self, instance_ids, start_date=None, end_date=None):
         """Returns the analytics for the form fields.

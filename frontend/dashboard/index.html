@@ -263,106 +263,111 @@
 
 
 <script type="text/template" id="timeline-customer-details-template">
-	<aside id="details" class="small-5 columns details-column">
-		<div class="panel">
+    <aside id="details" class="small-5 columns details-column">
+        <div class="panel">
 
-			<h3 class="namesyntax">
-				<% if (feedback.get('customer').name) { %>
-					<%= feedback.get('customer').name %>
-					<% } else { %>
-						No Name
-						<% } %>
-					</h3>
+    <h3 class="namesyntax">
+        <% if (feedback.get('customer').name) { %>
+            <%= feedback.get('customer').name %>
+            <% } else { %>
+                No Name
+                <% } %>
+            </h3>
 
-					<div class="row collapse">
+            <div class="row collapse">
 
-						<div class="small-2 columns">
-							<% if (feedback.get('customer').email) { %>
-								<img src="http://www.gravatar.com/avatar/<%= MD5(feedback.get('customer').email) %>">
-								<% } else { %>
-									<img src="http://www.gravatar.com/avatar/">
-									<% } %>
-								</div>
+                <div class="small-2 columns">
+                    <% if (feedback.get('customer').email) { %>
+                        <img src="http://www.gravatar.com/avatar/<%= MD5(feedback.get('customer').email) %>">
+                        <% } else { %>
+                            <img src="http://www.gravatar.com/avatar/">
+                            <% } %>
+                        </div>
 
-								<div class="small-7 columns">
-									<ul class="naked secondary contact-details">
-										<li> 
-											<% if (feedback.get('customer').email) { %>
-												<%= feedback.get('customer').email %>
-												<% } else { %>
-													No e-Mail
-													<% } %>
-												</li>
-												<li>
-													<% if (feedback.get('customer').mobile) { %>
-														<%= feedback.get('customer').mobile %>
-														<% } else { %>
-															No Mobile
-															<% } %>
-														</li>
-													</ul>
-												</div>
-												<div class="small-3 columns">
-													<div class="feedback-score
+                        <div class="small-7 columns">
+                            <ul class="naked secondary contact-details">
+                                <li> 
+                                    <% if (feedback.get('customer').email) { %>
+                                        <%= feedback.get('customer').email %>
+                                        <% } else { %>
+                                            No e-Mail
+                                            <% } %>
+                                        </li>
+                                        <li>
+                                            <% if (feedback.get('customer').mobile) { %>
+                                                <%= feedback.get('customer').mobile %>
+                                                <% } else { %>
+                                                    No Mobile
+                                                    <% } %>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="small-3 columns">
+                                            <div class="feedback-score
 
-													<% if (feedback.get('nps_score') == 10 || feedback.get('nps_score') == 9) {%>
-														green
-														<% } else if(feedback.get('nps_score') == 8 || feedback.get('nps_score') == 7) { %>
-															yellow
-															<% } else { %>
-																red
-																<% } %>
+                                            <% if (feedback.get('nps_score') == 10 || feedback.get('nps_score') == 9) {%>
+                                                green
+                                                <% } else if(feedback.get('nps_score') == 8 || feedback.get('nps_score') == 7) { %>
+                                                    yellow
+                                                    <% } else { %>
+                                                        red
+                                                        <% } %>
 
-																">
-																<%= feedback.get('nps_score') %>
-															</div>
-															<div class="secondary-color secondary">
-																<i class="fi-clock"></i><% var received_at = new Date(feedback.get("received_at")) %>
-																<%= received_at.getHours() %>:<%= received_at.getMinutes() %>
-															</div>
-															<div class="secondary-color secondary">
-																<i class="fi-calendar"></i>
-																<%= received_at.getDate() %>-<%= received_at.getMonth() %>-<%= received_at.getFullYear() %>
-															</div>
-														</div>
-													</div>
+                                                        ">
+                                                        <%= feedback.get('nps_score') %>
+                                                    </div>
+                                                    <div class="secondary-color secondary">
+                                                        <i class="fi-clock"></i><% var received_at = new Date(feedback.get("received_at")) %>
+                                                        <%= received_at.getHours() %>:<%= received_at.getMinutes() %>
+                                                    </div>
+                                                    <div class="secondary-color secondary">
+                                                        <i class="fi-calendar"></i>
+                                                        <%= received_at.getDate() %>-<%= received_at.getMonth() %>-<%= received_at.getFullYear() %>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-													<hr>
-													<div class="secondary">
-														<p><%= feedback.get("feedback_text") %></p>
-													</div>
-													<hr>
+                                            <hr>
+                                            <div class="secondary">
+                                                <p><%= feedback.get("feedback_text") %></p>
+                                            </div>
+                                            <hr>
 
-													<div class="secondary survey-column">
-														<ol>
-															<% _.each(feedback.get('responses'), function(response){ %>
-																<li>
-																	<h5><%= response.text %></h5>
-																	<p><%= response.response %></p>
-																</li>
-																<% }); %>
-														</ol>
-													</div>
+                                            <div class="secondary survey-column">
+                                                <ol>
+                                                    <% _.each(feedback.get('responses'), function(response){ %>
+                                                        <li>
+                                                            <h5><%= response.text %></h5>
+                                                            <p><%= response.response %></p>
+                                                        </li>
+                                                        <% }); %>
+                                                </ol>
+                                            </div>
 
-													<hr>
+                                            <hr>
 
-													<h3>Instance Details</h3>
-													<div class="form-details secondary">
-														<div class="row collapse">
-															<div class="small-4 columns secondary-color">Name:</div><div class="small-8 columns">
-															<%= feedback.get("instance").name %>
-														</div>
-														<div class="small-4 columns secondary-color">Location:</div><div class="small-8 columns">
-														<%= feedback.get("instance").location %>
-													</div>
-													<div class="small-4 columns secondary-color">Details:</div><div class="small-8 columns">
-													<%= feedback.get("instance").description %>
-												</div>
-											</div>
+                                            <% if (feedback.get("has_counter")){ %>
+                                                <h4>Feedback Counter: <%= feedback.get("counter") %></h4>
+                                                <hr>
+                                            <% } %>
 
-										</div>
-									</aside>
-								</script>
+                                            <h3>Instance Details</h3>
+                                            <div class="form-details secondary">
+                                                <div class="row collapse">
+                                                    <div class="small-4 columns secondary-color">Name:</div><div class="small-8 columns">
+                                                    <%= feedback.get("instance").name %>
+                                                </div>
+                                                <div class="small-4 columns secondary-color">Location:</div><div class="small-8 columns">
+                                                <%= feedback.get("instance").location %>
+                                            </div>
+                                            <div class="small-4 columns secondary-color">Details:</div><div class="small-8 columns">
+                                            <%= feedback.get("instance").description %>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </aside>
+                        </script>
 
 								<script type="text/template" id="analytics-settings-template">
 									<div class="row" id="analytics-settings">

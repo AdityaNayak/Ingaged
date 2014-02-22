@@ -246,7 +246,7 @@ $( document ).ready(function() {
             feedbackTimelineCollection.actAs_Paginatable_currentPage_attr = "page";
             feedbackTimelineCollection.actAs_Paginatable_itemsPerPage_attr = "rpp";
             feedbackTimelineCollection.currentPage(currentPage);
-            feedbackTimelineCollection.itemsPerPage(3);
+            feedbackTimelineCollection.itemsPerPage(20);
 
             // basic auth credentials
             feedbackTimelineCollection.credentials = {
