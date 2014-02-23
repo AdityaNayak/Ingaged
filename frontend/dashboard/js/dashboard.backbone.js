@@ -17,6 +17,19 @@ $( document ).ready(function() {
         return o;
     };
 
+    /* method to download a file on a URL using the iFrame trick */
+    var downloadURL = function downloadURL(url) {
+        var hiddenIFrameID = 'hiddenDownloader',
+            iframe = document.getElementById(hiddenIFrameID);
+        if (iframe === null) {
+            iframe = document.createElement('iframe');
+            iframe.id = hiddenIFrameID;
+            iframe.style.display = 'none';
+            document.body.appendChild(iframe);
+        }
+        iframe.src = url;
+    };
+
     /* hostname of the api server */
     var api_root = 'https://ingage.herokuapp.com'
 
@@ -35,20 +48,32 @@ $( document ).ready(function() {
     /* collection storing the list of feedbacks which come in the timeline */
     var FeedbackTimelineCollection = Backbone.Collection.extend({
         model: FeedbackModel,
-        initialize: function(nps_score_start, nps_score_end){
+        initialize: function(nps_score_start, nps_score_end, start_date, end_date){
             this.nps_score_start = nps_score_start;
             this.nps_score_end = nps_score_end;
+            this.start_date = start_date;
+            this.end_date = end_date;
         },
         urlRoot: function(){
+            params = {}
+            var that = this;
             if (this.nps_score_start && this.nps_score_end){
-                return api_root + "/dashboard/timeline" + "?nps_score_start=" + this.nps_score_start +
-                        "&nps_score_end=" + this.nps_score_end;
-            } else {
-                return api_root + "/dashboard/timeline";
+                params['nps_score_start'] = that.nps_score_start;
+                params['nps_score_end'] = that.nps_score_end;
             }
+            if (this.start_date && this.end_date){
+                params['start_date'] = that.start_date.format('YYYY-MM-DD').replace("00", "20");
+                params['end_date'] = that.end_date.format('YYYY-MM-DD').replace("00", "20");
+            }
+            return api_root + "/dashboard/timeline?" + $.param(params)
         },
         parse: function(response, xhr){
+            // set the total number of items for pagination
             this.actAs_Paginatable_totalItems = response.total_results;
+            this.start_date = moment(response.start_date);
+            this.end_date = moment(response.end_date);
+            this.all_start_date = moment(response.all_start_date);
+            this.all_end_date = moment(response.all_end_date);
             return response.feedbacks;
         }
     });
@@ -123,19 +148,20 @@ $( document ).ready(function() {
         sendSignupRequest: function(ev){
             ev.preventDefault();
             var customerDetails = $(ev.currentTarget).serializeObject();
-            console.log(customerDetails);
             var signupRequestModel = new SignupRequestModel();
             signupRequestModel.save(customerDetails, {
                 success: function(data){
                     //TODO: show the feeedback to the user properly
-                    alert("The sign up details were sent sucessfully.");
+                    $("#signup-submit").fadeOut(300);
+                    $("#signup-confirm").delay(300).fadeIn(300);
                 }
             });
         },
         showSignup: function(ev){
             ev.preventDefault();
             $('#login-form').fadeOut(300);
-            $('#signup-form').fadeIn(300).delay(300);
+            $('#load-signup').fadeOut(300);
+            $('#signup-form').delay(300).fadeIn(300);
         },
         loginUser: function(ev){
             ev.preventDefault();
@@ -191,27 +217,55 @@ $( document ).ready(function() {
             'click #timeline-refresh-button': 'refreshTimeline',
             'click .nps-score-filter li a': 'npsScoreFilter',
             'click .pagination li a': 'changePageTimeline',
+            'click .form-filter li': 'exportCSV',
+        },
+        exportCSV: function(ev){
+            ev.preventDefault();
+            var formID = $(ev.currentTarget).find("a").attr("data-id");
+            params = {}
+            if (this.nps_score_start && this.nps_score_end){
+                params['nps_score_start'] = this.nps_score_start;
+                params['nps_score_end'] = this.nps_score_end;
+            }
+            params['start_date'] = feedbackTimelineCollection.start_date.format('YYYY-MM-DD');
+            params['end_date'] = feedbackTimelineCollection.end_date.format('YYYY-MM-DD');
+            params['form_id'] = formID;
+            $.ajax({
+                'method': 'GET',
+                'url': api_root + '/dashboard/timeline/csv_export?' + $.param(params),
+                'headers': Backbone.BasicAuth.getHeader({ username: $.cookie("username"), password: $.cookie("password") }),
+                'success': function(data){
+                    downloadURL(data['csv_url']);
+                    return;
+                }
+            })
         },
         changePageTimeline: function(ev){
             ev.preventDefault();
             var target = $(ev.currentTarget);
             var pageNumber = target.text();
-            console.log(pageNumber);
-            this.render(null, null, Number(pageNumber));
+            this.current_page = Number(pageNumber);
+            this.render()
         },
         npsScoreFilter: function(ev){
             ev.preventDefault();
             var target = $(ev.currentTarget);
             var that = this;
+            this.current_page = null;
             if (target.hasClass("promoters")) {
-                that.render(9, 10);
+                that.nps_score_start = 9;
+                that.nps_score_end = 10;
             } else if (target.hasClass("passive")) {
-                that.render(7, 8);
+                that.nps_score_start = 7;
+                this.nps_score_end = 8;
             } else {
-                that.render(1, 6);
+                that.nps_score_start = 1;
+                that.nps_score_end = 6;
             }
+            this.render()
         },
         refreshTimeline: function(ev){
+            this.current_page = null;
             this.render();
         },
         showCustomerDetails: function(ev){
@@ -228,7 +282,7 @@ $( document ).ready(function() {
             }
             toAppendTo.append(template);
         },
-        render: function(nps_score_start, nps_score_end, currentPage){
+        render: function(){
             if (!$.cookie("username") && !$.cookie("password")){
                 router.navigate('', {trigger: true});
                 return
@@ -236,13 +290,14 @@ $( document ).ready(function() {
 
             // change the title
             document.title = "Feedback Timeline | Ingage Dashboard";
-            
+
             // fetching feedback timeline
             var that = this;
-            feedbackTimelineCollection = new FeedbackTimelineCollection(nps_score_start, nps_score_end);
+            feedbackTimelineCollection = new FeedbackTimelineCollection(this.nps_score_start, this.nps_score_end, 
+                                    this.startDateRangePicker, this.endDateRangePicker);
 
             // pagination properties of the collection
-            currentPage = currentPage || 1;
+            currentPage = this.current_page || 1;
             feedbackTimelineCollection.actAs_Paginatable_currentPage_attr = "page";
             feedbackTimelineCollection.actAs_Paginatable_itemsPerPage_attr = "rpp";
             feedbackTimelineCollection.currentPage(currentPage);
@@ -272,15 +327,26 @@ $( document ).ready(function() {
                         pagesToShow.push(rightSide[i]);
                     }
 
-                    // mumbo jumbo of templates
-                    var template = _.template($("#feedback-timeline-template").html(),
-                        {feedbacks: feedbacks.models, pagesToShow: pagesToShow, currentPage: paginationInfo.currentPage});
-                    var headerTemplate = _.template($("#header-template").html(), {username: $.cookie("username")});
-                    var footerTemplate = _.template($("#footer-template").html(), {});
-                    that.$el.html(template);
-                    that.$el.prepend(headerTemplate);
-                    that.$el.append(footerTemplate);
-                    
+                    feedbackFormsCollection = new FeedbackFormsCollection();
+                    feedbackFormsCollection.credentials = {
+                        username: $.cookie("username"),
+                        password: $.cookie("password")
+                    };
+                    feedbackFormsCollection.fetch({
+                        'async': false,
+                        'success': function(forms){
+                            // mumbo jumbo of templates
+                            var template = _.template($("#feedback-timeline-template").html(),
+                                {feedbacks: feedbacks.models, pagesToShow: pagesToShow,
+                                    currentPage: paginationInfo.currentPage, forms: forms.models});
+                            var headerTemplate = _.template($("#header-template").html(), {username: $.cookie("username")});
+                            var footerTemplate = _.template($("#footer-template").html(), {});
+                            that.$el.html(template);
+                            that.$el.prepend(headerTemplate);
+                            that.$el.append(footerTemplate);
+                        }
+                    })
+
                     // jquery shit
                     $(document).foundation(); 
                     $(window).scroll(function() {
@@ -291,15 +357,16 @@ $( document ).ready(function() {
 				            $("#details").removeClass("stickit");
 				        }
 				    });
-				    console.log("this is done now");
 
-                    startDateRangePicker = moment().subtract('days', 29);
-                    endDateRangePicker = moment();
+                    this.startDateRangePicker = feedbackTimelineCollection.start_date;
+                    this.endDateRangePicker = feedbackTimelineCollection.end_date;
+                    minDate = feedbackTimelineCollection.all_start_date;
+                    maxDate = feedbackTimelineCollection.all_end_date;
                     $('#reportrange').daterangepicker({
-                        startDate: startDateRangePicker,
-                        endDate: endDateRangePicker,
-                        minDate: '01/01/2012',
-                        maxDate: '12/31/2014',
+                        startDate: this.startDateRangePicker.format('MM-DD-YYYY'),
+                        endDate: this.endDateRangePicker.format('MM-DD-YYYY'),
+                        minDate: minDate.format('MM-DD-YYYY'),
+                        maxDate: maxDate.format('MM-DD-YYYY'),
                         dateLimit: { days: 60 },
                         showDropdowns: true,
                         showWeekNumbers: false,
@@ -324,22 +391,23 @@ $( document ).ready(function() {
                             toLabel: 'To',
                             customRangeLabel: 'Custom Range',
                             daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr','Sa'],
-                            monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                            monthNames: ['January', 'February', 'March', 'April', 'May',
+                                'June', 'July', 'August', 'September', 'October', 'November', 'December'],
                             firstDay: 1
                         }
                     },
-                    function(start, end) {
-                        startDateRangePicker = start;
-                        endDateRangePicker = end;
-                        var field_id = $("li.active").attr("id");
-                        if ($("input[name='form_id']")){
-                            that.changeForm(ev=false, field_id=field_id);
+                        function(start, end) {
+                            that.current_page = null;
+                            tat = start;
+                            that.startDateRangePicker = start;
+                            that.endDateRangePicker = end;
+                            $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                            that.render()
                         }
-                        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-                    }
-              );
-              //Set the initial state of the picker label
-              $('#reportrange span').html(moment().subtract('days', 29).format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+                    );
+                    //Set the initial state of the picker label
+                    $('#reportrange span').html(this.startDateRangePicker.format('MMMM D, YYYY') + ' - ' +
+                            this.endDateRangePicker.format('MMMM D, YYYY'));
                 }
             });
             $('#selectall').click(function(event) {  //on click 
@@ -355,7 +423,7 @@ $( document ).ready(function() {
             });            
         }
     });
-    var feedbackTimelineView = new FeedbackTimelineView();
+    feedbackTimelineView = new FeedbackTimelineView();
 
     /* Analytics View */
     var AnalyticsView = Backbone.View.extend({
