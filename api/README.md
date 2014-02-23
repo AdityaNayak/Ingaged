@@ -30,7 +30,7 @@ staging environment are explained below in the section titled **Creating a new S
 
 3. Add the email deploy hooks to this app so that an e-mail is sent whenver a new deployment is made.
 
-   ```shell
+   ```sh
    heroku addons:add deployhooks:email \
    --recipient="rishabh@ingagelive.com,aditya@ingagelive.com" \
    --subject="InGage API deployed to a staging environment." \
