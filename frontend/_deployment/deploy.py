@@ -13,8 +13,8 @@ app = Flask(__name__) # TODO: using flask-script requires a flask app. look into
 manager = Manager(app)
 
 # AWS Keys
-AWS_ACCESS_KEY_ID = 'AKIAJPKFYAQXRHIIIPNA'
-AWS_SECRET_ACCESS_KEY = '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'
+AWS_ACCESS_KEY_ID = 'AKIAI66SF4STC6GMSA6Q'
+AWS_SECRET_ACCESS_KEY = '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'
 
 # Creating an S3 connection
 conn = S3Connection(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY)
@@ -162,7 +162,7 @@ def deploy(exp, env):
         key.set_contents_from_filename(file_['filename'])
         key.set_acl('public-read')
 
-    print colored.red('All the resources have been uploaded successfully.')
+    print colored.green('All the resources have been uploaded successfully.')
     return False
 
 if __name__ == "__main__":
