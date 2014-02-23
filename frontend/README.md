@@ -20,7 +20,7 @@ when the CWD is the `_deployment` directory.
 This will list all the available environments. The different headings in the output are essentially the environment names
 which can be used in other commands when deploying to those particular environments.
 
-```shell
+```sh
 cd _deployment
 python deploy.py list_envs
 ```
@@ -29,7 +29,7 @@ python deploy.py list_envs
 A unique ID (which should be an incremental ID) for a staging environment needs to given as a parameter to create a new
 staging environment.
 
-```shell
+```sh
 cd _deployment
 python deploy.py create_staging_env --staging-id {unique integer id}
 ```
@@ -40,7 +40,9 @@ The name of the environment and the experience to be deployed are needed when de
 1. Name of environment will be among one of the headings of the output of `list_envs` command.
 2. Name of the experience can be `customer`, `admin` or `dashboard`.
 
-```shell
+```sh
 cd _deployment
 python deploy.py deploy --experience staging-1 --environment customer
 ```
+
+**Note: Currently there are no e-Mails being sent automatically (as opposed to the same during deployment) on the heroku app. So when you deploy a new version, make it a point to intimate everyone else on your own. The best way to do this would be comment on the pull request in github.**
