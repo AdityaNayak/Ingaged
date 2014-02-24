@@ -30,8 +30,8 @@ $( document ).ready(function() {
         iframe.src = url;
     };
 
-    /* hostname of the api server */
-    var api_root = 'https://ingage.herokuapp.com'
+	/* hostname of the api */
+	var api_root = 'https://ingage-staging-1.herokuapp.com'
 
     /* logs out the user on the click of the logout link */
     logoutUser = function(ev){
