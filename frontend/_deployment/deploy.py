@@ -137,9 +137,9 @@ def deploy(exp, env):
     """
     print '\n'
     # all the files which need to be uploaded
-    asset_files = [{'filename': i, 'key': os.path.join('assets', i.split('assets')[1][1:])} \
+    asset_files = [{'filename': i, 'key': os.path.join('assets', i.split('/assets', 1)[1][1:])} \
             for i in get_dir_filenames(resource_dirs['assets'])]
-    exp_files = [{'filename': i, 'key': i.split(exp)[1][1:]} for i in get_dir_filenames(resource_dirs[exp])]
+    exp_files = [{'filename': i, 'key': i.split('/'+ exp, 1)[1][1:]} for i in get_dir_filenames(resource_dirs[exp])]
     all_files = exp_files
     all_files.extend(asset_files)
     print colored.blue('{0} number of files need to be uploaded.'.format(len(all_files)))
