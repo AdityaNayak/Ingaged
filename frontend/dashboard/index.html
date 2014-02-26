@@ -364,7 +364,7 @@
                                             </div>
                                             </div>
                                             <hr>
-                                            <h3>Instance Details</h3>
+                                            <h3>Interaction Point Details</h3>
                                             <div class="instance-details secondary">
                                                 <div class="row collapse">
                                                     <div class="small-4 columns secondary-color">Name:</div><div class="small-8 columns">
@@ -490,7 +490,7 @@
 												<li class="row">
 													<span class="small-1 cform columns"><input type="checkbox"></span>
 													<span class="small-4 columns">Name</span>
-													<!-- <span class="small-2 columns">Instance</span> -->
+													<!-- <span class="small-2 columns">Interaction Point</span> -->
 													<span class="small-7 columns">Description</span>
 													<!-- <span class="small-4 columns">
 													<span class="row collapse">
@@ -526,7 +526,7 @@
 <script type="text/template" id="form-instances-side-list-template">
 	<div class="small-3 columns">
 		<div class="panel" id="form-instances-side-list">
-			<h5>Associated Instances</h5>
+			<h5>Associated Interaction Points</h5>
 			<% if (instances.length > 0) { %>
 				<a class="secondary" href="#/feedback_forms/<%= form_id %>/instances">View details</a>
 				<ul class="side-nav">
@@ -535,9 +535,9 @@
 						<% }); %>
 				</ul>
 				<% } else { %>
-					<h6>No Instances Associated</h6>
+					<h6>No Interaction Points Associated</h6>
 					<% } %>
-					<a href="#/feedback_forms/<%= form_id %>/instances/new" class="button tiny">Create New Instance</a>
+					<a href="#/feedback_forms/<%= form_id %>/instances/new" class="button tiny">Create New Interaction Point</a>
 				</div>
 			</div>
 		</script>
@@ -547,7 +547,7 @@
 				<div class="small-9 small-centered columns">
 					<div class="row">
 						<a class="secondary secondary-color" href="#/feedback_forms">Back to Form</a>
-						<h2>Instances attached to <em>"<%= form.get('name') %>"</em><a href="#/feedback_forms/<%= form.get('id') %>/instances/new" class="button right tiny">Create New Instance</a></h2>
+						<h2>Interaction Points attached to <em>"<%= form.get('name') %>"</em><a href="#/feedback_forms/<%= form.get('id') %>/instances/new" class="button right tiny">Create New Interaction Point</a></h2>
 						<div class="small-12 columns">
 							<ul class="feedback-list list-header">
 								<li class="row read">
@@ -585,21 +585,21 @@
 		<script type="text/template" id="instance-creation-form-template">
 			<div class="small-9 small-centered columns">
 				<div class="row">
-					<h2> Create a New instance for <em><%= form.get("name") %></em></h2>
+					<h2> Create a New Interaction Point for <em><%= form.get("name") %></em></h2>
 					<form id="instances-form" name="login-form" class="small-6 columns panel">
 						<fieldset>
 							<div class="form-element">
-								<label for="name">Instance Name:</label>
+								<label for="name">Interaction Point Name:</label>
 								<input type="text" id="name" required placeholder="eg. feedback for new menu" name="name" />
-								<label for="name">Instance Location:</label>
+								<label for="name">Interaction Point Location:</label>
 								<input type="text" id="location" required placeholder="eg. Table No.1" name="location" />
-								<label for="name">Instance Description:</label>
+								<label for="name">Interaction Point Description:</label>
 								<textarea id="description" class="form-textarea" required name="description" placeholder="eg. Tablet kept at the table"></textarea>
 								<input type="hidden" value="<%= form.get('id') %>" name="form_id">
 							</div>
 						</fieldset>
 						<div class="form-element text-right">
-							<button type="submit" class="small primary">Create instance</button>
+							<button type="submit" class="small primary">Create Interaction Point</button>
 						</div>
 					</form>   
 					<!-- <div class="small-5 small-offset-1 columns panel">
