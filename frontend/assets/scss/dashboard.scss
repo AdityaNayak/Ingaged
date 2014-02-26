@@ -209,6 +209,7 @@
 	}
 }
 .form-details{
+	line-height:1.5;
 
 }
 .action-nav{
@@ -368,3 +369,8 @@ input[type=checkbox] {
 				width: 30%;
 			}
 		}
+.main-app{
+	background-image:url('../images/icons.png');
+	background-repeat:no-repeat no-repeat;
+	background-position:50% 315px;
+}

@@ -46,6 +46,7 @@ $( document ).ready(function() {
 			'click #form-submit-btn': 'submitFeedback',
 		},
 		nextSection: function(ev){
+
 			var previousResponse = $(ev.currentTarget).parent().find(".response");
 			if (previousResponse) {
 			    previousResponse.removeClass("response");
@@ -117,36 +118,53 @@ $( document ).ready(function() {
 				'success': function(form){
 					var template = _.template($("#feedback-form-template").html(), {instance_id: options.instance_id, form: form});
 					that.$el.html(template);
-					$("#nps-rating").noUiSlider({
-							range: [0, 10],
-							start: 7,
-							step: 1,
-							handles: 1,
-							serialization: {
-								resolution: 1,
-								to: [ $("#show-serialization-field"),"html" ]
-							}
-						});
 					
-					$.fn.fullpage({
+					
+				    $.fn.fullpage({
 				        verticalCentered: false,
 				        resize : false,
-				        scrollingSpeed: 450,
+				        scrollingSpeed: 150,
 				        easing: false,
-				        anchors: [],
 				        menu: false,
 				        navigation: false,
 				        slidesNavigation: false,
 				        loopBottom: false,
-				        loopTop: true,
+				        loopTop: false,
 				        loopHorizontal: false,
 				        autoScrolling: true,
 				        scrollOverflow: false,
 				        css3: true,
-				        paddingTop: '3em',
+				        paddingTop: '10px',
 				        paddingBottom: '10px',
+				        keyboardScrolling: false,
+				        touchSensitivity: 5,
 
+				        //events
+				        onLeave: function(index, direction){},
+				        afterLoad: function(anchorLink, index){},
+				        afterRender: function(){
+				        	$("#nps-rating").noUiSlider({
+						range: [0, 10],
+						start: 7,
+						step: 1,
+						handles: 1,
+						serialization: {
+							resolution: 1,
+							to: $("#show-serialization-field")
+						}
+					});
+				        },
+				        afterSlideLoad: function(anchorLink, index, slideAnchor, slideIndex){},
+				        onSlideLeave: function(anchorLink, index, slideIndex, direction){
+				        	if(temp===1){
+
+
+				        	}
+				        }
 				    });
+					
+
+
 					return
 					
 				},
