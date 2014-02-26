@@ -153,21 +153,19 @@ $( document ).ready(function() {
 				        afterLoad: function(anchorLink, index){},
 				        afterRender: function(){
 				        	$("#nps-rating").noUiSlider({
-						range: [0, 10],
-						start: 7,
-						step: 1,
-						handles: 1,
-						serialization: {
-							resolution: 1,
-							to: $("#show-serialization-field")
-						}
-					});
+								range: [0, 10],
+								start: 7,
+								step: 1,
+								handles: 1,
+								serialization: {
+									resolution: 1,
+									to: [$("#show-serialization-field"), "html"]
+								},
+							});
 				        },
 				        afterSlideLoad: function(anchorLink, index, slideAnchor, slideIndex){},
 				        onSlideLeave: function(anchorLink, index, slideIndex, direction){
 				        	if(temp===1){
-
-
 				        	}
 				        }
 				    });

@@ -15,6 +15,7 @@
 	<script src="js/customer.backbone.js"></script>
 	<!-- <script src="js/jquery.mobile-events.min.js"></script> -->
 	<script src="js/plugins/jquery.fullPage.min.js"></script>
+    <script src="js/plugins/jquery.nouislider.js"></script>
 </head>
 <body>
 	<script type="text/template" id="feedback-form-template">
@@ -130,7 +131,7 @@
                     <h3><%= form.get('nps_score_heading') %></h3>
 				</li>
 				<div class="small-10 small-centered columns">
-					<div id="show-serialization-field" class="text-center nps-score"> </div>
+					<div id="show-serialization-field" class="text-center nps-score"></div>
 					<div id="nps-rating"> 
 					</div>
 				</div>
@@ -162,7 +163,6 @@
 
 		</ol>
         <input type="hidden" name="id" value="<%= instance_id %>">
-		<script src="js/plugins/jquery.nouislider.js"></script>
 		
 	</script>
 
