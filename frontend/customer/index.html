@@ -178,10 +178,18 @@
 		<div class="row">
 			<div class="small-11 small-centered columns">
 				<div data-alert class="alert-box success">
-					Feedback submitted successfully
+                    Feedback submitted successfully
 				</div>
-				<h3 class="text-center">Thank you</h3>
-			</div>
+                <h3 class="text-center">Thank you</h3>
+                <% if (feedback.get('has_counter')){ %>
+                    <h3 class="text-center">This Form has The Counter Facility</h3>
+                    <h3 class="text-center">Count: <%= feedback.get('counter') %></h3>
+                    <h3 class="text-center"><a href="#/<%= instance_id %>">Link to Form Again</a></h3>
+                <% } else { %>
+                    <h3 class="text-center">This Form does not have Counter Facility.</h3>
+                    <h3 class="text-center"><a href="#/<%= instance_id %>">Link to Form Again</a></h3>
+                <% } %>
+        </div>
 		</div>
 	</script>
 </body>

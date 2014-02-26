@@ -110,7 +110,8 @@ form_obj = {
     'merchant': fields.Nested(merchant_obj),
     'customer_details_heading': fields.String,
     'feedback_heading': fields.String,
-    'nps_score_heading': fields.String
+    'nps_score_heading': fields.String,
+    'incremental_id': fields.Boolean
 }
 
 instance_obj = {
@@ -128,14 +129,25 @@ customer_obj = {
 }
 
 feedback_obj = {
+
+    # unique feedback ID
     'id': fields.String,
-    'received_at': fields.DateTime,
-    'customer': fields.Nested(customer_obj),
+    
+    # form & instance objects
     'instance': fields.Nested(instance_obj, attribute='form_instance'),
     'form': fields.Nested(form_obj, attribute='form_instance.form'),
+
+    # feedback information
     'nps_score': fields.Integer,
     'feedback_text': fields.String,
-    'responses': FeedbackResponseField
+    'received_at': fields.DateTime,
+    'customer': fields.Nested(customer_obj),
+    'responses': FeedbackResponseField,
+
+    # counter infromation (for forms which generate a feedback ID)
+    'has_counter': fields.Boolean,
+    'counter': fields.Integer,
+
 }
 
 analytics_obj = {
@@ -177,6 +189,7 @@ class FormList(Resource):
     post_parser.add_argument('feedback_heading', required=True, type=unicode, location='json')
     post_parser.add_argument('nps_score_heading', required=True, type=unicode, location='json')
     post_parser.add_argument('customer_details_heading', required=True, type=unicode, location='json')
+    post_parser.add_argument('incremental_id', required=True, type=bool, location='json')
     post_parser.add_argument('fields', required=True, type=form_fields, location='json')
     get_fields = {
         'error': fields.Boolean(default=False),
@@ -299,7 +312,9 @@ class CustomerFeedback(Resource):
 
     put_fields = {
         'error': fields.Boolean(default=False),
-        'success': fields.Boolean
+        'success': fields.Boolean,
+        'counter': fields.Integer,
+        'has_counter': fields.Boolean
     }
 
     @marshal_with(get_fields)
@@ -324,17 +339,18 @@ class CustomerFeedback(Resource):
         
         # save customer feedback
         try:
-            FeedbackModel.create(args['nps_score'], args['feedback_text'], args['field_responses'], instance, customer_details)
+            feedback = FeedbackModel.create(args['nps_score'], args['feedback_text'], args['field_responses'], \
+                    instance, customer_details)
         except FeedbackException:
             abort_error(4004)
 
-        return {'success': True}
+        return {'success': True, 'counter': feedback.counter, 'has_counter': feedback.has_counter}
 
 class FeedbackTimelineExport(Resource):
 
     get_fields = {
         'error': fields.Boolean(default=False),
-        'csv_url': fields.Url,
+        'csv_url': fields.String,
     }
 
     get_parser = reqparse.RequestParser()
@@ -369,7 +385,7 @@ class FeedbackTimelineExport(Resource):
         instances.extend(instances_)
 
         # get the feedbacks
-        feedbacks_ = FeedbackModel.get_timeline(
+        feedbacks_, all_start_date, all_end_date = FeedbackModel.get_timeline(
                         merchant = g.user.merchant,
                         nps_score_start = nps_score_start,
                         nps_score_end = nps_score_end,
@@ -451,6 +467,10 @@ class FeedbackTimeline(Resource):
         'total_results': fields.Integer,
         'current_page': fields.Integer,
         'rpp': fields.Integer,
+        'start_date': fields.DateTime,
+        'end_date': fields.DateTime,
+        'all_start_date': fields.DateTime,
+        'all_end_date': fields.DateTime,
         'feedbacks': fields.List(fields.Nested(feedback_obj))
     }
 
@@ -498,7 +518,7 @@ class FeedbackTimeline(Resource):
                 instances.extend(instances_)
 
         # get the feedbacks
-        feedbacks = FeedbackModel.get_timeline(
+        feedbacks, all_start_date, all_end_date = FeedbackModel.get_timeline(
                         merchant = g.user.merchant,
                         nps_score_start = nps_score_start,
                         nps_score_end = nps_score_end,
@@ -506,6 +526,10 @@ class FeedbackTimeline(Resource):
                         end_date = end_date,
                         instances = instances
                     )
+
+        # start date and end date (with the current filters but without page numbers)
+        start_date = feedbacks.skip(len(feedbacks)-1).limit(1)[0].received_at
+        end_date = feedbacks[0].received_at
 
         # pagination related stuff
         total_results = feedbacks.count() # total number of feedbacks returned
@@ -517,7 +541,11 @@ class FeedbackTimeline(Resource):
             'total_pages': total_pages,
             'current_page': args['page'],
             'rpp': args['rpp'],
-            'total_results': total_results
+            'total_results': total_results,
+            'start_date': start_date,
+            'end_date': end_date,
+            'all_start_date': all_start_date,
+            'all_end_date': all_end_date,
         }
 
 
