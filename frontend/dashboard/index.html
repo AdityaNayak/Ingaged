@@ -348,16 +348,24 @@
                                                         <% }); %>
                                                 </ol>
                                             </div>
-
                                             <hr>
-
-                                            <% if (feedback.get("has_counter")){ %>
-                                                <h4>Feedback Counter: <%= feedback.get("counter") %></h4>
-                                                <hr>
-                                            <% } %>
-
-                                            <h3>Instance Details</h3>
+                                            <h3>Form Details</h3>
                                             <div class="form-details secondary">
+                                                <div class="row collapse">
+                                                    <div class="small-4 columns secondary-color">Name:</div><div class="small-8 columns">
+                                                    <%= feedback.get("form").name %>
+                                                    </div>
+                                                
+                                            <% if (feedback.get("has_counter")){ %>
+                                                <div class="small-4 columns secondary-color">Return ID:</div><div class="small-8 columns">
+                                                    <%= feedback.get("counter") %>
+                                                    </div>
+                                            <% } %>
+                                            </div>
+                                            </div>
+                                            <hr>
+                                            <h3>Instance Details</h3>
+                                            <div class="instance-details secondary">
                                                 <div class="row collapse">
                                                     <div class="small-4 columns secondary-color">Name:</div><div class="small-8 columns">
                                                     <%= feedback.get("instance").name %>
@@ -367,12 +375,11 @@
                                             </div>
                                             <div class="small-4 columns secondary-color">Details:</div><div class="small-8 columns">
                                             <%= feedback.get("instance").description %>
+                                            </div>
                                         </div>
                                     </div>
-
-                                </div>
-                            </aside>
-                        </script>
+                                </aside>
+                            </script>
 
 								<script type="text/template" id="analytics-settings-template">
 									<div class="row" id="analytics-settings">
