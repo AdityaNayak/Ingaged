@@ -156,7 +156,7 @@
             </div>
             <div class="small-4 columns">
                 <div id="reportrange" class="rangepicker-box has-dropdown big secondary">
-                    <i class="fi-calendar"></i> <span> </span>
+                    <i class="fi-calendar"></i> <span></span>
                 </div>
                 <!-- <h5>Select location</h5>
                 <select>
@@ -320,10 +320,12 @@
                                                     </div>
 
                                                     <hr>
+                                                    <% if (feedback.get("feedback_text")) { %>
                                                     <div class="secondary">
                                                         <p><%= feedback.get("feedback_text") %></p>
                                                     </div>
                                                     <hr>
+                                                    <% } %>
 
                                                     <div class="secondary survey-column">
                                                         <ol>
