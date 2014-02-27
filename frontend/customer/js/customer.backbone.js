@@ -24,13 +24,17 @@ $( document ).ready(function() {
 	});
 
 	/* hostname of the api */
-	var api_root = 'https://ingage.herokuapp.com'
+	var api_root = 'https://ingage-staging-1.herokuapp.com'
 
 	/* feedback form model */
 	FeedbackFormModel = Backbone.Model.extend({
 		urlRoot: api_root + "/customer/feedback",
 		parse: function(response, xhr){
-			return response.form;
+            if (response.form){
+                return response.form;
+            } else {
+                return response;
+            }
 		},
 	});
 
@@ -38,14 +42,14 @@ $( document ).ready(function() {
 	var FeedbackFormView = Backbone.View.extend({
 		
 		el: 'body',
-
-		successTemplate: _.template($("#feedback-form-success-template").html(), {}),
+        successTemplate: _.template($("#feedback-form-success-template").html()),
 		events: {
 			'click input,textarea': 'showDone',
 			'click .intr-btn, .intr': 'nextSection',
 			'click #form-submit-btn': 'submitFeedback',
 		},
 		nextSection: function(ev){
+
 			var previousResponse = $(ev.currentTarget).parent().find(".response");
 			if (previousResponse) {
 			    previousResponse.removeClass("response");
@@ -106,47 +110,68 @@ $( document ).ready(function() {
 				data.customer_mobile = customer_details.mobile
 			}
 
+			var that = this;
 			var feedbackForm = new FeedbackFormModel();
-			feedbackForm.save(data);
-			this.$el.html(this.successTemplate);
+			feedbackForm.save(data, {
+			    'success': function(feedback){
+                    that.$el.html(that.successTemplate({'feedback': feedback, 'instance_id': that.instanceID}));
+			    }
+			});
 		},
 		render: function(options){
 			var feedbackForm = new FeedbackFormModel({'id': options.instance_id})
 			var that = this;
 			feedbackForm.fetch({
 				'success': function(form){
+					that.form = form;
+					that.instanceID = options.instance_id
 					var template = _.template($("#feedback-form-template").html(), {instance_id: options.instance_id, form: form});
 					that.$el.html(template);
-					$("#nps-rating").noUiSlider({
-							range: [0, 10],
-							start: 7,
-							step: 1,
-							handles: 1,
-							serialization: {
-								resolution: 1,
-								to: [ $("#show-serialization-field"),"html" ]
-							}
-						});
 					
-					$.fn.fullpage({
+					
+				    $.fn.fullpage({
 				        verticalCentered: false,
 				        resize : false,
-				        scrollingSpeed: 450,
+				        scrollingSpeed: 150,
 				        easing: false,
-				        anchors: [],
 				        menu: false,
 				        navigation: false,
 				        slidesNavigation: false,
 				        loopBottom: false,
-				        loopTop: true,
+				        loopTop: false,
 				        loopHorizontal: false,
 				        autoScrolling: true,
 				        scrollOverflow: false,
 				        css3: true,
-				        paddingTop: '3em',
+				        paddingTop: '10px',
 				        paddingBottom: '10px',
+				        keyboardScrolling: false,
+				        touchSensitivity: 5,
 
+				        //events
+				        onLeave: function(index, direction){},
+				        afterLoad: function(anchorLink, index){},
+				        afterRender: function(){
+				        	$("#nps-rating").noUiSlider({
+								range: [0, 10],
+								start: 7,
+								step: 1,
+								handles: 1,
+								serialization: {
+									resolution: 1,
+									to: [$("#show-serialization-field"), "html"]
+								},
+							});
+				        },
+				        afterSlideLoad: function(anchorLink, index, slideAnchor, slideIndex){},
+				        onSlideLeave: function(anchorLink, index, slideIndex, direction){
+				        	if(temp===1){
+				        	}
+				        }
 				    });
+					
+
+
 					return
 					
 				},

@@ -130,10 +130,10 @@
 	li{
 		padding:0.75em;
 		background:$white;
-		border-right:0px solid lighten($grey,10%);	
-		border-left:0px solid lighten($grey,10%);	
-		border-top:1px solid lighten($grey,10%);	
-		border-bottom:0px solid lighten($grey,10%);	
+		border-right:0px solid scale-color($grey, $lightness: 10%);
+		border-left:0px solid scale-color($grey, $lightness: 10%);	
+		border-top:1px solid scale-color($grey, $lightness: 10%);	
+		border-bottom:0px solid scale-color($grey, $lightness: 10%);	
 		cursor: pointer;
 		&:hover, &:active, &:focus{
 			background: rgba($blue,0.1);
@@ -149,7 +149,7 @@
 		}
 	}
 	.read{
-		background:lighten($grey,15%);
+		background:scale-color($grey, $lightness: 15%);
 	}
 	.selected{
 		background: rgba($blue,0.1);
@@ -160,7 +160,7 @@
 	font-weight:bold;
 }
 .feedback-column{
-	border-bottom:1px solid lighten($grey,10%);	
+	border-bottom:1px solid scale-color($grey, $lightness: 10%);	
 }
 
 .feedback-content{
@@ -201,15 +201,17 @@
 	h5{
 		margin-bottom: 0;
 		font-size: 1em;
-		font-weight: 300;
+		@extend .secondary-color;
 	}
 	p{
 		margin-bottom: 0.5em;
-		font-weight: 700;
 	}
 }
 .form-details{
-
+	line-height:1.5;
+}
+.instance-details{
+	line-height:1.5;
 }
 .action-nav{
 	font-size:0.9em;
@@ -217,15 +219,23 @@
 	overflow:visible;
 	dd{
 		padding:0.5em 1em;
-		background: lighten($grey,15%);
-		border:1px solid $grey;
-		cursor: pointer;
-		&:hover{
-			box-shadow: 0 0 1px $grey;
-			cursor: pointer;
-		}
+		@extend .btn-bg;
 		a:hover{
 			color:$black;
+		}
+		&.naked{
+			border:none;
+			font-weight: normal;
+			background:none;
+			margin:0;
+			padding-right:0;
+			&:hover{
+				cursor: default;
+				box-shadow:none;
+			}
+		}
+		&.has-dropdown{
+			padding-right:1.2rem;
 		}
 	}
 	.checkbox-dd{
@@ -350,21 +360,53 @@ input[type=checkbox] {
 		text-align: center;  
 		line-height: 15px;  
 		} */
-		.vermachutiyahain{
-			&:after{
-				content:"Coming Soon";
-				position:absolute;
-				left:45%;
-				top:50%;
-				font-size: 2em;
-			}
-		}
-		#line{
-			opacity:0.5;
-		}
 
-		@media #{$large-up} {
-			.top-bar .title-area{
-				width: 30%;
-			}
+
+@media #{$large-up} {
+	.top-bar .title-area{
+		width: 30%;
+	}
+}
+.main-app{
+	background-image:url('../images/icons.png');
+	background-repeat:no-repeat no-repeat;
+	background-position:50% 315px;
+}
+.btn-bg{
+	background: scale-color($grey, $lightness: 60%);
+	border:1px solid $grey;
+	cursor: pointer;
+	font-weight: 700;
+	@include radius($global-radius);
+	color:$darkgrey;
+	&:hover{
+		box-shadow: 0 0 1px $grey;
+		cursor: pointer;
+		color:$black;
+	}
+}
+.has-dropdown{
+	padding-right:1.2rem;
+	position:relative;
+	&:before{
+		position: absolute;
+		content: "";
+		width: 0;
+		height: 0;
+		display: block;
+		border-style: solid;
+		border-color: scale-color($darkgrey, $lightness: 30%) transparent transparent transparent;
+		top: 50%;
+		border-width: 0.2rem;
+		right: 0.5rem;
+		margin-top: -0.03rem;
+	}
+	&.big{
+		padding-right:2.4rem;
+		&:before{
+		border-width: 0.33333rem;
+		right: 0.5rem;
+		margin-top: -0.13889rem;
 		}
+	}
+}

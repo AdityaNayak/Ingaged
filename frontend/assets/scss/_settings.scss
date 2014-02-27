@@ -18,6 +18,7 @@ $white: #ffffff;
 
 $grey: #dcdcdc;
 $lightgrey: #FAFBFC;
+$darkgrey: scale-color($grey, $lightness: -45%);
 
 $yellow: #fbb82d;
 $blue: #0e90d2;
