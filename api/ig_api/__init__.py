@@ -51,6 +51,11 @@ TRANSACTIONAL_EMAILS = {
         'template': 'emails/signup_request.html',
         'from': 'InGage <hello@ingagelive.com>'
     },
+    'feedback_nps_notification': { # this is sent to the e-mail provided by merchant when feedback has nps below threshold
+        'subject': 'You received a feedback which needs action.',
+        'template': 'emails/feedback_notif.html',
+        'from': 'InGage <hello@ingagelive.com>'
+    }
 }
 
 ## app initilization
