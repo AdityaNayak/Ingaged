@@ -76,10 +76,44 @@ class FormFieldSubModel(db.EmbeddedDocument):
         def __repr__(self):
             return '<FormFieldSubModel: {0} ({1})>'.format([i[1] for i in self.FIELD_TYPES if i[0] == self.field_type][0], self.text)
 
+
+class FormIncrementCounter(db.Document):
+
+    counter = db.IntField(required=True, default=0) # the first value will be 1
+
+    # form associated with the counter
+    form = db.ReferenceField('FormModel', required=True)
+
+    @staticmethod
+    def create(form):
+        """Creates a new FormIncrementCounter."""
+        # save the counter
+        counter = FormIncrementCounter(form=form)
+        counter.save()
+
+        return counter
+
+
+    def get_next_counter(self):
+        """Updates the DB with the incremented (+1) value of the counter
+        and returns the new counter value"""
+        # atomic update of the counter
+        self.update(inc__counter=1)
+        self.reload()
+
+        return self.counter
+
+    def __repr__(self):
+        return '<FormIncrementCounter: {0} ({1})>'.format(self.counter, self.form.name)
+
+
 class FormModel(db.Document):
     # basic info about the form
     name = db.StringField(required=True)
     description = db.StringField(required=True)
+
+    # flag if the form needs to produce a incremetal id for every feedback
+    incremental_id = db.BooleanField(required=True, default=False)
 
     # fields comprising of the form
     fields = db.ListField(db.EmbeddedDocumentField(FormFieldSubModel))
@@ -93,6 +127,15 @@ class FormModel(db.Document):
     merchant = db.ReferenceField('MerchantModel', required=True)
 
     meta = {'collection': 'forms'}
+
+    @property
+    def counter(self):
+        try:
+            counter = FormIncrementCounter.objects.get(form=self)
+        except db.DoesNotExist:
+            counter = None
+
+        return counter
 
     def get_analytics(self, instance_ids, start_date=None, end_date=None):
         """Returns the analytics for the form fields.
@@ -188,7 +231,7 @@ class FormModel(db.Document):
         return responses
 
     @staticmethod
-    def create(name, description, customer_details_heading, feedback_heading, nps_score_heading, fields, merchant):
+    def create(name, description, customer_details_heading, feedback_heading, nps_score_heading, fields, merchant, incremental_id):
         """Creates a new form instance.
 
         The `fields` keyword argument will take up a list with `FormFieldSubModel` instances. The order of these
@@ -197,12 +240,18 @@ class FormModel(db.Document):
         For now a feedback form can have a maximum of 4 fields.
         """
 
+        # saving the form
         form = FormModel(name=name, description=description, merchant=merchant, customer_details_heading=customer_details_heading,
-                feedback_heading=feedback_heading, nps_score_heading=nps_score_heading, fields=fields)
+                feedback_heading=feedback_heading, nps_score_heading=nps_score_heading, fields=fields,
+                incremental_id=incremental_id)
         try:
             form.save()
         except db.ValidationError:
             raise FormException('Form data provided was wrong')
+
+        # create a form counter object if `incremental_id` is True
+        if incremental_id:
+            FormIncrementCounter.create(form)
         
         return form
 
@@ -253,6 +302,10 @@ class FeedbackModel(db.Document):
 
     # which merchant is feedback associated with?
     merchant = db.ReferenceField('MerchantModel', required=True)
+
+    # unique counter of the feedback (only exists if `incremental_id` flag is true on form)
+    has_counter = db.BooleanField(default=False)
+    counter = db.IntField()
 
     meta = {'collection': 'feedbacks'}
 
@@ -316,7 +369,7 @@ class FeedbackModel(db.Document):
 
         # iterating over all the responses of the feedback
         for f_id, response in self.field_responses.items():
-            # check for the field the response is associated with
+            # check for the field the response is associatform.counter.get_next_counter
             for field in form.fields:
                 if str(field.id) == f_id:
                     responses.append({
@@ -328,7 +381,7 @@ class FeedbackModel(db.Document):
         return responses
 
     @staticmethod
-    def create(nps_score, feedback_text, field_responses, form_instance, customer_details=None):
+    def create(nps_score, feedback_text, field_responses, form_instance, customer_details=None, counter=None):
         # validate the responses of the fields of the form
         form = form_instance.form
         for field in form.fields:
@@ -345,6 +398,11 @@ class FeedbackModel(db.Document):
         # feedback form object
         feedback = FeedbackModel(nps_score=nps_score, feedback_text=feedback_text, field_responses=field_responses,
                 form_instance=form_instance, merchant=form_instance.form.merchant)
+
+        # add counter info to feedback (if exists on form)
+        if form.incremental_id:
+            feedback.has_counter = True
+            feedback.counter = form.counter.get_next_counter()
 
         # create customer object only if customer exists
         customer = None

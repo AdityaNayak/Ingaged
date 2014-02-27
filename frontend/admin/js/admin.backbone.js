@@ -18,7 +18,7 @@ $( document ).ready(function() {
     };
 
     /* api root url */
-    var root_server = 'https://ingage.herokuapp.com'
+	var root_server = 'https://ingage.herokuapp.com'
 
     /* all the routes of the admin panel */
     var Router = Backbone.Router.extend({
