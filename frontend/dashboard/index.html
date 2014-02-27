@@ -115,10 +115,12 @@
 				<section class="top-bar-section">
 					<ul class="right">
 						<li class="secondary-color namesyntax">Welcome <%= username %></li>
+                        <li id="nav-overview"><a href="#/overview" >Overview</a></li>
 						<li id="nav-timeline"><a href="#/timeline" >Timeline</a></li>
-						<li id="nav-analytics"><a href="#/analytics" >Analytics</a></li>
-						<li id="nav-feedback_forms"><a href="#/feedback_forms" >System</a></li>
-						<li><a href="#" id="logout-link">Log Out</a></li>      
+						<li id="nav-analytics"><a href="#/analytics" >Analysis</a></li>
+						<!-- <li id="nav-feedback_forms"><a href="#/feedback_forms" >System</a></li> -->
+                        <li id="nav-settings"><a href="#/settings">Settings</a></li>      
+						<li id="logout-link"><a href="#" >Log Out</a></li>      
 					</ul>
 				</section>
 			</header>
@@ -170,7 +172,7 @@
 
         <div class="row collapse">
         <div class="sub-nav action-nav">
-          <dl class="small-6 columns">
+          <dl class="small-4 columns">
              <!-- <dd class="checkbox-dd cform">
              <input id="selectall" type="checkbox" name="check" value="check1">Select
              </dd>
@@ -191,7 +193,7 @@
             <li><a href="#">Form 3</a></li>
         </ul>
         </dl>
-        <dl class="small-6 columns">
+        <dl class="small-8 columns">
         <dd data-dropdown="hover3">Export <i class="fi-page-export-csv"></i></dd>
         <ul id="hover3" class="tiny f-dropdown form-filter" data-dropdown-content>			    
             <% _.each(forms, function(form){ %>
