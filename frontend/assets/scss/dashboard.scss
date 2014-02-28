@@ -67,7 +67,9 @@
 }
 .alert-bar{
 	height:36px;
-	margin-bottom:1.5em;
+	position:fixed;
+	z-index:999;
+	width:45%;
 }
 .alert-box.loading{
 	background:$white;
@@ -83,7 +85,7 @@
 	color:$white;
 	border-color: darken($red,15%);
 }
-.alert-text{
+.loading-text{
 	margin-left:-10px;
 }
 .login-form{
@@ -229,6 +231,7 @@
 			background:none;
 			margin:0;
 			padding-right:0;
+			padding-left:0;
 			&:hover{
 				cursor: default;
 				box-shadow:none;
@@ -409,4 +412,13 @@ input[type=checkbox] {
 		margin-top: -0.13889rem;
 		}
 	}
+}
+.font-2x{
+	font-size:2rem;
+}
+.font-3x{
+	font-size:3rem;
+}
+.ov-score{
+	font-weight:300;
 }

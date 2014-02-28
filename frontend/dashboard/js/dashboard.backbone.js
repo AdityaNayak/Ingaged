@@ -179,7 +179,7 @@ $( document ).ready(function() {
                 success: function(data){
                     $.cookie("username", credentials.username);
                     $.cookie("password", credentials.password);
-                    router.navigate('timeline', {trigger: true});
+                    router.navigate('overview', {trigger: true});
                 },
                 error: function(data){
                     $(loadingButton).fadeOut(300); 
@@ -198,7 +198,7 @@ $( document ).ready(function() {
             }
 
             // change the title
-            document.title = "Ingage Dashboard";
+            document.title = "Ingage: Your in-venue Customer Experience Management system";
 
             var template = _.template($("#login-template").html(), {});
             var footerTemplate = _.template($("#footer-template").html(), {});
@@ -207,6 +207,39 @@ $( document ).ready(function() {
         }
     });
     var loginView = new LoginView();
+
+
+    /* Overview */
+    var overviewView = Backbone.View.extend({
+        el: '.main-app',
+        events: {
+            'click #logout-link': logoutUser,
+        },
+        
+        render: function(){
+            if (!$.cookie("username") && !$.cookie("password")){
+                router.navigate('', {trigger: true});
+                return
+            }
+
+            // change the title
+            document.title = "Overview | Ingage Dashboard";
+
+            // mumbo jumbo of templates
+            var template = _.template($("#overview-template").html(), {});
+            
+            var headerTemplate = _.template($("#header-template").html(), {username: $.cookie("username")});
+            var footerTemplate = _.template($("#footer-template").html(), {});
+            this.$el.html(template);
+            this.$el.prepend(headerTemplate);
+            this.$el.append(footerTemplate);
+        
+            // jquery shit
+            $(document).foundation();                      
+        }
+    });
+    overviewView = new overviewView();
+
 
     /* timeline of various feedbacks */
     var FeedbackTimelineView = Backbone.View.extend({
@@ -588,6 +621,38 @@ $( document ).ready(function() {
     });
     var AnalyticsView = new AnalyticsView();
 
+        /* Overview */
+    var crmView = Backbone.View.extend({
+        el: '.main-app',
+        events: {
+            'click #logout-link': logoutUser,
+        },
+        
+        render: function(){
+            if (!$.cookie("username") && !$.cookie("password")){
+                router.navigate('', {trigger: true});
+                return
+            }
+
+            // change the title
+            document.title = "Customers | Ingage Dashboard";
+
+            // mumbo jumbo of templates
+            var template = _.template($("#crm-template").html(), {});
+            
+            var headerTemplate = _.template($("#header-template").html(), {username: $.cookie("username")});
+            var footerTemplate = _.template($("#footer-template").html(), {});
+            this.$el.html(template);
+            this.$el.prepend(headerTemplate);
+            this.$el.append(footerTemplate);
+        
+            // jquery shit
+            $(document).foundation();                      
+        }
+    });
+    crmView = new crmView();
+
+
 
     /* view of list of feedbacks */
     var FeedbackFormsView = Backbone.View.extend({
@@ -789,12 +854,15 @@ $( document ).ready(function() {
     var Router = Backbone.Router.extend({
         routes: {
             "": "login",
+            "overview": "overView",
             "timeline": "feedbackTimeline",
-            "feedback_forms": "feedbackForms",
+            "analytics": "analytics",
+            "crm": "crm",
+            "settings": "feedbackForms",
             "feedback_forms/new": "newFeedbackForm",
             "feedback_forms/:form_id/instances": "formInstancesList",
             "feedback_forms/:form_id/instances/new": "newFormInstances",
-            "analytics": "analytics",
+            
         },
     });
 
@@ -812,6 +880,11 @@ $( document ).ready(function() {
         loginView.render();
     });
 
+    router.on('route:overView', function(){
+        overviewView.render();
+        highlightNavLinks("overview");
+    });
+
     router.on('route:feedbackTimeline', function(){
         feedbackTimelineView.render();
         highlightNavLinks("timeline");
@@ -822,9 +895,15 @@ $( document ).ready(function() {
         highlightNavLinks("analytics");
     });
 
+
+    router.on('route:crm', function(){
+        crmView.render();
+        highlightNavLinks("crm");
+    });
+
     router.on('route:feedbackForms', function(){
         feedbackFormsView.render();
-        highlightNavLinks("feedback_forms");
+        highlightNavLinks("settings");
     });
 
     router.on('route:formInstancesList', function(form_id){
