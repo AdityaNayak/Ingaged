@@ -39,7 +39,7 @@ class SignUpRequestModel(db.Document):
             'email': email,
             'phone': phone
         }
-        send_trans_email('signup_request', '{0} <{1}>'.format('InGage Admin', email), email_vars)
+        send_trans_email('signup_request', ['{0} <{1}>'.format('InGage Admin', email), ], email_vars)
 
         return request
 

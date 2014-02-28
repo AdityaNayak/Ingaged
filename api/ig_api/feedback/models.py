@@ -347,9 +347,8 @@ class FeedbackModel(db.Document):
             return False
 
         # send an e-mail to the provided e-mail ids
-        emails = ','.join(feedback.merchant.notif_emails)
+        emails = feedback.merchant.notif_emails
         send_trans_email('feedback_nps_notification', emails, {'feedback': feedback})
-
 
     @staticmethod
     def create(nps_score, feedback_text, field_responses, form_instance, customer_details=None):

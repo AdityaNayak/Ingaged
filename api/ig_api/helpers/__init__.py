@@ -81,9 +81,8 @@ def send_trans_email(trans_name, emails, template_vars={}):
     """Sends a transactional email.
 
     Keyword Arguments:
-    trans_name -- a key name in the dict `app.config['TRANSACTIONAL_EMAILS']`
-    emails -- email of the user (comma seperated values) can be in the format (User Name <user@example.com)
-             or (user1@example.com,user2@example.com)
+    trans_name -- a key name in the dict `app.config['TRANSACTIONAL_EMAILS']
+    emails -- list of emails of users
     template_vars -- variables using which template of the email needs to be rendered
     """
     email_details = app.config['TRANSACTIONAL_EMAILS'][trans_name]

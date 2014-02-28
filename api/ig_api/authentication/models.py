@@ -88,7 +88,7 @@ class MerchantUserModel(BaseUser, db.Document):
             'email': email,
             'password': password
         }
-        send_trans_email('new_merchant_new_user', '{0} <{1}>'.format(user.name, user.email), email_vars)
+        send_trans_email('new_merchant_new_user', ['{0} <{1}>'.format(user.name, user.email), ], email_vars)
 
         return user
 
