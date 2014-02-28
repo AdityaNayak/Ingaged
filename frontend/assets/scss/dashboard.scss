@@ -413,12 +413,26 @@ input[type=checkbox] {
 		}
 	}
 }
+.font-1-5x{
+	font-size:1.5rem;
+	font-weight:300;
+}
 .font-2x{
 	font-size:2rem;
+	font-weight:300;
 }
 .font-3x{
 	font-size:3rem;
+	font-weight:300;
 }
 .ov-score{
 	font-weight:300;
+}
+.ov-stats{
+	h4{
+		@extend .secondary-color;
+	}
+	h6{
+		@extend .secondary-color;
+	}
 }
