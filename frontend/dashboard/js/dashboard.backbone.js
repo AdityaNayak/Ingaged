@@ -31,7 +31,7 @@ $( document ).ready(function() {
     };
 
     /* hostname of the api server */
-    var api_root = 'http://localhost:5000'
+    var api_root = 'https://ingage-staging-1.herokuapp.com'
 
     /* logs out the user on the click of the logout link */
     logoutUser = function(ev){
