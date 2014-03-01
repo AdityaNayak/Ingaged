@@ -54,6 +54,8 @@
 @import "loading";
 @import "foundation-icons";
 @import "dayrange";
+@import "compass/css3/shared";
+@import "compass/css3/filter";
 
 .primary-message{
 	font-size:1.75em;
@@ -158,8 +160,12 @@
 	}
 }
 .list-header{
-	margin-bottom:0.5em;
-	font-weight:bold;
+	background:$lightgrey !important;
+	color:$darkgrey;
+	
+	&:hover, &:active, &:focus{
+		background: $lightgrey !important;
+	}
 }
 .feedback-column{
 	border-bottom:1px solid scale-color($grey, $lightness: 10%);	
@@ -232,7 +238,7 @@
 			margin:0;
 			padding-right:0;
 			padding-left:0;
-			&:hover{
+			&:hover, &:active, &:focus{
 				cursor: default;
 				box-shadow:none;
 			}
@@ -274,8 +280,7 @@
 .stickit{
 	position:fixed;
 	top:0;
-	margin-left:54.4%;
-	width:38.8%;
+	width:36.6%;
 	z-index:9;
 	bottom:0;
 }
@@ -302,7 +307,7 @@
 		border-bottom:1px solid $grey;
 		padding:0.5em 0;
 		cursor: pointer;
-		&.active, &:hover{
+		&.active, &:hover, &:active, &:focus{
 			font-weight: 700;
 		}
 	}
@@ -371,9 +376,12 @@ input[type=checkbox] {
 	}
 }
 .main-app{
-	background-image:url('../images/icons.png');
+	background-image:url('../images/icons-bg.png');
 	background-repeat:no-repeat no-repeat;
-	background-position:50% 315px;
+	background-position:75% 75px;
+	&.home{
+		background:none;
+	}
 }
 .btn-bg{
 	background: scale-color($grey, $lightness: 60%);
@@ -382,7 +390,7 @@ input[type=checkbox] {
 	font-weight: 700;
 	@include radius($global-radius);
 	color:$darkgrey;
-	&:hover{
+	&:hover, &:active, &:focus{
 		box-shadow: 0 0 1px $grey;
 		cursor: pointer;
 		color:$black;
@@ -428,6 +436,13 @@ input[type=checkbox] {
 .ov-score{
 	font-weight:300;
 }
+
+
+//To Objectify CSS
+.blueg-c{
+	@include f-color($bluegreen);
+}
+
 .ov-stats{
 	h4{
 		@extend .secondary-color;
@@ -435,4 +450,58 @@ input[type=checkbox] {
 	h6{
 		@extend .secondary-color;
 	}
+}
+.circle-img{
+	border-radius:50%;
+}
+.customer-ov{
+	img{
+		@include filter(grayscale(100%));
+		@include single-transition(all 1s);
+		&:hover, &:active, &:focus{
+			@include filter(grayscale(0%));
+			@include single-transition(all 1s);
+		}
+	}
+	.circle-img{
+		margin-top: -10em;
+	}
+	.row.collapse{
+		margin:1em 0;
+	}
+	h4.text-center{
+		margin-bottom:1em;
+	}
+	.small-8.secondary-color{
+		line-height: 1.75;
+	}
+}
+.ov-panel{
+	margin-top:10em;
+}
+.customer-history{
+	padding-top:1em;
+	&:before{
+		display: block;
+		content: "";
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 4em;
+		width: 2px;
+		background-color: $grey;
+		z-index: -1;
+	}
+}
+.fb-time{
+	margin-top:2.8rem;
+}
+.customer-history{
+	.small-8.secondary-color{
+		line-height: 1.75;
+	}
+	&:hover, &:active, &:focus{
+			background: rgba($blue,0.1);
+			cursor: pointer;
+		}
 }
