@@ -630,10 +630,10 @@ $( document ).ready(function() {
         el: '.main-app',
         events: {
             'click #logout-link': logoutUser,
-            'click .feedback-list li': 'crmCustomer',
+            'click .customer-list li': 'crmCustomer',
         },
         crmCustomer: function(){
-            router.navigate('crm/customer', {trigger: true});
+            router.navigate('customer', {trigger: true});
         },
         render: function(){
             if (!$.cookie("username") && !$.cookie("password")){
@@ -659,13 +659,17 @@ $( document ).ready(function() {
     });
     crmView = new crmView();
 
-    /* CRM */
+    /* CRM Single view*/
     var crmSingleView = Backbone.View.extend({
         el: '.main-app',
         events: {
             'click #logout-link': logoutUser,
+            'click .customer-history': 'interactionview',
         },
-        
+        interactionview: function(){
+            router.navigate('customer/interaction', {trigger: true});
+        },
+
         render: function(){
             if (!$.cookie("username") && !$.cookie("password")){
                 router.navigate('', {trigger: true});
@@ -689,6 +693,37 @@ $( document ).ready(function() {
         }
     });
     crmSingleView = new crmSingleView();
+
+    /* Interaction View */
+    var interactionView = Backbone.View.extend({
+        el: '.main-app',
+        events: {
+            'click #logout-link': logoutUser,
+        },
+        
+        render: function(){
+            if (!$.cookie("username") && !$.cookie("password")){
+                router.navigate('', {trigger: true});
+                return
+            }
+
+            // change the title
+            document.title = "Interaction | Ingage Dashboard";
+
+            // mumbo jumbo of templates
+            var template = _.template($("#interaction-template").html(), {});
+            
+            var headerTemplate = _.template($("#header-template").html(), {username: $.cookie("username")});
+            var footerTemplate = _.template($("#footer-template").html(), {});
+            this.$el.html(template);
+            this.$el.prepend(headerTemplate);
+            this.$el.append(footerTemplate);
+        
+            // jquery shit
+            $(document).foundation();                      
+        }
+    });
+    interactionView = new interactionView();
 
     /* view of list of feedbacks */
     var FeedbackFormsView = Backbone.View.extend({
@@ -894,7 +929,8 @@ $( document ).ready(function() {
             "timeline": "feedbackTimeline",
             "analytics": "analytics",
             "crm": "crm",
-            "crm/customer": "crm-single",
+            "customer": "crm-single",
+            "customer/interaction": "interaction",
             "settings": "feedbackForms",
             "feedback_forms/new": "newFeedbackForm",
             "feedback_forms/:form_id/instances": "formInstancesList",
@@ -940,6 +976,10 @@ $( document ).ready(function() {
 
     router.on('route:crm-single', function(){
         crmSingleView.render();
+    });
+
+    router.on('route:interaction', function(){
+        interactionView.render();
     });
 
     router.on('route:feedbackForms', function(){

@@ -114,7 +114,7 @@
 				</ul>
 				<section class="top-bar-section">
 					<ul class="right">
-						<li class="secondary-color namesyntax">Welcome <%= username %></li>
+						<!-- <li class="secondary-color namesyntax">Welcome <%= username %></li> -->
                         <li id="nav-overview"><a href="#/overview" >Overview</a></li>
                         <li id="nav-timeline"><a href="#/timeline" >Timeline</a></li>
                         <li id="nav-analytics"><a href="#/analytics" >Analysis</a></li>
@@ -603,7 +603,7 @@
 <div class="row">
     <div class="small-12 columns">
         <h2>Customers</h2>
-        <ul class="feedback-list">
+        <ul class="feedback-list customer-list">
             <li class="row list-header">
                 <span class="small-2 columns">
                 Name
@@ -672,7 +672,7 @@
 <div class="panel ov-panel">
     <div class="customer-ov row">
         <div class="small-3 columns">
-        <img class="circle-img" src="http://api.randomuser.me/0.3.1/portraits/women/19.jpg" >
+        <img class="circle-img bw-img" src="http://api.randomuser.me/0.3.1/portraits/women/19.jpg" >
         <hr>
         <div class="text-right">
             <h3>Shruti Sharma</h3>
@@ -766,14 +766,11 @@
 <div class="customer-history-ov">
     <div class="row">
         <div class="small-3 columns text-right fb-time secondary secondary-color">
-            <div class="row collapse">
-                <div class="small-7 columns">
-                    <i class="fi-calendar"></i> 26 Dec, 2013
-                </div>
-                <div class="small-5 columns">
-                    <i class="fi-clock"></i> 10:30 PM 
-                </div>
-            </div>
+            <ul class="naked">
+                <li>26 Dec, 2013 <i class="fi-calendar"></i></li>
+                <li>10:30 PM <i class="fi-clock"></i></li>
+                <li>Atta Market <i class="fi-marker"></i></li>
+            </ul>
         </div>
         <div class="small-9 columns customer-history">
             <div class="panel">
@@ -814,14 +811,11 @@
     </div>
     <div class="row">
         <div class="small-3 columns text-right fb-time secondary secondary-color">
-            <div class="row collapse">
-                <div class="small-7 columns">
-                    <i class="fi-calendar"></i> 26 Dec, 2013
-                </div>
-                <div class="small-5 columns">
-                    <i class="fi-clock"></i> 10:30 PM 
-                </div>
-            </div>
+            <ul class="naked">
+                <li>26 Dec, 2013 <i class="fi-calendar"></i></li>
+                <li>10:30 PM <i class="fi-clock"></i></li>
+                <li>Atta Market <i class="fi-marker"></i></li>
+            </ul>
         </div>
         <div class="small-9 columns customer-history">
             <div class="panel">
@@ -859,6 +853,142 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
+</script>
+<script type="text/template" id="interaction-template">
+<div class="row">
+    
+    <h2>Interaction Details</h2>
+    
+</div>
+<div class="panel row interaction-ov">
+    <div class="small-3 columns">
+        <h4>Customer Experience</h4>
+        <hr>
+        <div class="row collapse">
+            <div class="small-8 secondary-color secondary columns">Feedback Score: </div>
+            <div class="small-4 columns">7</div>
+        </div>
+        <div class="row collapse">
+            <div class="small-8 secondary-color secondary columns">Price Value Score: </div>
+            <div class="small-4 columns">5</div>
+        </div>
+        <div class="row collapse secondary">
+        <p class="s-ws-top">The feedback comment returned in 'How was your experience?' and is collected in a textbox. Adding some more wrods to see how the extra content breaks the design</p>
+        </div>
+        
+        <div class="survey-column">
+            <ol>
+                <li>
+                    <h5>Question 1 sdhf and som thing more to heck for content overflow</h5>
+                    <p>No</p>
+                </li>
+            </ol>
+        </div>
+        
+    </div>
+    <div class="small-3 columns">
+        <h4>Loyalty</h4>
+        <hr>
+        <div class="row collapse">
+            <div class="small-8 secondary-color secondary columns">Total Points Earned: </div>
+            <div class="small-4 columns">30</div>
+        </div>
+        <div class="row collapse">
+            <div class="small-8 secondary-color secondary columns">Points for Checkin: </div>
+            <div class="small-4 columns">10</div>
+        </div>
+        <div class="row collapse">
+            <div class="small-8 secondary-color secondary columns">Points for Order: </div>
+            <div class="small-4 columns">30</div>
+        </div>
+        <h4 class="b-ws-top">Location</h4>
+        <hr>
+        <div class="row collapse">
+            <div class="small-6 secondary-color secondary columns">Time: </div>
+            <div class="small-6 columns">6:30 PM</div>
+        </div>
+        <div class="row collapse">
+            <div class="small-6 secondary-color secondary columns">Date: </div>
+            <div class="small-6 columns">24, Feb, 2014</div>
+        </div>
+        <h4 class="s-ws-top">Interaction Point</h4>
+        <div class="row collapse">
+            <div class="small-6 secondary-color secondary columns">Name: </div>
+            <div class="small-6 columns">Table 1</div>
+        </div>
+        <div class="row collapse">
+            <div class="small-6 secondary-color secondary columns">Location: </div>
+            <div class="small-6 columns">Sec-18, Noida</div>
+        </div>
+        <div class="row collapse">
+            <div class="small-6 secondary-color secondary columns">Details: </div>
+            <div class="small-6 columns">Something here</div>
+        </div>
+        
+    </div>
+    <div class="small-3 columns">
+    <h4>Sales</h4>
+        <hr>
+        <div class="row collapse">
+            <div class="small-8 secondary-color secondary columns">Total sale: </div>
+            <div class="small-4 columns"><small>&#8377;</small>3200</div>
+        </div>
+        <div class="row collapse">
+            <div class="small-8 secondary-color secondary columns">Total Items: </div>
+            <div class="small-4 columns">5</div>
+        </div>
+        <h5 class="b-ws-top">Details</h5>
+        <div class="row collapse">
+            <div class="small-8 secondary-color secondary columns">Item 1</div>
+            <div class="small-4 columns">598</div>
+        </div>
+        <div class="row collapse">
+            <div class="small-8 secondary-color secondary columns">Item 2</div>
+            <div class="small-4 columns">93</div>
+        </div>
+        <div class="row collapse">
+            <div class="small-8 secondary-color secondary columns">Item 3</div>
+            <div class="small-4 columns">238</div>
+        </div>
+        <div class="row collapse">
+            <div class="small-8 secondary-color secondary columns">Item 4</div>
+            <div class="small-4 columns">87</div>
+        </div>
+        <div class="row collapse">
+            <div class="small-8 secondary-color secondary columns">Item 5</div>
+            <div class="small-4 columns">435</div>
+        </div>
+        <div class="b-ws-top b-ws-bottom">
+            <div class="row collapse">
+                <div class="small-8 secondary-color secondary columns">Discount 1  (-)</div>
+                <div class="small-4 columns">98</div>
+            </div>
+        </div>
+        <div class="row collapse">
+            <div class="small-8 secondary-color secondary columns">Tax 1</div>
+            <div class="small-4 columns">23</div>
+        </div>
+    </div>
+    <div class="small-3 columns">
+        <h4>Customer</h4>
+        <hr>
+        <img class="circle-img bw-img" src="http://api.randomuser.me/0.3.1/portraits/women/19.jpg">
+        <h4>Shruti Sharma</h4>
+        <h5>+91 9874 876 762</h5>
+        <h6>shruti.snyder11@example.com</h6>
+        <div class="row collapse">
+        <div class="small-4 text-center columns">
+            <a href="#">Facebook</a>
+            </div>
+            <div class="small-4 columns text-center">
+            <a href="#">Twitter</a>
+            </div>
+            <div class="small-4 columns text-center">
+            <a href="#">Linked In</a>
+            </div>
+        
     </div>
 </div>
 </script>

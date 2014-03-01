@@ -282,7 +282,6 @@
 	top:0;
 	width:36.6%;
 	z-index:9;
-	bottom:0;
 }
 .pagination{
 	margin-top:2em;
@@ -454,15 +453,16 @@ input[type=checkbox] {
 .circle-img{
 	border-radius:50%;
 }
-.customer-ov{
-	img{
-		@include filter(grayscale(100%));
+.bw-img{
+	@include filter(grayscale(100%));
+	@include single-transition(all 1s);
+	&:hover, &:active, &:focus{
+		@include filter(grayscale(0%));
 		@include single-transition(all 1s);
-		&:hover, &:active, &:focus{
-			@include filter(grayscale(0%));
-			@include single-transition(all 1s);
-		}
 	}
+}
+.customer-ov{
+	
 	.circle-img{
 		margin-top: -10em;
 	}
@@ -494,7 +494,12 @@ input[type=checkbox] {
 	}
 }
 .fb-time{
-	margin-top:2.8rem;
+	margin-top:1.3em;
+	ul{
+		li{
+			font-size: 0.8em;
+		}
+	}
 }
 .customer-history{
 	.small-8.secondary-color{
@@ -504,4 +509,27 @@ input[type=checkbox] {
 			background: rgba($blue,0.1);
 			cursor: pointer;
 		}
+}
+.interaction-ov{
+	.secondary{
+		margin-top: 0.1em;
+	}
+	h5{
+		margin-top:1em;
+	}
+	.row.collapse{
+		margin:0.5em 0;
+	}
+}
+.s-ws-top{
+	margin-top:1em;
+}
+.s-ws-bottom{
+	margin-bottom:1em;
+}
+.b-ws-top{
+	margin-top:1.5em;
+}
+.b-ws-bottom{
+	margin-bottom:1.5em;
 }
