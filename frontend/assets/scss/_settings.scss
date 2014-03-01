@@ -1213,3 +1213,13 @@ $hr-border-color: $grey;
 .fullwidth {
 	width: 100%;
 }
+
+
+//Mixins
+
+@mixin f-color ($color) {
+	color: $color !important;
+}
+@mixin bg-color ($color){
+	background: $color !important;
+}
