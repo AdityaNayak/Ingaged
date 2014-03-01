@@ -216,6 +216,11 @@ $( document ).ready(function() {
         el: '.main-app',
         events: {
             'click #logout-link': logoutUser,
+            'click .recovery-list li': 'singleinteraction',
+        },
+
+        singleinteraction: function(){
+            router.navigate('customer/interaction', {trigger: true});
         },
         
         render: function(){
@@ -228,6 +233,7 @@ $( document ).ready(function() {
             document.title = "Overview | Ingage Dashboard";
 
             $('.main-app').removeClass('home');
+
 
             // mumbo jumbo of templates
             var template = _.template($("#overview-template").html(), {});
