@@ -435,20 +435,9 @@ input[type=checkbox] {
 .ov-score{
 	font-weight:300;
 }
-
-
-//To Objectify CSS
-.blueg-c{
-	@include f-color($bluegreen);
-}
-
-.ov-stats{
-	h4{
-		@extend .secondary-color;
-	}
-	h6{
-		@extend .secondary-color;
-	}
+.recovery-list{
+	height:408px;
+	overflow:auto;
 }
 .circle-img{
 	border-radius:50%;
@@ -461,6 +450,43 @@ input[type=checkbox] {
 		@include single-transition(all 1s);
 	}
 }
+.bgc{
+	@include f-color($bluegreen);
+}
+.bc{
+	@include f-color($blue);
+}
+.dbc{
+	@include f-color($darkblue);
+}
+.rc{
+	@include f-color($red);
+}
+.yc{
+	@include f-color($yellow);
+}
+.s-ws-top{
+	margin-top:1em;
+}
+.s-ws-bottom{
+	margin-bottom:1em;
+}
+.b-ws-top{
+	margin-top:1.5em;
+}
+.b-ws-bottom{
+	margin-bottom:1.5em;
+}
+//To Objectify CSS
+.ov-stats{
+	h4{
+		@extend .secondary-color;
+	}
+	h6{
+		@extend .secondary-color;
+	}
+}
+
 .customer-ov{
 	
 	.circle-img{
@@ -494,7 +520,7 @@ input[type=checkbox] {
 	}
 }
 .fb-time{
-	margin-top:1.3em;
+	margin-top:1.5em;
 	ul{
 		li{
 			font-size: 0.8em;
@@ -520,16 +546,4 @@ input[type=checkbox] {
 	.row.collapse{
 		margin:0.5em 0;
 	}
-}
-.s-ws-top{
-	margin-top:1em;
-}
-.s-ws-bottom{
-	margin-bottom:1em;
-}
-.b-ws-top{
-	margin-top:1.5em;
-}
-.b-ws-bottom{
-	margin-bottom:1.5em;
 }
