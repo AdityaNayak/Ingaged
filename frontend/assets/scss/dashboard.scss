@@ -282,6 +282,7 @@
 	top:0;
 	width:36.6%;
 	z-index:9;
+	overflow:auto;
 }
 .pagination{
 	margin-top:2em;
@@ -311,9 +312,9 @@
 		}
 	}
 }
-.rangepicker-box{
-	margin-bottom:2em;
-}
+.rangepicker-box {
+  margin-top: 1.4em;
+ }
 input[type=checkbox] {
 	margin-bottom:0;
 }

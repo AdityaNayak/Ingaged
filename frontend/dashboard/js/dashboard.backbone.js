@@ -405,11 +405,13 @@ $( document ).ready(function() {
                     this.endDateRangePicker = feedbackTimelineCollection.end_date;
                     minDate = feedbackTimelineCollection.all_start_date;
                     maxDate = feedbackTimelineCollection.all_end_date;
+                   startDateRangePicker = moment().subtract('days', 29);
+                    endDateRangePicker = moment();
                     $('#reportrange').daterangepicker({
-                        startDate: this.startDateRangePicker.format('MM-DD-YYYY'),
-                        endDate: this.endDateRangePicker.format('MM-DD-YYYY'),
-                        minDate: minDate.format('MM-DD-YYYY'),
-                        maxDate: maxDate.format('MM-DD-YYYY'),
+                        startDate: startDateRangePicker,
+                        endDate: endDateRangePicker,
+                        minDate: '01/01/2012',
+                        maxDate: '12/31/2014',
                         dateLimit: { days: 60 },
                         showDropdowns: true,
                         showWeekNumbers: false,
@@ -434,23 +436,22 @@ $( document ).ready(function() {
                             toLabel: 'To',
                             customRangeLabel: 'Custom Range',
                             daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr','Sa'],
-                            monthNames: ['January', 'February', 'March', 'April', 'May',
-                                'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                            monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
                             firstDay: 1
                         }
                     },
-                        function(start, end) {
-                            that.current_page = null;
-                            tat = start;
-                            that.startDateRangePicker = start;
-                            that.endDateRangePicker = end;
-                            $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-                            that.render()
-                        }
-                    );
-                    //Set the initial state of the picker label
-                    $('#reportrange span').html(this.startDateRangePicker.format('MMMM D, YYYY') + ' - ' +
-                            this.endDateRangePicker.format('MMMM D, YYYY'));
+                function(start, end) {
+                    startDateRangePicker = start;
+                    endDateRangePicker = end;
+                    var field_id = $("li.active").attr("id");
+                    if ($("input[name='form_id']")){
+                        that.changeForm(ev=false, field_id=field_id);
+                    }
+                    $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                }
+          );
+          //Set the initial state of the picker label
+          $('#reportrange span').html(moment().subtract('days', 29).format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
                 }
             });
             $('#selectall').click(function(event) {  //on click 

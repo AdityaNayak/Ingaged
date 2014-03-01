@@ -355,9 +355,9 @@
        red
        <% } %>
        ">
-       <span class="small-1 cform columns">
-        <input class="chkb" type="checkbox" name="check" value="check1">  
-    </span>
+    <!--<span class="small-1 cform columns">
+            <input class="chkb" type="checkbox" name="check" value="check1">  
+        </span> -->
     <span class="small-2 columns"><%= feedback.get("instance").location %></span>
     <span class="small-7 columns feedback-content">
         <span class="customer-name namesyntax">
@@ -371,7 +371,7 @@
            <%= feedback.get("feedback_text") %>
        </span>
    </span>
-   <span class="small-2 columns text-right secondary secondary-color">
+   <span class="small-3 columns text-right secondary secondary-color">
       <%= $.timeago(new Date(feedback.get("received_at"))) %>
   </span>
   <input type="hidden" name="feedback_id" value="<%= feedback.get('id') %>">
@@ -734,6 +734,14 @@
             </div>
             <div class="row collapse">
                 <div class="small-8 columns secondary-color">
+                    Loyalty Points:
+                </div>
+                <div class="small-4 columns font-1-5x">
+                    728<small>pts</small>
+                </div>
+            </div>
+            <div class="row collapse">
+                <div class="small-8 columns secondary-color">
                     Total Checkins:
                 </div>
                 <div class="small-4 columns font-1-5x">
@@ -804,7 +812,7 @@
                     <div class="small-4 columns">
                         <div class="row collapse">
                             <div class="small-8 columns secondary-color">
-                                Loyalty Score:
+                                Loyalty Points:
                             </div>
                             <div class="small-4 columns font-1-5x bc">
                                 32
@@ -849,7 +857,7 @@
                     <div class="small-4 columns">
                         <div class="row collapse">
                             <div class="small-8 columns secondary-color">
-                                Loyalty Score:
+                                Loyalty Points:
                             </div>
                             <div class="small-4 columns font-1-5x bc">
                                 32

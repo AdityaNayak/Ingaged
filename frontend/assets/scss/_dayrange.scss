@@ -12,6 +12,7 @@
   cursor: pointer; 
   padding: 1px 10px 10px 10px; 
   border: 1px solid $grey;
+  margin-top: 1.4em;
   .fi-calendar{
   	font-size:1.75em;
   	margin-right: 0.5em;
@@ -25,7 +26,7 @@
 
 .daterangepicker.opensleft .ranges, .daterangepicker.opensleft .calendar {
   float: left;
-  margin: 4px;
+  margin: 0.5em;
 }
 
 .daterangepicker.opensright .ranges, .daterangepicker.opensright .calendar {
@@ -96,7 +97,7 @@
 }
 
 .daterangepicker .ranges li {
-  font-size: 13px;
+  font-size: 14px;
   background: $lightgrey;
   border: 1px solid $grey;
   color: $dayrangepicker;
@@ -114,7 +115,7 @@
 
 .daterangepicker .calendar-date {
   border: 1px solid $grey;
-  padding: 4px;
+  padding: 0.5em;
   border-radius: 2px;
   background: $white;
 }
@@ -130,7 +131,7 @@
   background: #fff;
   top: 100px;
   left: 20px;
-  padding: 4px;
+  padding: 0.5em;
   margin-top: 1px;
   border-radius: 2px;
   display: none;
@@ -190,9 +191,9 @@
 
 .daterangepicker td, .daterangepicker th {
   text-align: center;
-  width: 20px;
-  height: 20px;
-  border-radius: 2px;
+  width: 24px;
+  height: 24px;
+  border-radius: 0px;
   cursor: pointer;
   white-space: nowrap;
 }
@@ -226,11 +227,11 @@
 }
 
 .daterangepicker select.monthselect, .daterangepicker select.yearselect {
-  font-size: 12px;
-  padding: 1px;
+  font-size: 15px;
+  padding: 3px;
   height: auto;
   margin: 0;
-  cursor: default;
+  cursor: pointer;
 }
 
 .daterangepicker select.monthselect {
@@ -245,4 +246,7 @@
 .daterangepicker select.hourselect, .daterangepicker select.minuteselect, .daterangepicker select.ampmselect {
   width: 50px;
   margin-bottom: 0;
+}
+.spacer{
+	height:10px;
 }
