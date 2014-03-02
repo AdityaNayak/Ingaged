@@ -70,8 +70,10 @@
 .alert-bar{
 	height:36px;
 	position:fixed;
+	width:43.8%;
+}
+.show-on-top{
 	z-index:999;
-	width:45%;
 }
 .alert-box.loading{
 	background:$white;
@@ -280,7 +282,7 @@
 .stickit{
 	position:fixed;
 	top:0;
-	width:36.6%;
+	width:28.8%;
 	z-index:9;
 	overflow:auto;
 }
@@ -290,17 +292,9 @@
 .feedback-score{
 	color:$white;
 	text-align:center;
-	padding-top:1px;
-	padding-bottom:1px;
-	&.green{
-		background:$green;
-	}
-	&.red{
-		background:$red;
-	}
-	&.yellow{
-		background:$yellow;
-	}
+	border-radius:50%;
+	padding:7px;
+	width:30px;
 }
 .question-list{
 	li{
@@ -313,8 +307,8 @@
 	}
 }
 .rangepicker-box {
-  margin-top: 1.4em;
- }
+ 	//margin-top: 1.4em;
+}
 input[type=checkbox] {
 	margin-bottom:0;
 }
@@ -430,11 +424,16 @@ input[type=checkbox] {
 	font-weight:300;
 }
 .font-3x{
-	font-size:3rem;
+	font-size:3rem !important;
 	font-weight:300;
 }
 .ov-score{
 	font-weight:300;
+}
+.ov-scores{
+	p.secondary{
+		@extend .secondary-color;
+	}
 }
 .recovery-list{
 	height:408px;
@@ -454,6 +453,9 @@ input[type=checkbox] {
 .bgc{
 	@include f-color($bluegreen);
 }
+.wc{
+	@include f-color($white);
+}
 .bc{
 	@include f-color($blue);
 }
@@ -466,17 +468,41 @@ input[type=checkbox] {
 .yc{
 	@include f-color($yellow);
 }
+.gc{
+	@include f-color($green);
+}
+.ybg{
+	@include bg-color($yellow);
+}
+.rbg{
+	@include bg-color($red);
+}
+.bgbg{
+	@include bg-color($bluegreen);
+}
+.gbg{
+	@include bg-color($green);
+}
+.bbg{
+	@include bg-color($blue);
+}
+.dbbg{
+	@include bg-color($darkblue);
+}
+.bg-bg{
+	@include bg-color($body-bg);
+}
 .s-ws-top{
-	margin-top:1em;
+	margin-top:1em !important;
 }
 .s-ws-bottom{
-	margin-bottom:1em;
+	margin-bottom:1em !important;
 }
 .b-ws-top{
-	margin-top:1.5em;
+	margin-top:1.5em !important;
 }
 .b-ws-bottom{
-	margin-bottom:1.5em;
+	margin-bottom:1.5em !important;
 }
 //To Objectify CSS
 .ov-stats{

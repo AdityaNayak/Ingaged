@@ -421,7 +421,7 @@
 // $glowing-effect-color: $input-focus-border-color;
 
 // Select variables
-$select-bg-color: $lightgrey;
+$select-bg-color: scale-color($grey, $lightness: 60%);
 
 // Inline Lists
 

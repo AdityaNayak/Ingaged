@@ -234,7 +234,6 @@ $( document ).ready(function() {
 
             $('.main-app').removeClass('home');
 
-
             // mumbo jumbo of templates
             var template = _.template($("#overview-template").html(), {});
             
@@ -244,8 +243,10 @@ $( document ).ready(function() {
             this.$el.prepend(headerTemplate);
             this.$el.append(footerTemplate);
         
+            $('.ov-dials').knob({
+                });
             // jquery shit
-            $(document).foundation();                      
+           // $(document).foundation();                      
         }
     });
     overviewView = new overviewView();
@@ -391,7 +392,7 @@ $( document ).ready(function() {
                     })
 
                     // jquery shit
-                    $(document).foundation(); 
+                 //   $(document).foundation(); 
                     $(window).scroll(function() {
 				        var scroll = $(window).scrollTop();
 				        if (scroll >= 225) {
@@ -661,7 +662,7 @@ $( document ).ready(function() {
             this.$el.append(footerTemplate);
         
             // jquery shit
-            $(document).foundation();                      
+           // $(document).foundation();                      
         }
     });
     crmView = new crmView();
@@ -696,7 +697,7 @@ $( document ).ready(function() {
             this.$el.append(footerTemplate);
         
             // jquery shit
-            $(document).foundation();                      
+           // $(document).foundation();                      
         }
     });
     crmSingleView = new crmSingleView();
@@ -727,7 +728,7 @@ $( document ).ready(function() {
             this.$el.append(footerTemplate);
         
             // jquery shit
-            $(document).foundation();                      
+           // $(document).foundation();                      
         }
     });
     interactionView = new interactionView();

@@ -152,24 +152,23 @@
 <script type="text/template" id="overview-template">
 <div class="panel">
     <div class="row ov-scores">
-    
+    <% $test=64 %>
+    <% $test1=7.5%>
+    <% $test2=8 %>
         <div class="small-4 columns text-center">
-            <div class="font-3x">
-              64
-            </div>
-            <h5>Net Promoter Score (NPS)</h5>
+        <input type="text" value="64" data-width="150" data-readOnly=true class="ov-dials" data-thickness=".1" data-bgcolor="#FAFBFC" data-fgColor="<%  if ($test>50) {%>#5eb95e<% } else if($test<10) { %>#dd514c<% } else { %>#fbb82d<% } %>">
+           <h4>Net Promoter Score (NPS)</h4>
+           <p class="secondary secondary-color">Percentage of Promoters over Detractors</p>
         </div>
         <div class="small-4 columns text-center">
-            <div class="font-3x">
-              6
-            </div>
-            <h5>Avg. Value for Price Paid</h5>
+        <input type="text" value="7.5" data-width="150" class="ov-dials" data-readOnly=true data-min="0" data-max="10" data-thickness=".1" data-bgcolor="#FAFBFC" data-fgColor="<%  if ($test1>8) {%>#5eb95e<% } else if($test1<7) { %>#dd514c<% } else { %>#fbb82d<% } %>">
+            <h4>Price Value Score</h4>
+            <p class="secondary secondary-color">Avg. Value for Price Paid</p>
         </div>
         <div class="small-4 columns text-center">
-            <div class="font-3x">
-            8<small>%</small>
-            </div>
-            <h5>Customers Retention and Recovery ratio</h5>
+            <input type="text" value="8" data-width="150" class="ov-dials" data-readOnly=true data-min="0" data-max="60" data-thickness=".1" data-bgcolor="#FAFBFC" data-fgColor="<%  if ($test2>40) {%>#5eb95e<% } else if($test2<10) { %>#dd514c<% } else { %>#fbb82d<% } %>">
+            <h4>Retention and Recovery ratio</h4>
+            <p class="secondary secondary-color">Percentage of Customers recovered and retained</p>
         </div>
     </div>
 </div>
@@ -211,7 +210,7 @@
             <h3>Summary <small> Last 30 days</small></h3>
             <hr>
             <div class="row">
-            <h4 class="bgc columns">Customer Experience</h4>
+            <h4 class="bgc s-ws-bottom columns">Customer Experience</h4>
                 <div class="small-3 columns text-center">
                     <div class="font-2x">
                     640
@@ -239,7 +238,7 @@
             </div>   
             <hr>
             <div class="row">
-            <h4 class="bc columns">Loyalty</h4>
+            <h4 class="bc s-ws-bottom columns">Loyalty</h4>
                 <div class="small-3 columns text-center">
                     <div class="font-2x">
                     960
@@ -267,7 +266,7 @@
             </div>
             <hr>
             <div class="row">
-            <h4 class="dbc columns">Sales</h4>
+            <h4 class="dbc s-ws-bottom columns">Sales</h4>
                 <div class="small-6 columns text-center">
                     <div class="font-2x">
                     <small>&#8377;</small>4.8 <small>crores</small>
@@ -293,7 +292,7 @@
             <h2>Feedback Timeline</h2>
         </div>
         <div class="small-4 columns">
-            <div id="reportrange" class="rangepicker-box has-dropdown btn-bg big secondary">
+            <div id="reportrange" class="rangepicker-box has-dropdown btn-bg secondary">
                 <i class="fi-calendar"></i><span></span>
             </div>
             <!-- <h5>Select location</h5>
@@ -308,53 +307,44 @@
 
     <div class="row collapse">
         <div class="sub-nav action-nav">
-          <dl class="small-4 columns">
-           <!-- <dd class="checkbox-dd cform">
-           <input id="selectall" type="checkbox" name="check" value="check1">Select
-       </dd>
-       <dd>Unread (30)</dd>
-       <dd>Mark as Read</dd>
-       <dd><i class="fi-trash"></i></dd> -->
-       <dd class="naked">Filter by:</dd>
-       <dd class="has-dropdown" data-dropdown="hover1">Customer Segments</dd>		
-       <ul id="hover1" class="tiny f-dropdown nps-score-filter" data-dropdown-content>			    
-        <li><a href="#" style="border-left-color:#5eb95e;" class="promoters">Promoters</a></li>
-        <li><a href="#" style="border-left-color:#fbb82d;" class="passive">Passive</a></li>
-        <li><a href="#" style="border-left-color:#dd514c;" class="detractors">Detractors</a></li>
-    </ul>
-    <dd class="has-dropdown" data-dropdown="hover2">Form</dd>       
-    <ul id="hover2" class="tiny f-dropdown" data-dropdown-content>                
-        <li><a href="#">Form 1</a></li>
-        <li><a href="#">Form 2</a></li>
-        <li><a href="#">Form 3</a></li>
-    </ul>
-</dl>
-<dl class="small-8 columns">
-    <dd class="has-dropdown" data-dropdown="hover3">Export <i class="fi-page-export-csv"></i></dd>
-    <ul id="hover3" class="tiny f-dropdown form-filter" data-dropdown-content>			    
-        <% _.each(forms, function(form){ %>
-            <li><a href="#" data-id="<%= form.get('id') %>"><%= form.get('name') %></a></li>
-            <% }); %>
-    </ul>
-    <dd id="timeline-refresh-button"><i class="fi-refresh"></i></dd>
-</dl>
-</div>
+            <dl class="small-4 columns">
+               <!-- <dd class="checkbox-dd cform">
+               <input id="selectall" type="checkbox" name="check" value="check1">Select
+                </dd>
+                <dd>Unread (30)</dd>
+                <dd>Mark as Read</dd>
+                <dd><i class="fi-trash"></i></dd> -->
+                <dd class="naked">Filter by:</dd>
+                <dd class="has-dropdown" data-dropdown="hover1">Customer Segments</dd>		
+                <ul id="hover1" class="tiny f-dropdown nps-score-filter" data-dropdown-content>			    
+                    <li><a href="#" style="border-left-color:#5eb95e;" class="promoters">Promoters</a></li>
+                    <li><a href="#" style="border-left-color:#fbb82d;" class="passive">Passive</a></li>
+                    <li><a href="#" style="border-left-color:#dd514c;" class="detractors">Detractors</a></li>
+                </ul>
+            <dd class="has-dropdown" data-dropdown="hover2">Form</dd>       
+            <ul id="hover2" class="tiny f-dropdown" data-dropdown-content>                
+                <li><a href="#">Form 1</a></li>
+                <li><a href="#">Form 2</a></li>
+                <li><a href="#">Form 3</a></li>
+            </ul>
+        </dl>
+        <dl class="small-8 columns">
+            <dd class="has-dropdown" data-dropdown="hover3">Export <i class="fi-page-export-csv"></i></dd>
+            <ul id="hover3" class="tiny f-dropdown form-filter" data-dropdown-content>			    
+                <% _.each(forms, function(form){ %>
+                    <li><a href="#" data-id="<%= form.get('id') %>"><%= form.get('name') %></a></li>
+                    <% }); %>
+            </ul>
+            <dd id="timeline-refresh-button"><i class="fi-refresh"></i></dd>
+        </dl>
+    </div>
 </div>
 
 <div class="row">
- <div class="small-7 columns feedback-column    ">
+ <div class="small-8 columns feedback-column">
   <ul class="feedback-list feedback-timeline">
    <% _.each(feedbacks, function(feedback){ %>
-    <li class="row 
-
-    <% if (feedback.get('nps_score') == 10 || feedback.get('nps_score') == 9) {%>
-     green
-     <% } else if(feedback.get('nps_score') == 8 || feedback.get('nps_score') == 7) { %>
-      yellow
-      <% } else { %>
-       red
-       <% } %>
-       ">
+    <li class="row <% if (feedback.get('nps_score') == 10 || feedback.get('nps_score') == 9) {%>green<% } else if(feedback.get('nps_score') == 8 || feedback.get('nps_score') == 7) { %>yellow<% } else { %>red<% } %>">
     <!--<span class="small-1 cform columns">
             <input class="chkb" type="checkbox" name="check" value="check1">  
         </span> -->
@@ -393,127 +383,99 @@
 
 
 <script type="text/template" id="timeline-customer-details-template">
-    <aside id="details" class="small-5 columns details-column">
+    <aside id="details" class="small-4 columns details-column">
         <div class="panel">
+            <h3 class="namesyntax"><% if (feedback.get('customer').name) { %><%= feedback.get('customer').name %><% } else { %>No Name<% } %> </h3>
+            <div class="row collapse secondary-color">
+                <div class="small-4 columns">
+                        <i class="fi-clock"></i><% var received_at = new Date(feedback.get("received_at")) %>
+                        <%= received_at.getHours() %>:<%= received_at.getMinutes() %>
+                </div>
+                <div class="small-4 columns">
+                    <i class="fi-calendar"></i>
+                    <%= received_at.getDate() %>-<%= received_at.getMonth() %>-<%= received_at.getFullYear() %>
+                </div>
+                <div class="small-4 columns">
+                    <i class="fi-marker"></i>
+                    <%= feedback.get("instance").name %>
+                </div>
+            </div>
+            <hr>
+            <h5 class="bgc">Customer Experience</h5>
+            <div class="s-ws-top s-ws-bottom">
+                <div class="row collapse">
+                    <div class="small-4 columns secondary-color">NPS:</div>
+                    <div class="small-2 columns text-center">
+                        <div class="feedback-score <% if (feedback.get('nps_score') == 10 || feedback.get('nps_score') == 9) {%> gbg<% } else if(feedback.get('nps_score') == 8 || feedback.get('nps_score') == 7) { %> ybg<% } else { %> rbg<% } %>"><%= feedback.get('nps_score') %></div>
+                    </div>
+                    <div class="small-4 columns secondary-color">Price Value:</div>
+                    <div class="small-2 columns">
+                        <div class="feedback-score rbg">6</div>
+                    </div>
+                </div>
+            </div>
+            <p><%= feedback.get("feedback_text") %></p>
+            <div class="secondary survey-column">
+                <ol>
+                    <% _.each(feedback.get('responses'), function(response){ %>
+                        <li>
+                            <h5><%= response.text %></h5>
+                            <p><%= response.response %></p>
+                        </li>
+                        <% }); %>
+                </ol>
+            </div>
+            <hr>
+            <h5 class="bc">Loyalty</h5>
+            <div class="s-ws-top s-ws-bottom">
+                <div class="row collapse">
+                    <div class="small-4 columns secondary-color">Checkin Pts:</div>
+                    <div class="small-2 columns">
+                        12
+                    </div>
+                    <div class="small-4 columns secondary-color">Order Pts:</div>
+                    <div class="small-2 columns">
+                        60
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <h5 class="dbc">Sales</h5>
+            <div class="s-ws-top s-ws-bottom">
+                <div class="row collapse">
+                    <div class="small-4 columns secondary-color">Total Value:</div>
+                    <div class="small-2 columns text-center">
+                        <small>&#8377;</small>320
+                    </div>
+                    <div class="small-6 columns">
+                        &nbsp;
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <h5>Form Details</h5>
+            <div class="form-details secondary">
+                <div class="row collapse">
+                    <div class="small-4 columns secondary-color">Name:</div><div class="small-8 columns">
+                    <%= feedback.get("form").name %>
+                </div>
+                <% if (feedback.get("has_counter")){ %>
+                    <div class="small-4 columns secondary-color">Return ID:</div><div class="small-8 columns">
+                    <%= feedback.get("counter") %>
+                </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</aside>
+</script>
 
-            <h3 class="namesyntax">
-                <% if (feedback.get('customer').name) { %>
-                    <%= feedback.get('customer').name %>
-                    <% } else { %>
-                        No Name
-                        <% } %>
-                    </h3>
-
-                    <div class="row collapse">
-
-                        <div class="small-2 columns">
-                            <% if (feedback.get('customer').email) { %>
-                                <img src="http://www.gravatar.com/avatar/<%= MD5(feedback.get('customer').email) %>">
-                                <% } else { %>
-                                    <img src="http://www.gravatar.com/avatar/">
-                                    <% } %>
-                                </div>
-
-                                <div class="small-7 columns">
-                                    <ul class="naked secondary contact-details">
-                                        <li> 
-                                            <% if (feedback.get('customer').email) { %>
-                                                <%= feedback.get('customer').email %>
-                                                <% } else { %>
-                                                    No e-Mail
-                                                    <% } %>
-                                                </li>
-                                                <li>
-                                                    <% if (feedback.get('customer').mobile) { %>
-                                                        <%= feedback.get('customer').mobile %>
-                                                        <% } else { %>
-                                                            No Mobile
-                                                            <% } %>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <div class="small-3 columns">
-                                                    <div class="feedback-score
-
-                                                    <% if (feedback.get('nps_score') == 10 || feedback.get('nps_score') == 9) {%>
-                                                        green
-                                                        <% } else if(feedback.get('nps_score') == 8 || feedback.get('nps_score') == 7) { %>
-                                                            yellow
-                                                            <% } else { %>
-                                                                red
-                                                                <% } %>
-
-                                                                ">
-                                                                <%= feedback.get('nps_score') %>
-                                                            </div>
-                                                            <div class="secondary-color secondary">
-                                                                <i class="fi-clock"></i><% var received_at = new Date(feedback.get("received_at")) %>
-                                                                <%= received_at.getHours() %>:<%= received_at.getMinutes() %>
-                                                            </div>
-                                                            <div class="secondary-color secondary">
-                                                                <i class="fi-calendar"></i>
-                                                                <%= received_at.getDate() %>-<%= received_at.getMonth() %>-<%= received_at.getFullYear() %>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <hr>
-                                                    <% if (feedback.get("feedback_text")) { %>
-                                                        <div class="secondary">
-                                                            <p><%= feedback.get("feedback_text") %></p>
-                                                        </div>
-                                                        <hr>
-                                                        <% } %>
-
-                                                        <div class="secondary survey-column">
-                                                            <ol>
-                                                                <% _.each(feedback.get('responses'), function(response){ %>
-                                                                    <li>
-                                                                        <h5><%= response.text %></h5>
-                                                                        <p><%= response.response %></p>
-                                                                    </li>
-                                                                    <% }); %>
-                                                            </ol>
-                                                        </div>
-                                                        <hr>
-                                                        <h3>Form Details</h3>
-                                                        <div class="form-details secondary">
-                                                            <div class="row collapse">
-                                                                <div class="small-4 columns secondary-color">Name:</div><div class="small-8 columns">
-                                                                <%= feedback.get("form").name %>
-                                                            </div>
-
-                                                            <% if (feedback.get("has_counter")){ %>
-                                                                <div class="small-4 columns secondary-color">Return ID:</div><div class="small-8 columns">
-                                                                <%= feedback.get("counter") %>
-                                                            </div>
-                                                            <% } %>
-                                                        </div>
-                                                    </div>
-                                                    <hr>
-                                                    <h3>Interaction Point Details</h3>
-                                                    <div class="instance-details secondary">
-                                                        <div class="row collapse">
-                                                            <div class="small-4 columns secondary-color">Name:</div><div class="small-8 columns">
-                                                            <%= feedback.get("instance").name %>
-                                                        </div>
-                                                        <div class="small-4 columns secondary-color">Location:</div><div class="small-8 columns">
-                                                        <%= feedback.get("instance").location %>
-                                                    </div>
-                                                    <div class="small-4 columns secondary-color">Details:</div><div class="small-8 columns">
-                                                    <%= feedback.get("instance").description %>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </aside>
-                                </script>
-
-                                <script type="text/template" id="analytics-settings-template">
+                        <script type="text/template" id="analytics-settings-template">
                                    <div class="row" id="analytics-settings">
                                       <div class="small-9 small-offset-3 columns">
                                          <div class="small-6 small-offset-2 columns">
-                                            <div id="reportrange" class="rangepicker-box text-right">
-                                               <span> </span><i class="fi-calendar"></i>
+                                            <div id="reportrange" class="rangepicker-box has-dropdown btn-bg">
+                                               <i class="fi-calendar"></i> <span></span>
                                            </div>
                                        </div>
                                        <div class="small-4 columns">
@@ -535,7 +497,7 @@
                      <script type="text/template" id="analytics-choose-template">
                        <div class="row" id="form-analytics">
                           <div class="small-6 small-centered columns">
-                             <div data-alert class="alert-box error">  Please select a daterange and form
+                             <div data-alert class="b-ws-top s-ws-top alert-box error">  Please select a daterange and form
                              </div>
                          </div>
                      </div>
@@ -544,7 +506,7 @@
                  <script type="text/template" id="analytics-do-not-exist-template">
                    <div class="row" id="form-analytics">
                       <div class="small-6 small-centered columns">
-                         <div data-alert class="alert-box error">No analytics exist for this form.</div>
+                         <div data-alert class="alert-box error">Insuffecient data to show Analysis.</div>
                      </div>
                  </div>
              </script>
@@ -554,18 +516,19 @@
                   <input type="hidden" value="<%= form_id %>" name="form_id">
                   <input type="hidden" value="<%= form_name %>" name="form_name">
                   <h2>Analytics for <%= form_name %></h2>
+                  <hr>
                   <div class="small-3 columns panel">
                      <ol class="question-list">
                         <% _.each(analytics.get('analytics'), function(analytic){ %>
                            <% if (analytic.field.id == field_analytics.field.id){ %>
                               <li id="<%= analytic.field.id %>" class="active"><%= analytic.field.text %></li>
-                              <% } else { %>
-                                 <li id="<%= analytic.field.id %>"><%= analytic.field.text %></li>
-                                 <% } %>
-                                 <% }); %>
+                            <% } else { %>
+                                <li id="<%= analytic.field.id %>"><%= analytic.field.text %></li>
+                            <% } %>
+                        <% }); %>
                     </ol>
                 </div>
-                <div class="small-9 columns">
+                <div class="small-9 columns bg-bg">
                  <div class="row">
                     <div class="small-8 columns text-center">
                        <canvas id="canvas0" height="450" width="450"></canvas>
@@ -1171,7 +1134,9 @@
     <script src="js/plugins/chart.min.js"></script>
     <script src="js/plugins/moment.min.js"></script>
     <script src="js/plugins/daterangepicker.js"></script>
-    <script src="js/plugins/jquery.tristate.min.js"></script>
+    <!--<script src="js/plugins/jquery.tristate.min.js"></script> -->
+    <script src="js/plugins/jquery.knob.js"></script>
+
     <script>
       $(document).foundation();
   </script>
