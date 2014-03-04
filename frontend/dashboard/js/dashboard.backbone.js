@@ -945,7 +945,6 @@ $( document ).ready(function() {
             "feedback_forms/:form_id/instances/new": "newFormInstances",
             
         },
-        var Router = Backbone.Router.extend({
 
         initialize: function()
         {
@@ -965,7 +964,6 @@ $( document ).ready(function() {
 
             _gaq.push(['_trackPageview', url]);
         }
-    }
 
     });
 

@@ -61,11 +61,14 @@
 	font-size:1.75em;
 	background:$red;
 	color:$white;
-	padding:1.5em;
-	margin-top:2em;
+	padding:1em;
+	font-weight:300;
 }
 .login-alert{
 	height:36px;
+}
+.fullbg{
+	background: url(../images/background.jpg);
 }
 .alert-bar{
 	height:36px;
@@ -96,7 +99,7 @@
 	padding-top:1.5em;
 }
 .login{
-	margin-top:2em;
+	padding-top:2em;
 }
 .secondary{
 	font-size:0.9em;
@@ -376,6 +379,9 @@ input[type=checkbox] {
 	background-position:75% 75px;
 	&.home{
 		background:none;
+		.contain-to-grid{
+			margin-bottom: 0;
+		}
 	}
 }
 .btn-bg{
