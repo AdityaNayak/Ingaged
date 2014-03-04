@@ -59,7 +59,7 @@
 
 .primary-message{
 	font-size:1.75em;
-	background:$red;
+	background:rgba($red,0.7);
 	color:$white;
 	padding:1em;
 	font-weight:300;
@@ -69,6 +69,7 @@
 }
 .fullbg{
 	background: url(../images/background.jpg);
+	background-size:cover;
 }
 .alert-bar{
 	height:36px;
@@ -99,7 +100,8 @@
 	padding-top:1.5em;
 }
 .login{
-	padding-top:2em;
+	padding-top:5em;
+	padding-bottom:5em;
 }
 .secondary{
 	font-size:0.9em;
