@@ -41,13 +41,13 @@
 				</section>
 			</header>
 		</div>
-        <div class="fullbg">
+        <div class="fullbg s-ws-bottom">
     		<div class="row login">
     			<div class="small-5 small-offset-3 columns">
     				<p class="primary-message">Your in-venue customer experience management system</p>
     			</div>
     			
-    			<div class="small-3 small-offset-1 columns panel">
+    			<div class="small-3 small-offset-1 columns panel login-container">
     				<div class="login-alert">
     					<div class="alert-box error" style="display: none;" data-alert="">
     						Incorrect Username/Password
@@ -83,15 +83,15 @@
     					<fieldset>
     						<div class="form-element">
     							<label for="name">Name: </label>
-    							<input type="text" required id="name" name="name" />
+    							<input type="text" required placeholder="Full Name" id="name" name="name" />
     							<label for="email">Email: </label>
-    							<input type="email" required id="email" name="email" />
+    							<input type="email" required placeholder="name@example.com" id="email" name="email" />
     							<label for="phone">Phone: </label>
-    							<input type="tel" id="phone" name="phone" />
+    							<input type="tel" id="phone" placeholder="xxx-xxx-xxx" name="phone" />
     						</div>
     					</fieldset>
     					<div class="form-element">
-    						<button id="signup-submit" type="submit" class="small fullwidth primary">Sign Up for Free</button>
+    						<button id="signup-submit" type="submit" class="small fullwidth primary success">Get in Touch</button>
     						<div id="signup-confirm" class="alert-box success small" style="display:none;">Thank you! We are still Cooking. Will keep you updated</div>
     					</div>
     				</form>    
@@ -105,6 +105,42 @@
             <div class="small-12 small-centered columns text-center b-ws-top b-ws-bottom">
                 <h3>Gain an <strong>Unfair Advantage</strong> over your competition</h3>
                 <h4 class="secondary-color">We help you improve your Customer Experience and increase Loyalty</h4>
+            </div>
+            <div class="small-6 small-centered columns">
+            <hr>
+            </div>
+        </div>
+        <div class="row b-ws-top b-ws-bottom">
+            <div class="small-4 columns small-centered text-center">
+                <h4>Acquire Loyal Customers</h4>
+                <p class="secondary-color">Simple mobile based loyalty cards</p>
+            </div>
+        </div>
+        <div class="row loop-bg">
+            <div class="small-4 columns text-center">
+                <h4>Marketing on steroids</h4>
+                <p class="secondary-color">Reach to a wider audience beyond your customer base</p>
+            </div>
+            <div class="small-4 columns text-center">
+                <a id="signup-center" class="button b-ws-top small">Request a Call back</a>
+            </div>
+            <div class="small-4 columns text-center">
+                <h4>Measure your business performance</h4>
+                <p class="secondary-color">Sales are only half the story, measure the real health of you business</p>
+            </div>
+        </div>
+        <div class="row b-ws-top b-ws-bottom">
+            <div class="small-10 small-centered columns">
+                <div class="row collapse">
+                    <div class="small-5 columns text-center">
+                    <h4>Recover 'At Risk' Customers</h4>
+                    <p class="secondary-color">Do not let your marketing spend go waste</p>
+                    </div>
+                    <div class="small-5 small-offset-2 columns text-center">
+                    <h4>Build your growth engine</h4>
+                    <p class="secondary-color">Learn and understand unmet customer needs</p>
+                    </div>
+                </div>
             </div>
         </div>
 	</script>
@@ -876,10 +912,10 @@
 <script type="text/template" id="interaction-template">
 <div class="row">
     
-    <h2>Interaction Details</h2>
+    <h2 class="columns small-12 b-ws-top">Interaction Details</h2>
     
 </div>
-<div class="panel row interaction-ov">
+<div class="panel row b-ws-top interaction-ov">
     <div class="small-3 columns">
         <h4 class="bgc">Customer Experience</h4>
         <hr>
@@ -911,7 +947,7 @@
         <div class="row collapse">
             <div class="small-8 secondary-color secondary columns">Total Points Earned: </div>
             <div class="small-4 columns">30</div>
-        </div>
+        </div>  
         <div class="row collapse">
             <div class="small-8 secondary-color secondary columns">Points for Checkin: </div>
             <div class="small-4 columns">10</div>
@@ -977,7 +1013,7 @@
             <div class="small-8 secondary-color secondary columns">Item 5</div>
             <div class="small-4 columns">435</div>
         </div>
-        <div class="b-ws-top b-ws-bottom">
+        <div class="m-ws-top m-ws-bottom">
             <div class="row collapse">
                 <div class="small-8 secondary-color secondary columns">Discount 1  (-)</div>
                 <div class="small-4 columns">98</div>

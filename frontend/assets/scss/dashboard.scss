@@ -103,6 +103,12 @@
 	padding-top:5em;
 	padding-bottom:5em;
 }
+.loop-bg{
+	background: url(../images/circle.png) no-repeat no-repeat;
+	background-position:50% 50%;
+	padding-top:6.4em;
+	padding-bottom:4.8em;
+}
 .secondary{
 	font-size:0.9em;
 	margin-top:0.4em;
@@ -507,11 +513,17 @@ input[type=checkbox] {
 .s-ws-bottom{
 	margin-bottom:1em !important;
 }
-.b-ws-top{
+.m-ws-top{
 	margin-top:1.5em !important;
 }
-.b-ws-bottom{
+.m-ws-bottom{
 	margin-bottom:1.5em !important;
+}
+.b-ws-top{
+	margin-top:2em !important;
+}
+.b-ws-bottom{
+	margin-bottom:2em !important;
 }
 //To Objectify CSS
 .ov-stats{
@@ -582,4 +594,41 @@ input[type=checkbox] {
 	.row.collapse{
 		margin:0.5em 0;
 	}
+}
+@keyframes shake{ 
+    0% { transform: translate(5px, 0); }
+    50% { transform: translate(-5px, 0); }
+    100% { transform: translate(0, 0); }
+}
+ 
+@-moz-keyframes shake{ 
+    0% { -moz-transform: translate(5px, 0); }
+    50% { -moz-transform: translate(-5px, 0); }
+    100% { -moz-transform: translate(0, 0); }
+}
+ 
+@-webkit-keyframes shake {
+    0% { -webkit-transform: translate(5px, 0); }
+    50% { -webkit-transform: translate(-5px, 0); }
+    100% { -webkit-transform: translate(0, 0); }
+}
+ 
+.shake {
+    animation-name: shake; 
+    animation-duration: 150ms; 
+    animation-delay: 1s;
+    animation-iteration-count: 3; 
+    animation-timing-function: linear;
+ 
+    -moz-animation-name: shake; 
+    -moz-animation-duration: 150ms; 
+    -moz-animation-delay: 1s;
+    -moz-animation-iteration-count: 3; 
+    -moz-animation-timing-function: linear;
+ 
+    -webkit-animation-name: shake;
+    -webkit-animation-duration: 150ms;
+    -webkit-animation-delay: 1s;
+    -webkit-animation-iteration-count: 3;
+    -webkit-animation-timing-function: linear;
 }

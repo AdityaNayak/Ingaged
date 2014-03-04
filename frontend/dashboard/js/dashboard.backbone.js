@@ -143,6 +143,7 @@ $( document ).ready(function() {
         events: {
             'submit #login-form': 'loginUser',
             'click #load-signup, #contact-signup': 'showSignup',
+            'click #signup-center' : 'focusSignup',
             'submit #signup-form': 'sendSignupRequest'
         },
         sendSignupRequest: function(ev){
@@ -162,6 +163,14 @@ $( document ).ready(function() {
             $('#login-form').fadeOut(300);
             $('#load-signup').fadeOut(300);
             $('#signup-form').delay(300).fadeIn(300);
+        },
+        focusSignup: function(ev){
+            ev.preventDefault();
+            $("html, body").animate({ scrollTop: 0 }, "slow");
+            $('#login-form').fadeOut(300);
+            $('#load-signup').fadeOut(300);
+            $('#signup-form').delay(300).fadeIn(300);
+            $('.login-container').addClass('shake');
         },
         loginUser: function(ev){
             ev.preventDefault();
