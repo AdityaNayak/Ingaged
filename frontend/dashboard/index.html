@@ -151,7 +151,7 @@
 </script>
 <script type="text/template" id="overview-template">
 <div class="panel">
-    <div class="row ov-scores">
+    <div class="row s-ws-top ov-scores">
     <% $test=64 %>
     <% $test1=7.5%>
     <% $test2=8 %>
@@ -169,6 +169,30 @@
             <input type="text" value="8" data-width="150" class="ov-dials" data-readOnly=true data-min="0" data-max="60" data-thickness=".1" data-bgcolor="#FAFBFC" data-fgColor="<%  if ($test2>40) {%>#5eb95e<% } else if($test2<10) { %>#dd514c<% } else { %>#fbb82d<% } %>">
             <h4>Retention and Recovery ratio</h4>
             <p class="secondary secondary-color">Percentage of Customers recovered and retained</p>
+        </div>
+    </div>
+    <div class="row s-ws-top">
+        <div class="small-4 small-centered columns">
+            <div class="row">
+                <div class="small-1 columns gbg">
+                    &nbsp;
+                </div>
+                <div class="small-3 columns tertiary-color">
+                    Excellent
+                </div>
+                <div class="small-1 columns ybg">
+                    &nbsp;
+                </div>
+                <div class="small-3 columns tertiary-color">
+                    Average
+                </div>
+                <div class="small-1 columns rbg">
+                    &nbsp;
+                </div>
+                <div class="small-3 columns tertiary-color">
+                    Poor
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -1139,8 +1163,18 @@
 
     <script>
       $(document).foundation();
-  </script>
-  <script src="js/plugins/script.js"></script> <!-- //TODO: Fix the loading-bar fadein. It works in console -->
+    </script>
+    <!-- <script src="js/plugins/script.js"></script> <!-- //TODO: Fix the loading-bar fadein. It works in console -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-45177246-3', 'ingagelive.com');
+    ga('send', 'pageview');
+
+    </script>
 
 </body>
 </html>

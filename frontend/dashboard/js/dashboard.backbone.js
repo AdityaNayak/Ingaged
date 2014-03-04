@@ -945,6 +945,28 @@ $( document ).ready(function() {
             "feedback_forms/:form_id/instances/new": "newFormInstances",
             
         },
+        var Router = Backbone.Router.extend({
+
+        initialize: function()
+        {
+            //track every route change as a page view in google analytics
+            this.bind('route', this.trackPageview);
+        },
+
+        trackPageview: function ()
+        {
+            var url = Backbone.history.getFragment();
+
+            //prepend slash
+            if (!/^\//.test(url) && url != "")
+            {
+                url = "/" + url;
+            }
+
+            _gaq.push(['_trackPageview', url]);
+        }
+    }
+
     });
 
     var highlightNavLinks = function(route){
