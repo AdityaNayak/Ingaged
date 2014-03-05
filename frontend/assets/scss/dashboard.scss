@@ -59,19 +59,25 @@
 
 .primary-message{
 	font-size:1.75em;
-	background:$red;
+	background:rgba($red,0.7);
 	color:$white;
-	padding:1.5em;
-	margin-top:2em;
+	padding:1em;
+	font-weight:300;
 }
 .login-alert{
 	height:36px;
 }
+.fullbg{
+	background: url(../images/background.jpg);
+	background-size:cover;
+}
 .alert-bar{
 	height:36px;
 	position:fixed;
+	width:43.8%;
+}
+.show-on-top{
 	z-index:999;
-	width:45%;
 }
 .alert-box.loading{
 	background:$white;
@@ -94,7 +100,14 @@
 	padding-top:1.5em;
 }
 .login{
-	margin-top:2em;
+	padding-top:5em;
+	padding-bottom:5em;
+}
+.loop-bg{
+	background: url(../images/circle.png) no-repeat no-repeat;
+	background-position:50% 50%;
+	padding-top:6.4em;
+	padding-bottom:4.8em;
 }
 .secondary{
 	font-size:0.9em;
@@ -280,8 +293,10 @@
 .stickit{
 	position:fixed;
 	top:0;
-	width:36.6%;
+	width:28.8%;
 	z-index:9;
+	overflow:auto;
+	bottom:0
 }
 .pagination{
 	margin-top:2em;
@@ -289,17 +304,9 @@
 .feedback-score{
 	color:$white;
 	text-align:center;
-	padding-top:1px;
-	padding-bottom:1px;
-	&.green{
-		background:$green;
-	}
-	&.red{
-		background:$red;
-	}
-	&.yellow{
-		background:$yellow;
-	}
+	border-radius:50%;
+	padding:7px;
+	width:30px;
 }
 .question-list{
 	li{
@@ -311,8 +318,8 @@
 		}
 	}
 }
-.rangepicker-box{
-	margin-bottom:2em;
+.rangepicker-box {
+ 	//margin-top: 1.4em;
 }
 input[type=checkbox] {
 	margin-bottom:0;
@@ -380,6 +387,9 @@ input[type=checkbox] {
 	background-position:75% 75px;
 	&.home{
 		background:none;
+		.contain-to-grid{
+			margin-bottom: 0;
+		}
 	}
 }
 .btn-bg{
@@ -429,11 +439,16 @@ input[type=checkbox] {
 	font-weight:300;
 }
 .font-3x{
-	font-size:3rem;
+	font-size:3rem !important;
 	font-weight:300;
 }
 .ov-score{
 	font-weight:300;
+}
+.ov-scores{
+	p.secondary{
+		@extend .secondary-color;
+	}
 }
 .recovery-list{
 	height:408px;
@@ -453,6 +468,9 @@ input[type=checkbox] {
 .bgc{
 	@include f-color($bluegreen);
 }
+.wc{
+	@include f-color($white);
+}
 .bc{
 	@include f-color($blue);
 }
@@ -465,17 +483,50 @@ input[type=checkbox] {
 .yc{
 	@include f-color($yellow);
 }
+.gc{
+	@include f-color($green);
+}
+.wbg{
+	@include f-color($white);
+}
+.ybg{
+	@include bg-color($yellow);
+}
+.rbg{
+	@include bg-color($red);
+}
+.bgbg{
+	@include bg-color($bluegreen);
+}
+.gbg{
+	@include bg-color($green);
+}
+.bbg{
+	@include bg-color($blue);
+}
+.dbbg{
+	@include bg-color($darkblue);
+}
+.bg-bg{
+	@include bg-color($body-bg);
+}
 .s-ws-top{
-	margin-top:1em;
+	margin-top:1em !important;
 }
 .s-ws-bottom{
-	margin-bottom:1em;
+	margin-bottom:1em !important;
+}
+.m-ws-top{
+	margin-top:1.5em !important;
+}
+.m-ws-bottom{
+	margin-bottom:1.5em !important;
 }
 .b-ws-top{
-	margin-top:1.5em;
+	margin-top:2em !important;
 }
 .b-ws-bottom{
-	margin-bottom:1.5em;
+	margin-bottom:2em !important;
 }
 //To Objectify CSS
 .ov-stats{
@@ -546,4 +597,41 @@ input[type=checkbox] {
 	.row.collapse{
 		margin:0.5em 0;
 	}
+}
+@keyframes shake{ 
+    0% { transform: translate(5px, 0); }
+    50% { transform: translate(-5px, 0); }
+    100% { transform: translate(0, 0); }
+}
+ 
+@-moz-keyframes shake{ 
+    0% { -moz-transform: translate(5px, 0); }
+    50% { -moz-transform: translate(-5px, 0); }
+    100% { -moz-transform: translate(0, 0); }
+}
+ 
+@-webkit-keyframes shake {
+    0% { -webkit-transform: translate(5px, 0); }
+    50% { -webkit-transform: translate(-5px, 0); }
+    100% { -webkit-transform: translate(0, 0); }
+}
+ 
+.shake {
+    animation-name: shake; 
+    animation-duration: 150ms; 
+    animation-delay: 1s;
+    animation-iteration-count: 3; 
+    animation-timing-function: linear;
+ 
+    -moz-animation-name: shake; 
+    -moz-animation-duration: 150ms; 
+    -moz-animation-delay: 1s;
+    -moz-animation-iteration-count: 3; 
+    -moz-animation-timing-function: linear;
+ 
+    -webkit-animation-name: shake;
+    -webkit-animation-duration: 150ms;
+    -webkit-animation-delay: 1s;
+    -webkit-animation-iteration-count: 3;
+    -webkit-animation-timing-function: linear;
 }

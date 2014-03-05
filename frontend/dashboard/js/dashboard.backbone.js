@@ -143,6 +143,7 @@ $( document ).ready(function() {
         events: {
             'submit #login-form': 'loginUser',
             'click #load-signup, #contact-signup': 'showSignup',
+            'click #signup-center' : 'focusSignup',
             'submit #signup-form': 'sendSignupRequest'
         },
         sendSignupRequest: function(ev){
@@ -162,6 +163,14 @@ $( document ).ready(function() {
             $('#login-form').fadeOut(300);
             $('#load-signup').fadeOut(300);
             $('#signup-form').delay(300).fadeIn(300);
+        },
+        focusSignup: function(ev){
+            ev.preventDefault();
+            $("html, body").animate({ scrollTop: 0 }, "slow");
+            $('#login-form').fadeOut(300);
+            $('#load-signup').fadeOut(300);
+            $('#signup-form').delay(300).fadeIn(300);
+            $('.login-container').addClass('shake');
         },
         loginUser: function(ev){
             ev.preventDefault();
@@ -234,7 +243,6 @@ $( document ).ready(function() {
 
             $('.main-app').removeClass('home');
 
-
             // mumbo jumbo of templates
             var template = _.template($("#overview-template").html(), {});
             
@@ -244,8 +252,10 @@ $( document ).ready(function() {
             this.$el.prepend(headerTemplate);
             this.$el.append(footerTemplate);
         
+            $('.ov-dials').knob({
+                });
             // jquery shit
-            $(document).foundation();                      
+           // $(document).foundation();                      
         }
     });
     overviewView = new overviewView();
@@ -391,7 +401,7 @@ $( document ).ready(function() {
                     })
 
                     // jquery shit
-                    $(document).foundation(); 
+                 //   $(document).foundation(); 
                     $(window).scroll(function() {
 				        var scroll = $(window).scrollTop();
 				        if (scroll >= 225) {
@@ -405,11 +415,13 @@ $( document ).ready(function() {
                     this.endDateRangePicker = feedbackTimelineCollection.end_date;
                     minDate = feedbackTimelineCollection.all_start_date;
                     maxDate = feedbackTimelineCollection.all_end_date;
+                   startDateRangePicker = moment().subtract('days', 29);
+                    endDateRangePicker = moment();
                     $('#reportrange').daterangepicker({
-                        startDate: this.startDateRangePicker.format('MM-DD-YYYY'),
-                        endDate: this.endDateRangePicker.format('MM-DD-YYYY'),
-                        minDate: minDate.format('MM-DD-YYYY'),
-                        maxDate: maxDate.format('MM-DD-YYYY'),
+                        startDate: startDateRangePicker,
+                        endDate: endDateRangePicker,
+                        minDate: '01/01/2012',
+                        maxDate: '12/31/2014',
                         dateLimit: { days: 60 },
                         showDropdowns: true,
                         showWeekNumbers: false,
@@ -434,23 +446,22 @@ $( document ).ready(function() {
                             toLabel: 'To',
                             customRangeLabel: 'Custom Range',
                             daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr','Sa'],
-                            monthNames: ['January', 'February', 'March', 'April', 'May',
-                                'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                            monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
                             firstDay: 1
                         }
                     },
-                        function(start, end) {
-                            that.current_page = null;
-                            tat = start;
-                            that.startDateRangePicker = start;
-                            that.endDateRangePicker = end;
-                            $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-                            that.render()
-                        }
-                    );
-                    //Set the initial state of the picker label
-                    $('#reportrange span').html(this.startDateRangePicker.format('MMMM D, YYYY') + ' - ' +
-                            this.endDateRangePicker.format('MMMM D, YYYY'));
+                function(start, end) {
+                    startDateRangePicker = start;
+                    endDateRangePicker = end;
+                    var field_id = $("li.active").attr("id");
+                    if ($("input[name='form_id']")){
+                        that.changeForm(ev=false, field_id=field_id);
+                    }
+                    $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                }
+          );
+          //Set the initial state of the picker label
+          $('#reportrange span').html(moment().subtract('days', 29).format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
                 }
             });
             $('#selectall').click(function(event) {  //on click 
@@ -660,7 +671,7 @@ $( document ).ready(function() {
             this.$el.append(footerTemplate);
         
             // jquery shit
-            $(document).foundation();                      
+           // $(document).foundation();                      
         }
     });
     crmView = new crmView();
@@ -695,7 +706,7 @@ $( document ).ready(function() {
             this.$el.append(footerTemplate);
         
             // jquery shit
-            $(document).foundation();                      
+           // $(document).foundation();                      
         }
     });
     crmSingleView = new crmSingleView();
@@ -726,7 +737,7 @@ $( document ).ready(function() {
             this.$el.append(footerTemplate);
         
             // jquery shit
-            $(document).foundation();                      
+           // $(document).foundation();                      
         }
     });
     interactionView = new interactionView();
@@ -943,6 +954,26 @@ $( document ).ready(function() {
             "feedback_forms/:form_id/instances/new": "newFormInstances",
             
         },
+
+        initialize: function()
+        {
+            //track every route change as a page view in google analytics
+            this.bind('route', this.trackPageview);
+        },
+
+        trackPageview: function ()
+        {
+            var url = Backbone.history.getFragment();
+
+            //prepend slash
+            if (!/^\//.test(url) && url != "")
+            {
+                url = "/" + url;
+            }
+
+            _gaq.push(['_trackPageview', url]);
+        }
+
     });
 
     var highlightNavLinks = function(route){

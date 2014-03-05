@@ -721,7 +721,7 @@
                 html += '<th></th>';
 
             if (!minDate || minDate.isBefore(calendar[1][1])) {
-                html += '<th class="prev available">&larr;</th>';
+                html += '<th class="prev available"><i class="fi-arrow-left"></i></th>';
             } else {
                 html += '<th></th>';
             }
@@ -734,12 +734,13 @@
 
             html += '<th colspan="5" style="width: auto">' + dateHtml + '</th>';
             if (!maxDate || maxDate.isAfter(calendar[1][1])) {
-                html += '<th class="next available">&rarr;</th>';
+                html += '<th class="next available"><i class="fi-arrow-right"></i></th>';
             } else {
                 html += '<th></th>';
             }
 
             html += '</tr>';
+            html += '<tr class="spacer"></tr>';
             html += '<tr>';
 
             // add week number label
