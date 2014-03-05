@@ -486,6 +486,9 @@ input[type=checkbox] {
 .gc{
 	@include f-color($green);
 }
+.wbg{
+	@include f-color($white);
+}
 .ybg{
 	@include bg-color($yellow);
 }
