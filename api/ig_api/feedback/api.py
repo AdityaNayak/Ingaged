@@ -11,8 +11,8 @@ from ig_api import api, db
 from ig_api.error_codes import abort_error
 from ig_api.helpers import upload_s3
 from ig_api.authentication import login_required
-from ig_api.feedback.models import (FormModel, InstanceModel, FormException, InstanceException,
-        FormFieldSubModel, FeedbackModel, FeedbackException)
+from ig_api.feedback.models import (FormModel, InstanceModel, FormException, InstanceException, LocationException,
+        FormFieldSubModel, FeedbackModel, FeedbackException, LocationModel)
 
 
 ## Helpers
@@ -60,6 +60,16 @@ def form_id_exists(form_id):
 
     return form
 
+def location_id_exists(location_id):
+    """Does the same for location id what `form_id_exists` does for form ID.
+    Code of error raise: 4006
+    """
+    try:
+        location = LocationModel.objects.get(id=ObjectId(location_id))
+    except (db.ValidationError, InvalidId, db.DoesNotExist):
+        abort_error(4006)
+
+    return location
 
 def instance_id_exists(instance_id):
     """Does the same for instance id what `form_id_exists` does for form ID.
@@ -114,11 +124,17 @@ form_obj = {
     'incremental_id': fields.Boolean
 }
 
+location_obj = {
+    'id': fields.String,
+    'name': fields.String,
+    'description': fields.String
+}
+
 instance_obj = {
     'id': fields.String,
     'name': fields.String,
     'description': fields.String,
-    'location': fields.String
+    'location': fields.Nested(location_obj)
 }
 
 customer_obj = {
@@ -243,7 +259,7 @@ class FormInstanceList(Resource):
     post_parser = reqparse.RequestParser()
     post_parser.add_argument('name', required=True, type=unicode, location='json')
     post_parser.add_argument('description', required=True, type=unicode, location='json')
-    post_parser.add_argument('location', required=True, type=unicode, location='json')
+    post_parser.add_argument('location_id', required=True, type=unicode, location='json')
 
     post_fields = {
         'error': fields.Boolean(default=False),
@@ -270,6 +286,11 @@ class FormInstanceList(Resource):
         form = form_id_exists(form_id)
         args = self.post_parser.parse_args()
 
+        # get location using args['location_id'] or abort
+        location = location_id_exists(args['location_id']) # abort with 4006 if location does not exist
+        args.pop('location_id')
+        args['location'] = location
+
         # create instance
         try:
             instance = form.create_instance(**args)
@@ -277,6 +298,56 @@ class FormInstanceList(Resource):
             abort_error(4002)
         
         return {'instance': instance}
+
+
+class LocationList(Resource):
+
+    get_fields = {
+        'error': fields.Boolean(default=False),
+        'locations': fields.List(fields.Nested(location_obj))
+    }
+
+    post_fields = {
+        'error': fields.Boolean(default=False),
+        'location': fields.Nested(location_obj)
+    }
+
+    post_parser = reqparse.RequestParser()
+    post_parser.add_argument('name', required=True, type=unicode, location='json')
+    post_parser.add_argument('description', required=False, type=unicode, location='json')
+
+    @login_required('merchant')
+    @marshal_with(get_fields)
+    def get(self):
+        locations = LocationModel.objects.all()
+        
+        return {'locations': locations}
+
+    @login_required('merchant')
+    @marshal_with(post_fields)
+    def post(self):
+        args = self.post_parser.parse_args()
+        try:
+            location = LocationModel.create_location(merchant=g.user.merchant, **args)
+        except LocationException:
+            abort_error(4005)
+
+        return {'location': location}
+
+
+class Location(Resource):
+
+    post_fields = {
+        'error': fields.Boolean(default=False),
+        'location': fields.Nested(location_obj)
+    }
+
+    @login_required('merchant')
+    @marshal_with(post_fields)
+    def get(self, location_id):
+        location = location_id_exists(location_id)
+
+        return {'location': location}
 
 
 class FormInstance(Resource):
@@ -599,6 +670,8 @@ api.add_resource(FormInstance, '/dashboard/forms/<form_id>/instances/<instance_i
 api.add_resource(FeedbackTimeline, '/dashboard/timeline')
 api.add_resource(FeedbackTimelineExport, '/dashboard/timeline/csv_export')
 api.add_resource(FeedbackAnalytics, '/dashboard/forms/<form_id>/analytics')
+api.add_resource(LocationList, '/dashboard/locations')
+api.add_resource(Location, '/dashboard/locations/<location_id>')
 
 # customer facing
 api.add_resource(CustomerFeedback, '/customer/feedback/<instance_id>')

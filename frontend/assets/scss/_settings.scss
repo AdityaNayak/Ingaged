@@ -18,14 +18,16 @@ $white: #ffffff;
 
 $grey: #dcdcdc;
 $lightgrey: #FAFBFC;
+$darkgrey: scale-color($grey, $lightness: -45%);
 
 $yellow: #fbb82d;
-$blue: #0e90d2;
+$blue: #0E90D2;
 $red: #dd514c;
 $orange: #f37b1d;
 $green: #5eb95e;
 $lightgreen: #1bbc9b;
-$bluegreen: #1ABC9C;
+$bluegreen: #00B6A5;
+$darkblue: #0E629B;
 
 // The default font-size is set to 100% of the browser style sheet (usually 16px)
 // for compatibility with brower-based text zoom or user-set defaults.
@@ -1059,7 +1061,7 @@ $topbar-link-font-size: rem-calc(14);
 // $topbar-link-hover-lightness: -10%; // Darken by 10%
 $topbar-link-bg-hover: $red;
 $topbar-link-bg-active: $red;
-// $topbar-link-bg-active-hover: scale-color($primary-color, $lightness: -14%);
+ $topbar-link-bg-active-hover: $red;
 // $topbar-link-font-family: $body-font-family;
 
 // $topbar-button-font-size: 0.75rem;
@@ -1210,4 +1212,14 @@ $hr-border-color: $grey;
 
 .fullwidth {
 	width: 100%;
+}
+
+
+//Mixins
+
+@mixin f-color ($color) {
+	color: $color !important;
+}
+@mixin bg-color ($color){
+	background: $color !important;
 }

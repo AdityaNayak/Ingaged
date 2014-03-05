@@ -35,6 +35,8 @@ ERROR_CODES = {
         '4002': 'Form instance data provided was not correct.', # while creating a form instance
         '4003': 'Form instance(s) with the given ID does not exist.', # form instance does not exist
         '4004': 'Feedback data submitted is wrong', # while customer is giving feedback
+        '4005': 'Location data provided wrong', # while creation of location
+        '4006': 'Location with the given ID does not exist.', # when a specified location does not exist
 
         # miscellaneous errors (this for everything that does not fall under a set category)
         '5000': 'Sign up request details provided are wrong.'

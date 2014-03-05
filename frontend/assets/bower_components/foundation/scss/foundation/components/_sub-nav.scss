@@ -75,6 +75,7 @@ $sub-nav-item-divider-margin: rem-calc(12) !default;
     font-weight: $sub-nav-font-weight;
     font-size: $font-size;
     color: $font-color;
+    @include radius($global-radius);
 
     a {
       text-decoration: $sub-nav-text-decoration;

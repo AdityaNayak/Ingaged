@@ -22,6 +22,10 @@ class FeedbackException(Exception):
     def __init__(self, message):
         self.message = message
 
+class LocationException(Exception):
+    def __init__(self, message):
+        self.message = message
+
 
 ## Models
 
@@ -256,8 +260,8 @@ class FormModel(db.Document):
         return form
 
     def create_instance(self, name, description, location):
-        """name, description & location of the instance are to be provided."""
-        instance = InstanceModel(name=name, description=description, location=location, form=self)
+        """name, description & location (`LocationModel` object) of the instance are to be provided."""
+        instance = InstanceModel(name=name, description=description, form=self, location=location)
         try:
             instance.save()
         except db.ValidationError:
@@ -272,15 +276,45 @@ class FormModel(db.Document):
 class InstanceModel(db.Document):
     name = db.StringField(required=True)
     description = db.StringField(required=True)
-    location = db.StringField(required=True)
 
     # which form is the instance associated with?
     form = db.ReferenceField('FormModel', required=True)
+
+    # which location is the instance associated with?
+    location = db.ReferenceField('LocationModel', required=True)
 
     meta = {'collection': 'intances'}
 
     def __repr__(self):
         return '<InstanceModel: {0}>'.format(self.name)
+
+
+class LocationModel(db.Document):
+    name = db.StringField(required=True)
+    description = db.StringField()
+
+    def get_all_instances(self):
+        """Returns a list of all Instances in the form of `InstanceModel` objects
+        associated with the location.
+        """
+        instances = InstanceModel.objects.filter(location=self)
+        return instances
+
+    @staticmethod
+    def create_location(name, merchant, description=None):
+        """name & description (optional) & merchant (object) of location are to be provided"""
+        location = LocationModel(name=name, merchant=merchant, description=description)
+        try:
+            location.save()
+        except db.ValidationError:
+            raise LocationException('Location data provided was wrong')
+
+        return location
+
+    meta = {'collection': 'locations'}
+
+    def __repr__(self):
+        return '<LocationModel: {0}>'.format(self.name)
 
 
 class FeedbackModel(db.Document):

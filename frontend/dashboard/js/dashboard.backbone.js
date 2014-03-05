@@ -143,6 +143,7 @@ $( document ).ready(function() {
         events: {
             'submit #login-form': 'loginUser',
             'click #load-signup, #contact-signup': 'showSignup',
+            'click #signup-center' : 'focusSignup',
             'submit #signup-form': 'sendSignupRequest'
         },
         sendSignupRequest: function(ev){
@@ -163,6 +164,14 @@ $( document ).ready(function() {
             $('#load-signup').fadeOut(300);
             $('#signup-form').delay(300).fadeIn(300);
         },
+        focusSignup: function(ev){
+            ev.preventDefault();
+            $("html, body").animate({ scrollTop: 0 }, "slow");
+            $('#login-form').fadeOut(300);
+            $('#load-signup').fadeOut(300);
+            $('#signup-form').delay(300).fadeIn(300);
+            $('.login-container').addClass('shake');
+        },
         loginUser: function(ev){
             ev.preventDefault();
             var credentials = $(ev.currentTarget).serializeObject();
@@ -179,7 +188,7 @@ $( document ).ready(function() {
                 success: function(data){
                     $.cookie("username", credentials.username);
                     $.cookie("password", credentials.password);
-                    router.navigate('timeline', {trigger: true});
+                    router.navigate('overview', {trigger: true});
                 },
                 error: function(data){
                     $(loadingButton).fadeOut(300); 
@@ -198,7 +207,9 @@ $( document ).ready(function() {
             }
 
             // change the title
-            document.title = "Ingage Dashboard";
+            document.title = "Ingage: Your in-venue Customer Experience Management system";
+
+            $('.main-app').addClass('home');
 
             var template = _.template($("#login-template").html(), {});
             var footerTemplate = _.template($("#footer-template").html(), {});
@@ -207,6 +218,48 @@ $( document ).ready(function() {
         }
     });
     var loginView = new LoginView();
+
+
+    /* Overview */
+    var overviewView = Backbone.View.extend({
+        el: '.main-app',
+        events: {
+            'click #logout-link': logoutUser,
+            'click .recovery-list li': 'singleinteraction',
+        },
+
+        singleinteraction: function(){
+            router.navigate('customer/interaction', {trigger: true});
+        },
+        
+        render: function(){
+            if (!$.cookie("username") && !$.cookie("password")){
+                router.navigate('', {trigger: true});
+                return
+            }
+
+            // change the title
+            document.title = "Overview | Ingage Dashboard";
+
+            $('.main-app').removeClass('home');
+
+            // mumbo jumbo of templates
+            var template = _.template($("#overview-template").html(), {});
+            
+            var headerTemplate = _.template($("#header-template").html(), {username: $.cookie("username")});
+            var footerTemplate = _.template($("#footer-template").html(), {});
+            this.$el.html(template);
+            this.$el.prepend(headerTemplate);
+            this.$el.append(footerTemplate);
+        
+            $('.ov-dials').knob({
+                });
+            // jquery shit
+           // $(document).foundation();                      
+        }
+    });
+    overviewView = new overviewView();
+
 
     /* timeline of various feedbacks */
     var FeedbackTimelineView = Backbone.View.extend({
@@ -348,13 +401,13 @@ $( document ).ready(function() {
                     })
 
                     // jquery shit
-                    $(document).foundation(); 
+                 //   $(document).foundation(); 
                     $(window).scroll(function() {
 				        var scroll = $(window).scrollTop();
-				        if (scroll >= 550) {
-				            $("#details").addClass("stickit");
+				        if (scroll >= 225) {
+				            $("#details .panel").addClass("stickit");
 				        } else {
-				            $("#details").removeClass("stickit");
+				            $("#details .panel").removeClass("stickit");
 				        }
 				    });
 
@@ -362,11 +415,13 @@ $( document ).ready(function() {
                     this.endDateRangePicker = feedbackTimelineCollection.end_date;
                     minDate = feedbackTimelineCollection.all_start_date;
                     maxDate = feedbackTimelineCollection.all_end_date;
+                   startDateRangePicker = moment().subtract('days', 29);
+                    endDateRangePicker = moment();
                     $('#reportrange').daterangepicker({
-                        startDate: this.startDateRangePicker.format('MM-DD-YYYY'),
-                        endDate: this.endDateRangePicker.format('MM-DD-YYYY'),
-                        minDate: minDate.format('MM-DD-YYYY'),
-                        maxDate: maxDate.format('MM-DD-YYYY'),
+                        startDate: startDateRangePicker,
+                        endDate: endDateRangePicker,
+                        minDate: '01/01/2012',
+                        maxDate: '12/31/2014',
                         dateLimit: { days: 60 },
                         showDropdowns: true,
                         showWeekNumbers: false,
@@ -391,23 +446,22 @@ $( document ).ready(function() {
                             toLabel: 'To',
                             customRangeLabel: 'Custom Range',
                             daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr','Sa'],
-                            monthNames: ['January', 'February', 'March', 'April', 'May',
-                                'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                            monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
                             firstDay: 1
                         }
                     },
-                        function(start, end) {
-                            that.current_page = null;
-                            tat = start;
-                            that.startDateRangePicker = start;
-                            that.endDateRangePicker = end;
-                            $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-                            that.render()
-                        }
-                    );
-                    //Set the initial state of the picker label
-                    $('#reportrange span').html(this.startDateRangePicker.format('MMMM D, YYYY') + ' - ' +
-                            this.endDateRangePicker.format('MMMM D, YYYY'));
+                function(start, end) {
+                    startDateRangePicker = start;
+                    endDateRangePicker = end;
+                    var field_id = $("li.active").attr("id");
+                    if ($("input[name='form_id']")){
+                        that.changeForm(ev=false, field_id=field_id);
+                    }
+                    $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                }
+          );
+          //Set the initial state of the picker label
+          $('#reportrange span').html(moment().subtract('days', 29).format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
                 }
             });
             $('#selectall').click(function(event) {  //on click 
@@ -588,6 +642,105 @@ $( document ).ready(function() {
     });
     var AnalyticsView = new AnalyticsView();
 
+    /* CRM */
+    var crmView = Backbone.View.extend({
+        el: '.main-app',
+        events: {
+            'click #logout-link': logoutUser,
+            'click .customer-list li': 'crmCustomer',
+        },
+        crmCustomer: function(){
+            router.navigate('customer', {trigger: true});
+        },
+        render: function(){
+            if (!$.cookie("username") && !$.cookie("password")){
+                router.navigate('', {trigger: true});
+                return
+            }
+
+            // change the title
+            document.title = "Customers | Ingage Dashboard";
+
+            // mumbo jumbo of templates
+            var template = _.template($("#crm-template").html(), {});
+            
+            var headerTemplate = _.template($("#header-template").html(), {username: $.cookie("username")});
+            var footerTemplate = _.template($("#footer-template").html(), {});
+            this.$el.html(template);
+            this.$el.prepend(headerTemplate);
+            this.$el.append(footerTemplate);
+        
+            // jquery shit
+           // $(document).foundation();                      
+        }
+    });
+    crmView = new crmView();
+
+    /* CRM Single view*/
+    var crmSingleView = Backbone.View.extend({
+        el: '.main-app',
+        events: {
+            'click #logout-link': logoutUser,
+            'click .customer-history': 'interactionview',
+        },
+        interactionview: function(){
+            router.navigate('customer/interaction', {trigger: true});
+        },
+
+        render: function(){
+            if (!$.cookie("username") && !$.cookie("password")){
+                router.navigate('', {trigger: true});
+                return
+            }
+
+            // change the title
+            document.title = "Customer Profile | Ingage Dashboard";
+
+            // mumbo jumbo of templates
+            var template = _.template($("#crm-single-template").html(), {});
+            
+            var headerTemplate = _.template($("#header-template").html(), {username: $.cookie("username")});
+            var footerTemplate = _.template($("#footer-template").html(), {});
+            this.$el.html(template);
+            this.$el.prepend(headerTemplate);
+            this.$el.append(footerTemplate);
+        
+            // jquery shit
+           // $(document).foundation();                      
+        }
+    });
+    crmSingleView = new crmSingleView();
+
+    /* Interaction View */
+    var interactionView = Backbone.View.extend({
+        el: '.main-app',
+        events: {
+            'click #logout-link': logoutUser,
+        },
+        
+        render: function(){
+            if (!$.cookie("username") && !$.cookie("password")){
+                router.navigate('', {trigger: true});
+                return
+            }
+
+            // change the title
+            document.title = "Interaction | Ingage Dashboard";
+
+            // mumbo jumbo of templates
+            var template = _.template($("#interaction-template").html(), {});
+            
+            var headerTemplate = _.template($("#header-template").html(), {username: $.cookie("username")});
+            var footerTemplate = _.template($("#footer-template").html(), {});
+            this.$el.html(template);
+            this.$el.prepend(headerTemplate);
+            this.$el.append(footerTemplate);
+        
+            // jquery shit
+           // $(document).foundation();                      
+        }
+    });
+    interactionView = new interactionView();
 
     /* view of list of feedbacks */
     var FeedbackFormsView = Backbone.View.extend({
@@ -789,13 +942,38 @@ $( document ).ready(function() {
     var Router = Backbone.Router.extend({
         routes: {
             "": "login",
+            "overview": "overView",
             "timeline": "feedbackTimeline",
-            "feedback_forms": "feedbackForms",
+            "analytics": "analytics",
+            "crm": "crm",
+            "customer": "crm-single",
+            "customer/interaction": "interaction",
+            "settings": "feedbackForms",
             "feedback_forms/new": "newFeedbackForm",
             "feedback_forms/:form_id/instances": "formInstancesList",
             "feedback_forms/:form_id/instances/new": "newFormInstances",
-            "analytics": "analytics",
+            
         },
+
+        initialize: function()
+        {
+            //track every route change as a page view in google analytics
+            this.bind('route', this.trackPageview);
+        },
+
+        trackPageview: function ()
+        {
+            var url = Backbone.history.getFragment();
+
+            //prepend slash
+            if (!/^\//.test(url) && url != "")
+            {
+                url = "/" + url;
+            }
+
+            _gaq.push(['_trackPageview', url]);
+        }
+
     });
 
     var highlightNavLinks = function(route){
@@ -812,6 +990,11 @@ $( document ).ready(function() {
         loginView.render();
     });
 
+    router.on('route:overView', function(){
+        overviewView.render();
+        highlightNavLinks("overview");
+    });
+
     router.on('route:feedbackTimeline', function(){
         feedbackTimelineView.render();
         highlightNavLinks("timeline");
@@ -822,9 +1005,23 @@ $( document ).ready(function() {
         highlightNavLinks("analytics");
     });
 
+
+    router.on('route:crm', function(){
+        crmView.render();
+        highlightNavLinks("crm");
+    });
+
+    router.on('route:crm-single', function(){
+        crmSingleView.render();
+    });
+
+    router.on('route:interaction', function(){
+        interactionView.render();
+    });
+
     router.on('route:feedbackForms', function(){
         feedbackFormsView.render();
-        highlightNavLinks("feedback_forms");
+        highlightNavLinks("settings");
     });
 
     router.on('route:formInstancesList', function(form_id){

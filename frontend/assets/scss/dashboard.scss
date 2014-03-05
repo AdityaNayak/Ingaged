@@ -54,20 +54,30 @@
 @import "loading";
 @import "foundation-icons";
 @import "dayrange";
+@import "compass/css3/shared";
+@import "compass/css3/filter";
 
 .primary-message{
 	font-size:1.75em;
-	background:$red;
+	background:rgba($red,0.7);
 	color:$white;
-	padding:1.5em;
-	margin-top:2em;
+	padding:1em;
+	font-weight:300;
 }
 .login-alert{
 	height:36px;
 }
+.fullbg{
+	background: url(../images/background.jpg);
+	background-size:cover;
+}
 .alert-bar{
 	height:36px;
-	margin-bottom:1.5em;
+	position:fixed;
+	width:43.8%;
+}
+.show-on-top{
+	z-index:999;
 }
 .alert-box.loading{
 	background:$white;
@@ -83,14 +93,21 @@
 	color:$white;
 	border-color: darken($red,15%);
 }
-.alert-text{
+.loading-text{
 	margin-left:-10px;
 }
 .login-form{
 	padding-top:1.5em;
 }
 .login{
-	margin-top:2em;
+	padding-top:5em;
+	padding-bottom:5em;
+}
+.loop-bg{
+	background: url(../images/circle.png) no-repeat no-repeat;
+	background-position:50% 50%;
+	padding-top:6.4em;
+	padding-bottom:4.8em;
 }
 .secondary{
 	font-size:0.9em;
@@ -130,10 +147,10 @@
 	li{
 		padding:0.75em;
 		background:$white;
-		border-right:0px solid lighten($grey,10%);	
-		border-left:0px solid lighten($grey,10%);	
-		border-top:1px solid lighten($grey,10%);	
-		border-bottom:0px solid lighten($grey,10%);	
+		border-right:0px solid scale-color($grey, $lightness: 10%);
+		border-left:0px solid scale-color($grey, $lightness: 10%);	
+		border-top:1px solid scale-color($grey, $lightness: 10%);	
+		border-bottom:0px solid scale-color($grey, $lightness: 10%);	
 		cursor: pointer;
 		&:hover, &:active, &:focus{
 			background: rgba($blue,0.1);
@@ -149,18 +166,22 @@
 		}
 	}
 	.read{
-		background:lighten($grey,15%);
+		background:scale-color($grey, $lightness: 15%);
 	}
 	.selected{
 		background: rgba($blue,0.1);
 	}
 }
 .list-header{
-	margin-bottom:0.5em;
-	font-weight:bold;
+	background:$lightgrey !important;
+	color:$darkgrey;
+	
+	&:hover, &:active, &:focus{
+		background: $lightgrey !important;
+	}
 }
 .feedback-column{
-	border-bottom:1px solid lighten($grey,10%);	
+	border-bottom:1px solid scale-color($grey, $lightness: 10%);	
 }
 
 .feedback-content{
@@ -219,15 +240,24 @@
 	overflow:visible;
 	dd{
 		padding:0.5em 1em;
-		background: lighten($grey,15%);
-		border:1px solid $grey;
-		cursor: pointer;
-		&:hover{
-			box-shadow: 0 0 1px $grey;
-			cursor: pointer;
-		}
+		@extend .btn-bg;
 		a:hover{
 			color:$black;
+		}
+		&.naked{
+			border:none;
+			font-weight: normal;
+			background:none;
+			margin:0;
+			padding-right:0;
+			padding-left:0;
+			&:hover, &:active, &:focus{
+				cursor: default;
+				box-shadow:none;
+			}
+		}
+		&.has-dropdown{
+			padding-right:1.2rem;
 		}
 	}
 	.checkbox-dd{
@@ -263,10 +293,10 @@
 .stickit{
 	position:fixed;
 	top:0;
-	margin-left:54.4%;
-	width:38.8%;
+	width:28.8%;
 	z-index:9;
-	bottom:0;
+	overflow:auto;
+	bottom:0
 }
 .pagination{
 	margin-top:2em;
@@ -274,30 +304,22 @@
 .feedback-score{
 	color:$white;
 	text-align:center;
-	padding-top:1px;
-	padding-bottom:1px;
-	&.green{
-		background:$green;
-	}
-	&.red{
-		background:$red;
-	}
-	&.yellow{
-		background:$yellow;
-	}
+	border-radius:50%;
+	padding:7px;
+	width:30px;
 }
 .question-list{
 	li{
 		border-bottom:1px solid $grey;
 		padding:0.5em 0;
 		cursor: pointer;
-		&.active, &:hover{
+		&.active, &:hover, &:active, &:focus{
 			font-weight: 700;
 		}
 	}
 }
-.rangepicker-box{
-	margin-bottom:2em;
+.rangepicker-box {
+ 	//margin-top: 1.4em;
 }
 input[type=checkbox] {
 	margin-bottom:0;
@@ -352,26 +374,264 @@ input[type=checkbox] {
 		text-align: center;  
 		line-height: 15px;  
 		} */
-		.vermachutiyahain{
-			&:after{
-				content:"Coming Soon";
-				position:absolute;
-				left:45%;
-				top:50%;
-				font-size: 2em;
-			}
-		}
-		#line{
-			opacity:0.5;
-		}
 
-		@media #{$large-up} {
-			.top-bar .title-area{
-				width: 30%;
-			}
-		}
+
+@media #{$large-up} {
+	.top-bar .title-area{
+		width: 30%;
+	}
+}
 .main-app{
-	background-image:url('../images/icons.png');
+	background-image:url('../images/icons-bg.png');
 	background-repeat:no-repeat no-repeat;
-	background-position:50% 315px;
+	background-position:75% 75px;
+	&.home{
+		background:none;
+		.contain-to-grid{
+			margin-bottom: 0;
+		}
+	}
+}
+.btn-bg{
+	background: scale-color($grey, $lightness: 60%);
+	border:1px solid $grey;
+	cursor: pointer;
+	font-weight: 700;
+	@include radius($global-radius);
+	color:$darkgrey;
+	&:hover, &:active, &:focus{
+		box-shadow: 0 0 1px $grey;
+		cursor: pointer;
+		color:$black;
+	}
+}
+.has-dropdown{
+	padding-right:1.2rem;
+	position:relative;
+	&:before{
+		position: absolute;
+		content: "";
+		width: 0;
+		height: 0;
+		display: block;
+		border-style: solid;
+		border-color: scale-color($darkgrey, $lightness: 30%) transparent transparent transparent;
+		top: 50%;
+		border-width: 0.2rem;
+		right: 0.5rem;
+		margin-top: -0.03rem;
+	}
+	&.big{
+		padding-right:2.4rem;
+		&:before{
+		border-width: 0.33333rem;
+		right: 0.5rem;
+		margin-top: -0.13889rem;
+		}
+	}
+}
+.font-1-5x{
+	font-size:1.5rem;
+	font-weight:300;
+}
+.font-2x{
+	font-size:2rem;
+	font-weight:300;
+}
+.font-3x{
+	font-size:3rem !important;
+	font-weight:300;
+}
+.ov-score{
+	font-weight:300;
+}
+.ov-scores{
+	p.secondary{
+		@extend .secondary-color;
+	}
+}
+.recovery-list{
+	height:408px;
+	overflow:auto;
+}
+.circle-img{
+	border-radius:50%;
+}
+.bw-img{
+	@include filter(grayscale(100%));
+	@include single-transition(all 1s);
+	&:hover, &:active, &:focus{
+		@include filter(grayscale(0%));
+		@include single-transition(all 1s);
+	}
+}
+.bgc{
+	@include f-color($bluegreen);
+}
+.wc{
+	@include f-color($white);
+}
+.bc{
+	@include f-color($blue);
+}
+.dbc{
+	@include f-color($darkblue);
+}
+.rc{
+	@include f-color($red);
+}
+.yc{
+	@include f-color($yellow);
+}
+.gc{
+	@include f-color($green);
+}
+.wbg{
+	@include f-color($white);
+}
+.ybg{
+	@include bg-color($yellow);
+}
+.rbg{
+	@include bg-color($red);
+}
+.bgbg{
+	@include bg-color($bluegreen);
+}
+.gbg{
+	@include bg-color($green);
+}
+.bbg{
+	@include bg-color($blue);
+}
+.dbbg{
+	@include bg-color($darkblue);
+}
+.bg-bg{
+	@include bg-color($body-bg);
+}
+.s-ws-top{
+	margin-top:1em !important;
+}
+.s-ws-bottom{
+	margin-bottom:1em !important;
+}
+.m-ws-top{
+	margin-top:1.5em !important;
+}
+.m-ws-bottom{
+	margin-bottom:1.5em !important;
+}
+.b-ws-top{
+	margin-top:2em !important;
+}
+.b-ws-bottom{
+	margin-bottom:2em !important;
+}
+//To Objectify CSS
+.ov-stats{
+	h4{
+		@extend .secondary-color;
+	}
+	h6{
+		@extend .secondary-color;
+	}
+}
+
+.customer-ov{
+	
+	.circle-img{
+		margin-top: -10em;
+	}
+	.row.collapse{
+		margin:1em 0;
+	}
+	h4.text-center{
+		margin-bottom:1em;
+	}
+	.small-8.secondary-color{
+		line-height: 1.75;
+	}
+}
+.ov-panel{
+	margin-top:10em;
+}
+.customer-history{
+	padding-top:1em;
+	&:before{
+		display: block;
+		content: "";
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 4em;
+		width: 2px;
+		background-color: $grey;
+		z-index: -1;
+	}
+}
+.fb-time{
+	margin-top:1.5em;
+	ul{
+		li{
+			font-size: 0.8em;
+		}
+	}
+}
+.customer-history{
+	.small-8.secondary-color{
+		line-height: 1.75;
+	}
+	&:hover, &:active, &:focus{
+			background: rgba($blue,0.1);
+			cursor: pointer;
+		}
+}
+.interaction-ov{
+	.secondary{
+		margin-top: 0.1em;
+	}
+	h5{
+		margin-top:1em;
+	}
+	.row.collapse{
+		margin:0.5em 0;
+	}
+}
+@keyframes shake{ 
+    0% { transform: translate(5px, 0); }
+    50% { transform: translate(-5px, 0); }
+    100% { transform: translate(0, 0); }
+}
+ 
+@-moz-keyframes shake{ 
+    0% { -moz-transform: translate(5px, 0); }
+    50% { -moz-transform: translate(-5px, 0); }
+    100% { -moz-transform: translate(0, 0); }
+}
+ 
+@-webkit-keyframes shake {
+    0% { -webkit-transform: translate(5px, 0); }
+    50% { -webkit-transform: translate(-5px, 0); }
+    100% { -webkit-transform: translate(0, 0); }
+}
+ 
+.shake {
+    animation-name: shake; 
+    animation-duration: 150ms; 
+    animation-delay: 1s;
+    animation-iteration-count: 3; 
+    animation-timing-function: linear;
+ 
+    -moz-animation-name: shake; 
+    -moz-animation-duration: 150ms; 
+    -moz-animation-delay: 1s;
+    -moz-animation-iteration-count: 3; 
+    -moz-animation-timing-function: linear;
+ 
+    -webkit-animation-name: shake;
+    -webkit-animation-duration: 150ms;
+    -webkit-animation-delay: 1s;
+    -webkit-animation-iteration-count: 3;
+    -webkit-animation-timing-function: linear;
 }
