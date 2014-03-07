@@ -137,12 +137,14 @@ $( document ).ready(function() {
         }
     });
 
+
     /* login page */
     var LoginView = Backbone.View.extend({
         el: '.main-app',
         events: {
             'submit #login-form': 'loginUser',
             'click #load-signup, #contact-signup': 'showSignup',
+            'click #signup-center' : 'focusSignup',
             'submit #signup-form': 'sendSignupRequest'
         },
         sendSignupRequest: function(ev){
@@ -162,6 +164,14 @@ $( document ).ready(function() {
             $('#login-form').fadeOut(300);
             $('#load-signup').fadeOut(300);
             $('#signup-form').delay(300).fadeIn(300);
+        },
+        focusSignup: function(ev){
+            ev.preventDefault();
+            $("html, body").animate({ scrollTop: 0 }, "slow");
+            $('#login-form').fadeOut(300);
+            $('#load-signup').fadeOut(300);
+            $('#signup-form').delay(300).fadeIn(300);
+            $('.login-container').addClass('shake');
         },
         loginUser: function(ev){
             ev.preventDefault();
@@ -198,7 +208,9 @@ $( document ).ready(function() {
             }
 
             // change the title
-            document.title = "Ingage Dashboard";
+            document.title = "Ingage: Your in-venue Customer Experience Management system";
+
+            $('.main-app').addClass('home');
 
             var template = _.template($("#login-template").html(), {});
             var footerTemplate = _.template($("#footer-template").html(), {});
