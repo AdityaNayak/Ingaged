@@ -364,9 +364,9 @@ $( document ).ready(function() {
                     $(window).scroll(function() {
 				        var scroll = $(window).scrollTop();
 				        if (scroll >= 550) {
-				            $("#details").addClass("stickit");
+				            $("#details .panel").addClass("stickit");
 				        } else {
-				            $("#details").removeClass("stickit");
+				            $("#details .panel").removeClass("stickit");
 				        }
 				    });
 
