@@ -24,7 +24,7 @@ $( document ).ready(function() {
 	});
 
 	/* hostname of the api */
-	var api_root = 'https://ingage.herokuapp.com'
+	var api_root = 'http://localhost:5000'
 
 	/* feedback form model */
 	FeedbackFormModel = Backbone.Model.extend({
@@ -77,11 +77,11 @@ $( document ).ready(function() {
                 else {
                     response = section.find('input[name="tt_response"]').val();
                 }
-                field_responses[field_id] = response;
+                field_responses[field_id] = response || ".";
             });
 
             /* feedback text */
-            var feedback_text = $(".large-input").find("textarea").val();
+            var feedback_text = $(".large-input").find("textarea").val() || ".";
 
             /* nps score */
             var nps_score = $(".input-slider").find(".nps-score").text();
