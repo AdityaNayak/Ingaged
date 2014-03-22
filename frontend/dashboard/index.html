@@ -382,12 +382,16 @@
 
                                                     <div class="secondary survey-column">
                                                         <ol>
-                                                            <% _.each(feedback.get('responses'), function(response){ %>
-                                                                <li>
-                                                                    <h5><%= response.text %></h5>
-                                                                    <p><%= response.response %></p>
-                                                                </li>
+                                                            <% if (feedback.get('responses') == {}) { %>
+                                                                <% _.each(feedback.get('responses'), function(response){ %>
+                                                                    <li>
+                                                                        <h5><%= response.text %></h5>
+                                                                        <p><%= response.response %></p>
+                                                                    </li>
                                                                 <% }); %>
+                                                            <% } else { %>
+                                                                <strong>No questions were attached with this form.</strong>
+                                                            <% } %>
                                                         </ol>
                                                     </div>
                                                     <hr>
