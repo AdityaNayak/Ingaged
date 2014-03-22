@@ -289,7 +289,7 @@ class FeedbackModel(db.Document):
     feedback_text = db.StringField(required=True)
 
     # customer response to the different fields of the form
-    field_responses = db.DictField(required=True)
+    field_responses = db.DictField(required=False) # will not be required for feedbacks without any custom cards
 
     # time the feedback was received at (utc time)
     received_at = db.DateTimeField(required=True, default=datetime.datetime.utcnow)
