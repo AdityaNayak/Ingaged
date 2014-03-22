@@ -142,11 +142,25 @@
                     <h3><%= form.get('nps_score_heading') %></h3>
 				</li>
 				<div class="small-10 small-centered columns">
-					<div id="show-serialization-field" class="text-center nps-score"></div>
+					<div id="show-serialization-field-nps" class="text-center nps-score"></div>
 					<div id="nps-rating"> 
 					</div>
 				</div>
             </div>
+
+            <% if (form.get("price_value_exists")) { %>
+                <div class="input-slider section row" data-anchor="">
+                    <li class="small-11 small-centered columns">
+                        <div class="right sec intr-color done intr-btn">Done</div>  
+                        <h3><%= form.get('price_value_heading') %></h3>
+                    </li>
+                    <div class="small-10 small-centered columns">
+                        <div id="show-serialization-field-price-value" class="text-center nps-score"></div>
+                        <div id="price-value-rating"> 
+                        </div>
+                    </div>
+                </div>
+            <% } %>
 
 			<div class="customer-details section row" data-anchor="">
 				<li class="small-11 small-centered columns">
