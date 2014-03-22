@@ -193,25 +193,6 @@
 
     <script type="text/template" id="feedback-timeline-template">
 
-    	<div class="row">
-    		<div class="small-8 columns panel vermachutiyahain">
-    			<canvas id="line" data-type="Line" width="760" height="260"></canvas>
-    		</div>
-    		<div class="small-4 columns">
-    			<div id="reportrange" class="rangepicker-box text-right">
-    				<span ></span><i class="fi-calendar"></i>
-    			</div>
-    			<!-- <h5>Select location</h5>
-    			<select>
-    				<option>Location 1</option>
-    				<option>Location 2</option>
-    				<option>Location 3</option>
-    				<option>Location 4</option>
-    			</select> -->
-    		</div>
-    		<hr>
-    	</div>
-
     	<div class="row collapse">
     		<dl class="sub-nav action-nav small-12 columns">
     			<!-- <dd class="checkbox-dd cform">
@@ -273,39 +254,17 @@
     								</li>
     								<% }); %>
 </ul>
-<div class="pagination-centered">
-	<ul class="pagination">
-		<li class="arrow unavailable">&laquo;</li>
-		<% _.each(pagesToShow, function(page){ %>
-			<li class=<% page == currentPage ? print('"current"') : print('""') %>><a href="#"><%= page %></a></li>
-			<% }); %>
-		<li class="arrow unavailable">&raquo;</li>
-	</ul>
-</div>
-</div>
-</div>
-<script>
-	var npsdata = {
-		labels : ["6 Weeks ago","5 Weeks ago","4 Weeks ago","3 Weeks ago","2 Weeks ago","1 Week ago","Today"],
-		datasets : [
-		{
-			fillColor : "none",
-			strokeColor : "rgba(220,220,220,1)",
-			pointColor : "rgba(220,220,220,1)",
-			pointStrokeColor : "#fff",
-			data : [6,5,9,8,5,2,4]
-		},     
-		{
-			fillColor : "none",
-			strokeColor : "rgba(151,187,205,1)",
-			pointColor : "rgba(151,187,205,1)",
-			pointStrokeColor : "#fff",
-			data : [2,4,4,1,9,2,10]
-		}
-		]
-	}
-	var myNPSchart = new Chart(document.getElementById("line").getContext("2d")).Line(npsdata);
-</script>
+    <div class="pagination-centered">
+        <ul class="pagination">
+            <li class="arrow unavailable">&laquo;</li>
+            <% _.each(pagesToShow, function(page){ %>
+                <li class=<% page == currentPage ? print('"current"') : print('""') %>><a href="#"><%= page %></a></li>
+                <% }); %>
+            <li class="arrow unavailable">&raquo;</li>
+        </ul>
+    </div>
+    </div>
+    </div>
 </script>
 
 
