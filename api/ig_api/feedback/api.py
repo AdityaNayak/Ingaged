@@ -87,12 +87,20 @@ class FeedbackResponseField(fields.Raw):
 
 ## Different objects to be returns (to be used with `marshal_with`)
 merchant_obj = {
+
+    # merchant details
     'id': fields.String,
     'name': fields.String,
     'address': fields.String,
     'contact_number': fields.String,
     'current_balance': fields.Float,
-    'logo': fields.String
+    'logo': fields.String,
+
+    # nps notification details
+    'nps_notifs': fields.Boolean,
+    'nps_threshold': fields.Integer,
+    'notif_emails': fields.List(fields.String)
+
 }
 
 field_obj = {
