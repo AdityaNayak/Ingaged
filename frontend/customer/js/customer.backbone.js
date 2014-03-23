@@ -84,7 +84,7 @@ $( document ).ready(function() {
             var feedback_text = $(".large-input").find("textarea").val() || ".";
 
             // nps score
-            var nps_score = $(".input-slider").find("#show-serialization-field-nps").text();
+            var nps_score = $(".input-slider").find(".nps-score").text();
 
             // price value score
             var price_value_score = $(".input-slider").find("#show-serialization-field-price-value").text();
