@@ -201,15 +201,17 @@
 	h5{
 		margin-bottom: 0;
 		font-size: 1em;
-		font-weight: 300;
+		@extend .secondary-color;
 	}
 	p{
 		margin-bottom: 0.5em;
-		font-weight: 700;
 	}
 }
 .form-details{
-
+	line-height:1.5;
+}
+.instance-details{
+	line-height:1.5;
 }
 .action-nav{
 	font-size:0.9em;
@@ -368,3 +370,8 @@ input[type=checkbox] {
 				width: 30%;
 			}
 		}
+.main-app{
+	background-image:url('../images/icons.png');
+	background-repeat:no-repeat no-repeat;
+	background-position:50% 315px;
+}

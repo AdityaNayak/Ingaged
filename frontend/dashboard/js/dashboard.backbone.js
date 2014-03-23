@@ -30,8 +30,8 @@ $( document ).ready(function() {
         iframe.src = url;
     };
 
-    /* hostname of the api server */
-    var api_root = 'https://ingage-staging-1.herokuapp.com'
+	/* hostname of the api */
+	var api_root = 'https://ingage.herokuapp.com'
 
     /* logs out the user on the click of the logout link */
     logoutUser = function(ev){
@@ -137,12 +137,14 @@ $( document ).ready(function() {
         }
     });
 
+
     /* login page */
     var LoginView = Backbone.View.extend({
         el: '.main-app',
         events: {
             'submit #login-form': 'loginUser',
             'click #load-signup, #contact-signup': 'showSignup',
+            'click #signup-center' : 'focusSignup',
             'submit #signup-form': 'sendSignupRequest'
         },
         sendSignupRequest: function(ev){
@@ -162,6 +164,14 @@ $( document ).ready(function() {
             $('#login-form').fadeOut(300);
             $('#load-signup').fadeOut(300);
             $('#signup-form').delay(300).fadeIn(300);
+        },
+        focusSignup: function(ev){
+            ev.preventDefault();
+            $("html, body").animate({ scrollTop: 0 }, "slow");
+            $('#login-form').fadeOut(300);
+            $('#load-signup').fadeOut(300);
+            $('#signup-form').delay(300).fadeIn(300);
+            $('.login-container').addClass('shake');
         },
         loginUser: function(ev){
             ev.preventDefault();
@@ -198,7 +208,9 @@ $( document ).ready(function() {
             }
 
             // change the title
-            document.title = "Ingage Dashboard";
+            document.title = "Ingage: Your in-venue Customer Experience Management system";
+
+            $('.main-app').addClass('home');
 
             var template = _.template($("#login-template").html(), {});
             var footerTemplate = _.template($("#footer-template").html(), {});
@@ -301,7 +313,7 @@ $( document ).ready(function() {
             feedbackTimelineCollection.actAs_Paginatable_currentPage_attr = "page";
             feedbackTimelineCollection.actAs_Paginatable_itemsPerPage_attr = "rpp";
             feedbackTimelineCollection.currentPage(currentPage);
-            feedbackTimelineCollection.itemsPerPage(3);
+            feedbackTimelineCollection.itemsPerPage(20);
 
             // basic auth credentials
             feedbackTimelineCollection.credentials = {
@@ -352,9 +364,9 @@ $( document ).ready(function() {
                     $(window).scroll(function() {
 				        var scroll = $(window).scrollTop();
 				        if (scroll >= 550) {
-				            $("#details").addClass("stickit");
+				            $("#details .panel").addClass("stickit");
 				        } else {
-				            $("#details").removeClass("stickit");
+				            $("#details .panel").removeClass("stickit");
 				        }
 				    });
 

@@ -14,7 +14,8 @@
 	<script src="js/vendor/backbone.touch.js"></script>
 	<script src="js/customer.backbone.js"></script>
 	<!-- <script src="js/jquery.mobile-events.min.js"></script> -->
-	<script src="js/plugins/jquery.fullPage.js"></script>
+	<script src="js/plugins/jquery.fullPage.min.js"></script>
+    <script src="js/plugins/jquery.nouislider.js"></script>
 </head>
 <body>
 	<script type="text/template" id="feedback-form-template">
@@ -130,7 +131,7 @@
                     <h3><%= form.get('nps_score_heading') %></h3>
 				</li>
 				<div class="small-10 small-centered columns">
-					<div id="show-serialization-field" class="text-center nps-score"> </div>
+					<div id="show-serialization-field" class="text-center nps-score"></div>
 					<div id="nps-rating"> 
 					</div>
 				</div>
@@ -162,7 +163,6 @@
 
 		</ol>
         <input type="hidden" name="id" value="<%= instance_id %>">
-		<script src="js/plugins/jquery.nouislider.js"></script>
 		
 	</script>
 
@@ -178,10 +178,17 @@
 		<div class="row">
 			<div class="small-11 small-centered columns">
 				<div data-alert class="alert-box success">
-					Feedback submitted successfully
+                    Feedback submitted successfully
 				</div>
-				<h3 class="text-center">Thank you</h3>
-			</div>
+                <h3 class="text-center">Thank you</h3>
+                <% if (feedback.get('has_counter')){ %>
+                    <h3 class="text-center">Return ID <%= feedback.get('counter') %></h3>
+                    <!-- <h3 class="text-center"><a href="#/<%= instance_id %>">Link to Form Again</a></h3> -->
+                <% } else { %>
+<!--                    <h3 class="text-center">This Form does not have Counter Facility.</h3>
+                    <h3 class="text-center"><a href="#/<%= instance_id %>">Link to Form Again</a></h3> -->
+                <% } %>
+        </div>
 		</div>
 	</script>
 </body>
