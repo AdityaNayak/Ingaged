@@ -18,7 +18,7 @@ $( document ).ready(function() {
     };
 
     /* api root url */
-	var root_server = 'https://ingage.herokuapp.com'
+	var root_server = 'https://ingage-staging-3.herokuapp.com'
 
     /* all the routes of the admin panel */
     var Router = Backbone.Router.extend({
@@ -131,7 +131,19 @@ $( document ).ready(function() {
         },
         saveMerchant: function(ev){
             ev.preventDefault();
+    
+            // data to send to the API
             var merchantDetails = $(ev.currentTarget).serializeObject();
+            if (merchantDetails['nps_notifs']) {
+                merchantDetails['nps_notifs'] = true;
+                merchantDetails['nps_threshold'] = Number(merchantDetails['nps_threshold']);
+            } else {
+                delete merchantDetails['notif_emails'];
+                delete merchantDetails['nps_threshold'];
+                merchantDetails['nps_notifs'] = false;
+            }
+
+            // ping the API
             var merchant = new Merchant();
             merchant.credentials = {
                 username: $.cookie("username"),

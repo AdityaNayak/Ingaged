@@ -77,16 +77,15 @@ def DateTimeFieldType(value):
 ## SES e-Mails
 
 
-def send_trans_email(trans_name, name, email, template_vars={}):
+def send_trans_email(trans_name, emails, template_vars={}):
     """Sends a transactional email.
 
     Keyword Arguments:
-    trans_name -- a key name in the dict `app.config['TRANSACTIONAL_EMAILS']`
-    name -- name of the user
-    email -- email of the user
+    trans_name -- a key name in the dict `app.config['TRANSACTIONAL_EMAILS']
+    emails -- list of emails of users
     template_vars -- variables using which template of the email needs to be rendered
     """
     email_details = app.config['TRANSACTIONAL_EMAILS'][trans_name]
-    msg = SESMessage(email_details['from'], '{0} <{1}>'.format(name, email), email_details['subject'])
+    msg = SESMessage(email_details['from'], emails, email_details['subject'])
     msg.html = render_template(email_details['template'], **template_vars)
     msg.send()

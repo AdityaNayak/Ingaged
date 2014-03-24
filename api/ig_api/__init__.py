@@ -44,13 +44,18 @@ TRANSACTIONAL_EMAILS = {
     'new_merchant_new_user': { # this is sent to a new user who is created while creating a merchant
         'subject': 'Wecome to InGage Dashboard',
         'template': 'emails/new_merchant_user.html',
-        'from': 'InGage <ingage@mutinylabs.in>'
+        'from': 'InGage <hello@ingagelive.com>'
     },
     'signup_request': { # this is sent to the admin when a user requests for a sign up
         'subject': 'Sign Up Request for InGage',
         'template': 'emails/signup_request.html',
-        'from': 'InGage <ingage@mutinylabs.in>'
+        'from': 'InGage <hello@ingagelive.com>'
     },
+    'feedback_nps_notification': { # this is sent to the e-mail provided by merchant when feedback has nps below threshold
+        'subject': 'You received a feedback which needs action.',
+        'template': 'emails/feedback_notif.html',
+        'from': 'InGage <hello@ingagelive.com>'
+    }
 }
 
 ## app initilization

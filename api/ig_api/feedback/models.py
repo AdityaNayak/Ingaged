@@ -4,6 +4,7 @@ import datetime
 from bson.objectid import ObjectId
 
 from ig_api import db
+from ig_api.helpers import send_trans_email
 
 
 ## Helpers
@@ -387,6 +388,28 @@ class FeedbackModel(db.Document):
         return responses
 
     @staticmethod
+    def send_notification(feedback):
+        """Checks if a notification needs to be sent for the feedback provided
+        and also send the required notificaton (currently e-Mail) to the e-Mail
+        IDs of the merchant.
+
+        Keyword Arguments:
+        feedback -- feedback object for which notification needs to be sent
+        """
+        
+        # abort if NPS notifications for the merchant are not enabled
+        if not feedback.merchant.nps_notifs:
+            return False
+
+        # abort if feedback's NPS score is above the threshold
+        if feedback.nps_score > feedback.merchant.nps_threshold:
+            return False
+
+        # send an e-mail to the provided e-mail ids
+        emails = feedback.merchant.notif_emails
+        send_trans_email('feedback_nps_notification', emails, {'feedback': feedback})
+
+    @staticmethod
     def create(nps_score, feedback_text, field_responses, form_instance, customer_details=None, price_value_score=None):
         # validate the responses of the fields of the form
         form = form_instance.form
@@ -437,7 +460,11 @@ class FeedbackModel(db.Document):
             customer.save()
             feedback.customer = customer
 
+        # add feedback in db
         feedback.save()
+
+        # send notification (if required)
+        feedback.send_notification(feedback)
 
         return feedback
 

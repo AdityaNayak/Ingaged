@@ -23,6 +23,11 @@ class MerchantModel(db.Document):
     contact_number = db.StringField()
     logo = db.URLField()
 
+    # for e-mail based notifications for feedbacks below threshold
+    nps_notifs = db.BooleanField(required=True, default=False)
+    notif_emails = db.ListField(field=db.EmailField())
+    nps_threshold = db.IntField()
+
     # will be used for payments
     current_balance = db.FloatField(required=True, default=0.0)
 

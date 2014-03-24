@@ -57,14 +57,21 @@ def merchant_id_exists(merchant_id):
     return merchant
 
 ## Different objects to be returned (to be used with `marshal_with`)
-
 merchant_obj = {
+
+    # merchant details
     'id': fields.String,
     'name': fields.String,
     'address': fields.String,
     'contact_number': fields.String,
     'current_balance': fields.Float,
-    'logo': fields.String
+    'logo': fields.String,
+
+    # nps notification details
+    'nps_notifs': fields.Boolean,
+    'nps_threshold': fields.Integer,
+    'notif_emails': fields.List(fields.String)
+
 }
 
 payment_obj = {
@@ -174,10 +181,35 @@ class MerchantUploadLogo(Resource):
 
 class Merchant(Resource):
 
+    def emails_arg(value, key):
+        """Expects a comma seperated strings of emails and validates them.
+        Returns a list of e-Mails.
+        """
+
+        # check if value of str or unicode type
+        if type(value) is not unicode:
+            raise ValueError("There was some problem with the e-Mail(s) provided.")
+
+        # split emails into a list
+        emails = value.split(',')
+
+        # check if all emails are being validated
+        for email in emails:
+            try:
+                db.EmailField().validate(email)
+            except db.ValidationError:
+                raise ValueError("There was some problem with the e-Mail(s) provided.")
+
+        return emails
+
     put_parser = reqparse.RequestParser()
     put_parser.add_argument('name', required=True, type=unicode, location='json')
     put_parser.add_argument('address', required=True, type=unicode, location='json')
     put_parser.add_argument('contact_number', required=False, type=unicode, location='json')
+    # nps score related notification details
+    put_parser.add_argument('nps_notifs', required=True, type=bool, location='json')
+    put_parser.add_argument('notif_emails', required=False, type=emails_arg, location='json')
+    put_parser.add_argument('nps_threshold', required=False, type=int, location='json', choices=range(1, 11))
 
     get_fields = {
         'error': fields.Boolean(default=False),
@@ -202,6 +234,21 @@ class Merchant(Resource):
     def put(self, merchant_id):
         merchant = merchant_id_exists(merchant_id)
         args = self.put_parser.parse_args()
+
+        # add nps based notification details if provided
+        if args['nps_notifs'] is True:
+            # abort if other details are provided correctly
+            if not args.get('notif_emails') and not args.get('nps_threshold'):
+                abort_error(2000)
+            # continue if all the details are provided
+            merchant.nps_notifs = args['nps_notifs']
+            merchant.notif_emails = args.pop('notif_emails')
+            merchant.nps_threshold = args.pop('nps_threshold')
+        # remove all nps details if nps_notifs is False
+        else:
+            merchant.nps_notifs = False
+            merchant.notif_emails = None
+            merchant.nps_threshold = None
 
         # update merchant object attributes and save
         for arg,value in args.items():
