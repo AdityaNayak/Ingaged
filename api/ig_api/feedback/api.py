@@ -119,6 +119,8 @@ form_obj = {
     'customer_details_heading': fields.String,
     'feedback_heading': fields.String,
     'nps_score_heading': fields.String,
+    'price_value_exists': fields.Boolean,
+    'price_value_heading': fields.String,
     'incremental_id': fields.Boolean
 }
 
@@ -147,6 +149,7 @@ feedback_obj = {
 
     # feedback information
     'nps_score': fields.Integer,
+    'price_value_score': fields.Integer,
     'feedback_text': fields.String,
     'received_at': fields.DateTime,
     'customer': fields.Nested(customer_obj),
@@ -196,6 +199,8 @@ class FormList(Resource):
     post_parser.add_argument('description', required=True, type=unicode, location='json')
     post_parser.add_argument('feedback_heading', required=True, type=unicode, location='json')
     post_parser.add_argument('nps_score_heading', required=True, type=unicode, location='json')
+    post_parser.add_argument('price_value_exists', required=True, type=bool, location='json')
+    post_parser.add_argument('price_value_heading', required=False, type=unicode, location='json')
     post_parser.add_argument('customer_details_heading', required=True, type=unicode, location='json')
     post_parser.add_argument('incremental_id', required=True, type=bool, location='json')
     post_parser.add_argument('fields', required=True, type=form_fields, location='json')
@@ -307,6 +312,7 @@ class CustomerFeedback(Resource):
 
     put_parser = reqparse.RequestParser()
     put_parser.add_argument('nps_score', required=True, type=unicode, location='json')
+    put_parser.add_argument('price_value_score', required=False, type=unicode, location='json')
     put_parser.add_argument('feedback_text', required=True, type=unicode, location='json')
     put_parser.add_argument('field_responses', required=True, type=dict, location='json')
     put_parser.add_argument('customer_name', required=False, type=unicode, location='json')
@@ -348,7 +354,7 @@ class CustomerFeedback(Resource):
         # save customer feedback
         try:
             feedback = FeedbackModel.create(args['nps_score'], args['feedback_text'], args['field_responses'], \
-                    instance, customer_details)
+                    instance, customer_details, args['price_value_score'])
         except FeedbackException:
             abort_error(4004)
 

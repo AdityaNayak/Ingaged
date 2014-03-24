@@ -101,48 +101,6 @@
     			</div>
     		</div>
         </div>
-        <div class="row">
-            <div class="small-12 small-centered columns text-center b-ws-top b-ws-bottom">
-                <h3>Gain an <strong>Unfair Advantage</strong> over your competition</h3>
-                <h4 class="secondary-color">We help you improve your Customer Experience and increase Loyalty</h4>
-            </div>
-            <div class="small-6 small-centered columns">
-            <hr>
-            </div>
-        </div>
-        <div class="row b-ws-top b-ws-bottom">
-            <div class="small-4 columns small-centered text-center">
-                <h4 class="dbc">Acquire Loyal Customers</h4>
-                <p class="secondary-color">Simple and instant mobile based loyalty cards</p>
-            </div>
-        </div>
-        <div class="row loop-bg">
-            <div class="small-4 columns text-center">
-                <h4 class="dbc">Marketing on steroids</h4>
-                <p class="secondary-color">Reach beyond your customer base. Intelligent Location based offers.</p>
-            </div>
-            <div class="small-4 columns text-center">
-                <a id="signup-center" class="button b-ws-top small">Request a Call back</a>
-            </div>
-            <div class="small-4 columns text-center">
-                <h4 class="dbc">Measure your business performance</h4>
-                <p class="secondary-color">Sales are only half the story, measure the real health of you business in numbers.</p>
-            </div>
-        </div>
-        <div class="row b-ws-top b-ws-bottom">
-            <div class="small-10 small-centered columns">
-                <div class="row collapse">
-                    <div class="small-5 columns text-center">
-                    <h4 class="dbc">Recover 'At Risk' Customers</h4>
-                    <p class="secondary-color">Do not let your marketing spend go waste. Identify and rescue customers you are likely to lose.</p>
-                    </div>
-                    <div class="small-5 small-offset-2 columns text-center">
-                    <h4 class="dbc">Build your growth engine</h4>
-                    <p class="secondary-color">Learn and understand un met customer needs. Convert your Detractors into Promoters.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
 	</script>
 
 	<script type="text/template" id="header-template">
@@ -192,25 +150,6 @@
     </script>
 
     <script type="text/template" id="feedback-timeline-template">
-
-    	<div class="row">
-    		<div class="small-8 columns panel vermachutiyahain">
-    			<canvas id="line" data-type="Line" width="760" height="260"></canvas>
-    		</div>
-    		<div class="small-4 columns">
-    			<div id="reportrange" class="rangepicker-box text-right">
-    				<span ></span><i class="fi-calendar"></i>
-    			</div>
-    			<!-- <h5>Select location</h5>
-    			<select>
-    				<option>Location 1</option>
-    				<option>Location 2</option>
-    				<option>Location 3</option>
-    				<option>Location 4</option>
-    			</select> -->
-    		</div>
-    		<hr>
-    	</div>
 
     	<div class="row collapse">
     		<dl class="sub-nav action-nav small-12 columns">
@@ -273,39 +212,17 @@
     								</li>
     								<% }); %>
 </ul>
-<div class="pagination-centered">
-	<ul class="pagination">
-		<li class="arrow unavailable">&laquo;</li>
-		<% _.each(pagesToShow, function(page){ %>
-			<li class=<% page == currentPage ? print('"current"') : print('""') %>><a href="#"><%= page %></a></li>
-			<% }); %>
-		<li class="arrow unavailable">&raquo;</li>
-	</ul>
-</div>
-</div>
-</div>
-<script>
-	var npsdata = {
-		labels : ["6 Weeks ago","5 Weeks ago","4 Weeks ago","3 Weeks ago","2 Weeks ago","1 Week ago","Today"],
-		datasets : [
-		{
-			fillColor : "none",
-			strokeColor : "rgba(220,220,220,1)",
-			pointColor : "rgba(220,220,220,1)",
-			pointStrokeColor : "#fff",
-			data : [6,5,9,8,5,2,4]
-		},     
-		{
-			fillColor : "none",
-			strokeColor : "rgba(151,187,205,1)",
-			pointColor : "rgba(151,187,205,1)",
-			pointStrokeColor : "#fff",
-			data : [2,4,4,1,9,2,10]
-		}
-		]
-	}
-	var myNPSchart = new Chart(document.getElementById("line").getContext("2d")).Line(npsdata);
-</script>
+    <div class="pagination-centered">
+        <ul class="pagination">
+            <li class="arrow unavailable">&laquo;</li>
+            <% _.each(pagesToShow, function(page){ %>
+                <li class=<% page == currentPage ? print('"current"') : print('""') %>><a href="#"><%= page %></a></li>
+                <% }); %>
+            <li class="arrow unavailable">&raquo;</li>
+        </ul>
+    </div>
+    </div>
+    </div>
 </script>
 
 
@@ -382,12 +299,16 @@
 
                                                     <div class="secondary survey-column">
                                                         <ol>
-                                                            <% _.each(feedback.get('responses'), function(response){ %>
-                                                                <li>
-                                                                    <h5><%= response.text %></h5>
-                                                                    <p><%= response.response %></p>
-                                                                </li>
+                                                            <% if (feedback.get('responses') == {}) { %>
+                                                                <% _.each(feedback.get('responses'), function(response){ %>
+                                                                    <li>
+                                                                        <h5><%= response.text %></h5>
+                                                                        <p><%= response.response %></p>
+                                                                    </li>
                                                                 <% }); %>
+                                                            <% } else { %>
+                                                                <strong>No questions were attached with this form.</strong>
+                                                            <% } %>
                                                         </ol>
                                                     </div>
                                                     <hr>

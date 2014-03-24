@@ -39,6 +39,11 @@ buckets = {
         'admin': 'admin-staging-2.ingagelive.com',
         'customer': 'customer-staging-2.ingagelive.com',
         'dashboard': 'dashboard-staging-2.ingagelive.com'
+    },
+    'staging-3': {
+        'admin': 'admin-staging-3.ingagelive.com',
+        'customer': 'customer-staging-3.ingagelive.com',
+        'dashboard': 'dashboard-staging-3.ingagelive.com'
     }
 }
 

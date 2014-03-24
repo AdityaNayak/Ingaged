@@ -24,7 +24,7 @@ $( document ).ready(function() {
 	});
 
 	/* hostname of the api */
-	var api_root = 'https://ingage-staging-1.herokuapp.com'
+	var api_root = 'https://ingage.herokuapp.com'
 
 	/* feedback form model */
 	FeedbackFormModel = Backbone.Model.extend({
@@ -77,14 +77,18 @@ $( document ).ready(function() {
                 else {
                     response = section.find('input[name="tt_response"]').val();
                 }
-                field_responses[field_id] = response;
+                field_responses[field_id] = response || ".";
             });
 
             /* feedback text */
-            var feedback_text = $(".large-input").find("textarea").val();
+            var feedback_text = $(".large-input").find("textarea").val() || ".";
 
-            /* nps score */
+            // nps score
             var nps_score = $(".input-slider").find(".nps-score").text();
+
+            // price value score
+            var price_value_score = $(".input-slider").find("#show-serialization-field-price-value").text();
+
 			
             /* customer details */
             var customer_details = {
@@ -99,6 +103,9 @@ $( document ).ready(function() {
                 'nps_score': nps_score,
                 'field_responses': field_responses,
                 'id': $("input[name='id']").val()
+            }
+            if (price_value_score){
+                data.price_value_score = price_value_score;
             }
 			if (!customer_details.name == ""){
 				data.customer_name = customer_details.name
@@ -115,6 +122,10 @@ $( document ).ready(function() {
 			feedbackForm.save(data, {
 			    'success': function(feedback){
                     that.$el.html(that.successTemplate({'feedback': feedback, 'instance_id': that.instanceID}));
+			        // reload the page after 5 seconds
+			        setTimeout(function(){
+			            location.reload();
+			        }, 5 * 1000);
 			    }
 			});
 		},
@@ -152,16 +163,6 @@ $( document ).ready(function() {
 				        onLeave: function(index, direction){},
 				        afterLoad: function(anchorLink, index){},
 				        afterRender: function(){
-				        	$("#nps-rating").noUiSlider({
-								range: [0, 10],
-								start: 7,
-								step: 1,
-								handles: 1,
-								serialization: {
-									resolution: 1,
-									to: [$("#show-serialization-field"), "html"]
-								},
-							});
 				        },
 				        afterSlideLoad: function(anchorLink, index, slideAnchor, slideIndex){},
 				        onSlideLeave: function(anchorLink, index, slideIndex, direction){

@@ -119,6 +119,10 @@ class FormModel(db.Document):
     # fields comprising of the form
     fields = db.ListField(db.EmbeddedDocumentField(FormFieldSubModel))
     
+    # price/value comparison flag (exists or not) & heading
+    price_value_exists = db.BooleanField(required=True, default=False)
+    price_value_heading = db.StringField(required=False)
+
     # heading text for 'Your Details', 'NPS Score', 'Tell Us More' sections
     customer_details_heading = db.StringField(required=True)
     feedback_heading = db.StringField(required=True)
@@ -232,19 +236,18 @@ class FormModel(db.Document):
         return responses
 
     @staticmethod
-    def create(name, description, customer_details_heading, feedback_heading, nps_score_heading, fields, merchant, incremental_id):
+    def create(name, description, customer_details_heading, feedback_heading, nps_score_heading, fields, 
+            merchant, incremental_id, price_value_exists, price_value_heading):
         """Creates a new form instance.
 
         The `fields` keyword argument will take up a list with `FormFieldSubModel` instances. The order of these
         instances in the `fields` list will decide the order for the customer facing form.
-
-        For now a feedback form can have a maximum of 4 fields.
         """
 
         # saving the form
         form = FormModel(name=name, description=description, merchant=merchant, customer_details_heading=customer_details_heading,
-                feedback_heading=feedback_heading, nps_score_heading=nps_score_heading, fields=fields,
-                incremental_id=incremental_id)
+                feedback_heading=feedback_heading, nps_score_heading=nps_score_heading, fields=fields, incremental_id=incremental_id,
+                price_value_exists=price_value_exists, price_value_heading=price_value_heading)
         try:
             form.save()
         except db.ValidationError:
@@ -289,8 +292,11 @@ class FeedbackModel(db.Document):
     nps_score = db.IntField(required=True, choices=range(1,11))
     feedback_text = db.StringField(required=True)
 
+    # price/value score
+    price_value_score = db.IntField(required=False, choices=range(1,11))
+
     # customer response to the different fields of the form
-    field_responses = db.DictField(required=True)
+    field_responses = db.DictField(required=False) # will not be required for feedbacks without any custom cards
 
     # time the feedback was received at (utc time)
     received_at = db.DateTimeField(required=True, default=datetime.datetime.utcnow)
@@ -404,7 +410,7 @@ class FeedbackModel(db.Document):
         send_trans_email('feedback_nps_notification', emails, {'feedback': feedback})
 
     @staticmethod
-    def create(nps_score, feedback_text, field_responses, form_instance, customer_details=None):
+    def create(nps_score, feedback_text, field_responses, form_instance, customer_details=None, price_value_score=None):
         # validate the responses of the fields of the form
         form = form_instance.form
         for field in form.fields:
@@ -421,6 +427,12 @@ class FeedbackModel(db.Document):
         # feedback form object
         feedback = FeedbackModel(nps_score=nps_score, feedback_text=feedback_text, field_responses=field_responses,
                 form_instance=form_instance, merchant=form_instance.form.merchant)
+
+        # raise exception if price/value score is not provided
+        if form.price_value_exists and not price_value_score:
+            raise FeedbackException('The price/value score was not provided.')
+        else:
+            form.price_value_score = price_value_score
 
         # add counter info to feedback (if exists on form)
         if form.incremental_id:
