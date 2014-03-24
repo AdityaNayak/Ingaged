@@ -123,9 +123,9 @@ $( document ).ready(function() {
 			    'success': function(feedback){
                     that.$el.html(that.successTemplate({'feedback': feedback, 'instance_id': that.instanceID}));
 			        // reload the page after 5 seconds
-			        //setTimeout(function(){
-			        //    location.reload();
-			        //}, 5 * 1000);
+			        setTimeout(function(){
+			            location.reload();
+			        }, 5 * 1000);
 			    }
 			});
 		},
