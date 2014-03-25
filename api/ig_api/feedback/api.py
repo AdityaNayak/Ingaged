@@ -11,8 +11,8 @@ from ig_api import api, db
 from ig_api.error_codes import abort_error
 from ig_api.helpers import upload_s3
 from ig_api.authentication import login_required
-from ig_api.feedback.models import (FormModel, InstanceModel, FormException, InstanceException, LocationException,
-        FormFieldSubModel, FeedbackModel, FeedbackException, LocationModel)
+from ig_api.feedback.models import (FormModel, InstanceModel, FormException, InstanceException,
+        FormFieldSubModel, FeedbackModel, FeedbackException)
 
 
 ## Helpers
@@ -60,16 +60,6 @@ def form_id_exists(form_id):
 
     return form
 
-def location_id_exists(location_id):
-    """Does the same for location id what `form_id_exists` does for form ID.
-    Code of error raise: 4006
-    """
-    try:
-        location = LocationModel.objects.get(id=ObjectId(location_id))
-    except (db.ValidationError, InvalidId, db.DoesNotExist):
-        abort_error(4006)
-
-    return location
 
 def instance_id_exists(instance_id):
     """Does the same for instance id what `form_id_exists` does for form ID.
@@ -97,12 +87,20 @@ class FeedbackResponseField(fields.Raw):
 
 ## Different objects to be returns (to be used with `marshal_with`)
 merchant_obj = {
+
+    # merchant details
     'id': fields.String,
     'name': fields.String,
     'address': fields.String,
     'contact_number': fields.String,
     'current_balance': fields.Float,
-    'logo': fields.String
+    'logo': fields.String,
+
+    # nps notification details
+    'nps_notifs': fields.Boolean,
+    'nps_threshold': fields.Integer,
+    'notif_emails': fields.List(fields.String)
+
 }
 
 field_obj = {
@@ -121,20 +119,16 @@ form_obj = {
     'customer_details_heading': fields.String,
     'feedback_heading': fields.String,
     'nps_score_heading': fields.String,
+    'price_value_exists': fields.Boolean,
+    'price_value_heading': fields.String,
     'incremental_id': fields.Boolean
-}
-
-location_obj = {
-    'id': fields.String,
-    'name': fields.String,
-    'description': fields.String
 }
 
 instance_obj = {
     'id': fields.String,
     'name': fields.String,
     'description': fields.String,
-    'location': fields.Nested(location_obj)
+    'location': fields.String
 }
 
 customer_obj = {
@@ -155,6 +149,7 @@ feedback_obj = {
 
     # feedback information
     'nps_score': fields.Integer,
+    'price_value_score': fields.Integer,
     'feedback_text': fields.String,
     'received_at': fields.DateTime,
     'customer': fields.Nested(customer_obj),
@@ -204,6 +199,8 @@ class FormList(Resource):
     post_parser.add_argument('description', required=True, type=unicode, location='json')
     post_parser.add_argument('feedback_heading', required=True, type=unicode, location='json')
     post_parser.add_argument('nps_score_heading', required=True, type=unicode, location='json')
+    post_parser.add_argument('price_value_exists', required=True, type=bool, location='json')
+    post_parser.add_argument('price_value_heading', required=False, type=unicode, location='json')
     post_parser.add_argument('customer_details_heading', required=True, type=unicode, location='json')
     post_parser.add_argument('incremental_id', required=True, type=bool, location='json')
     post_parser.add_argument('fields', required=True, type=form_fields, location='json')
@@ -259,7 +256,7 @@ class FormInstanceList(Resource):
     post_parser = reqparse.RequestParser()
     post_parser.add_argument('name', required=True, type=unicode, location='json')
     post_parser.add_argument('description', required=True, type=unicode, location='json')
-    post_parser.add_argument('location_id', required=True, type=unicode, location='json')
+    post_parser.add_argument('location', required=True, type=unicode, location='json')
 
     post_fields = {
         'error': fields.Boolean(default=False),
@@ -286,11 +283,6 @@ class FormInstanceList(Resource):
         form = form_id_exists(form_id)
         args = self.post_parser.parse_args()
 
-        # get location using args['location_id'] or abort
-        location = location_id_exists(args['location_id']) # abort with 4006 if location does not exist
-        args.pop('location_id')
-        args['location'] = location
-
         # create instance
         try:
             instance = form.create_instance(**args)
@@ -298,56 +290,6 @@ class FormInstanceList(Resource):
             abort_error(4002)
         
         return {'instance': instance}
-
-
-class LocationList(Resource):
-
-    get_fields = {
-        'error': fields.Boolean(default=False),
-        'locations': fields.List(fields.Nested(location_obj))
-    }
-
-    post_fields = {
-        'error': fields.Boolean(default=False),
-        'location': fields.Nested(location_obj)
-    }
-
-    post_parser = reqparse.RequestParser()
-    post_parser.add_argument('name', required=True, type=unicode, location='json')
-    post_parser.add_argument('description', required=False, type=unicode, location='json')
-
-    @login_required('merchant')
-    @marshal_with(get_fields)
-    def get(self):
-        locations = LocationModel.objects.all()
-        
-        return {'locations': locations}
-
-    @login_required('merchant')
-    @marshal_with(post_fields)
-    def post(self):
-        args = self.post_parser.parse_args()
-        try:
-            location = LocationModel.create_location(merchant=g.user.merchant, **args)
-        except LocationException:
-            abort_error(4005)
-
-        return {'location': location}
-
-
-class Location(Resource):
-
-    post_fields = {
-        'error': fields.Boolean(default=False),
-        'location': fields.Nested(location_obj)
-    }
-
-    @login_required('merchant')
-    @marshal_with(post_fields)
-    def get(self, location_id):
-        location = location_id_exists(location_id)
-
-        return {'location': location}
 
 
 class FormInstance(Resource):
@@ -370,6 +312,7 @@ class CustomerFeedback(Resource):
 
     put_parser = reqparse.RequestParser()
     put_parser.add_argument('nps_score', required=True, type=unicode, location='json')
+    put_parser.add_argument('price_value_score', required=False, type=unicode, location='json')
     put_parser.add_argument('feedback_text', required=True, type=unicode, location='json')
     put_parser.add_argument('field_responses', required=True, type=dict, location='json')
     put_parser.add_argument('customer_name', required=False, type=unicode, location='json')
@@ -411,7 +354,7 @@ class CustomerFeedback(Resource):
         # save customer feedback
         try:
             feedback = FeedbackModel.create(args['nps_score'], args['feedback_text'], args['field_responses'], \
-                    instance, customer_details)
+                    instance, customer_details, args['price_value_score'])
         except FeedbackException:
             abort_error(4004)
 
@@ -670,8 +613,6 @@ api.add_resource(FormInstance, '/dashboard/forms/<form_id>/instances/<instance_i
 api.add_resource(FeedbackTimeline, '/dashboard/timeline')
 api.add_resource(FeedbackTimelineExport, '/dashboard/timeline/csv_export')
 api.add_resource(FeedbackAnalytics, '/dashboard/forms/<form_id>/analytics')
-api.add_resource(LocationList, '/dashboard/locations')
-api.add_resource(Location, '/dashboard/locations/<location_id>')
 
 # customer facing
 api.add_resource(CustomerFeedback, '/customer/feedback/<instance_id>')
