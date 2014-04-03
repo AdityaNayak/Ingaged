@@ -7,7 +7,7 @@ define([
 function($, _, Backbone, Router){
     
     var initialize = function(){
-        // call our router's initialize function to take off :D
+        // call our router's initialize function for a take off :D
         Router.initialize();
     }
 

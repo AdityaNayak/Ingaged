@@ -8,11 +8,10 @@ function($, _, Backbone){
     var Router = Backbone.Router.extend({
         routes: {
             'form/:instanceID': 'showForm',
-            '*actions': 'defaultAction'
+            '*notFound': 'notFound'
         }
     });
 
-    console.log("dasda");
     var initialize = function(){
         var appRouter = new Router;
 
@@ -20,7 +19,7 @@ function($, _, Backbone){
             alert("The form will be shown here.");
         });
 
-        appRouter.on('route:defaultAction', function(actions){
+        appRouter.on('route:notFound', function(){
             alert("Nothing exists out here.");
         });
 
