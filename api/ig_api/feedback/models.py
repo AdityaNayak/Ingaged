@@ -38,6 +38,7 @@ class FormFieldSubModel(db.EmbeddedDocument):
         field_type = db.StringField(max_length=2, choices=FIELD_TYPES, required=True)
         text = db.StringField(required=True)
         choices = db.ListField(db.StringField()) # only used in case of MULTIPLE FIELD
+        required = db.BooleanField(required=True, default=False);
         id = db.ObjectIdField(required=True, default=ObjectId)
 
         def validate(self, *args, **kwargs):
@@ -286,7 +287,7 @@ class InstanceModel(db.Document):
 class FeedbackModel(db.Document):
     # nps score and feedback text
     nps_score = db.IntField(required=True, choices=range(1,11))
-    feedback_text = db.StringField(required=True)
+    feedback_text = db.StringField(required=False)
 
     # customer response to the different fields of the form
     field_responses = db.DictField(required=False) # will not be required for feedbacks without any custom cards
@@ -403,7 +404,7 @@ class FeedbackModel(db.Document):
         send_trans_email('feedback_nps_notification', emails, {'feedback': feedback})
 
     @staticmethod
-    def create(nps_score, feedback_text, field_responses, form_instance, customer_details=None):
+    def create(nps_score,field_responses, form_instance, feedback_text=None, customer_details=None):
         # validate the responses of the fields of the form
         form = form_instance.form
         for field in form.fields:

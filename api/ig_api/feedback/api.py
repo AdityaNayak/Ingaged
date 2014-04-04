@@ -106,6 +106,7 @@ merchant_obj = {
 field_obj = {
     'id': fields.String,
     'type': fields.String(attribute='field_type'),
+    'required': fields.Boolean,
     'text': fields.String,
     'choices': fields.List(fields.String)
 }
@@ -182,7 +183,8 @@ class FormList(Resource):
             if not type(field) is dict:
                 raise ValueError("Every field should comprise of a dictionary.")
             # this will ensure that the field has the correct kind of keys
-            form_field = FormFieldSubModel(field_type=field.get('type'), text=field.get('text'), choices=field.get('choices')) 
+            form_field = FormFieldSubModel(field_type=field.get('type'), text=field.get('text'),
+                    choices=field.get('choices'), required=field.get('required'))
             try:
                 form_field.validate()
             except db.ValidationError:
@@ -307,7 +309,7 @@ class CustomerFeedback(Resource):
 
     put_parser = reqparse.RequestParser()
     put_parser.add_argument('nps_score', required=True, type=unicode, location='json')
-    put_parser.add_argument('feedback_text', required=True, type=unicode, location='json')
+    put_parser.add_argument('feedback_text', required=False, type=unicode, location='json')
     put_parser.add_argument('field_responses', required=True, type=dict, location='json')
     put_parser.add_argument('customer_name', required=False, type=unicode, location='json')
     put_parser.add_argument('customer_mobile', required=False, type=unicode, location='json')
@@ -347,8 +349,8 @@ class CustomerFeedback(Resource):
         
         # save customer feedback
         try:
-            feedback = FeedbackModel.create(args['nps_score'], args['feedback_text'], args['field_responses'], \
-                    instance, customer_details)
+            feedback = FeedbackModel.create(args['nps_score'], args['field_responses'], \
+                    instance, args.get('feedback_text'), customer_details)
         except FeedbackException:
             abort_error(4004)
 
