@@ -1,4 +1,4 @@
-// Filename: Form.js
+// Filename: models/Form.js
 
 define([
     'underscore',
@@ -6,6 +6,7 @@ define([
     'models/Merchant',
     'collections/FormCardCollection',
 ],
+
 function(_, Backbone, MerchantModel, FormCardCollection){
     
     var FormModel = Backbone.Model.extend({
@@ -15,7 +16,6 @@ function(_, Backbone, MerchantModel, FormCardCollection){
 
             // Form data exists under the 'form' key of the response.
             response = response.form;
-            console.log(response);
 
             // Add all the fields as cards. They will form the
             // first set of cards. NPS & Customer Details will
