@@ -1,8 +1,10 @@
+// Filename: app.js
+
 define([
     'jquery',
     'underscore',
     'backbone',
-    'router'
+    'Router'
 ],
 function($, _, Backbone, Router){
     
