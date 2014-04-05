@@ -401,10 +401,7 @@
 		*/		
 		function touchMoveHandler(event){
 		
-            //console.log("[line: 387] touchMoveHandler(event) was called.");
-
             if(stopTouchScroll){
-                console.log("The touch scroll flag is on.");
                 return;
             }
 
@@ -426,8 +423,6 @@
 					//if movement in the X axys is greater than in the Y and the currect section has slides...
 					if (activeSection.find('.slides').length && Math.abs(touchStartX - touchEndX) > (Math.abs(touchStartY - touchEndY))) {
 					    
-					    //console.log("[line: 409] Horizontal scrolling activated.");
-					    //console.log("[line: 410] The section has slides & X axis movement is more than Y axis movement.");
 
 					    //is the movement greater than the minimum resistance to scroll?
 					    if (Math.abs(touchStartX - touchEndX) > ($(window).width() / 100 * options.touchSensitivity)) {
@@ -443,7 +438,6 @@
 					//vertical scrolling
 					else{
 
-                        //console.log("[line 426] Vertical scrolling activated."); 
 
 						//if there are landscape slides, we check if the scrolling bar is in the current one or not
 						if(activeSection.find('.slides').length){
@@ -455,10 +449,6 @@
 						//is the movement greater than the minimum resistance to scroll?
 						if (Math.abs(touchStartY - touchEndY) > ($(window).height() / 100 * options.touchSensitivity)) {
 
-                            //console.log("Minimum resitance to scroll: " + ($(window).height() / 100 * options.touchSensitivity) + "px");
-                            //console.log("Math.abs(touchStartY - touchEndY) = " + Math.abs(touchStartY - touchEndY))
-                            //console.log("[line: 404] touchStartX: " + touchStartX + ", touchEndX: " + touchEndX);
-                            //console.log("[line: 404] touchStartY: " + touchStartY + ", touchEndY: " + touchEndY);
 
 							if (touchStartY > touchEndY) {
 								if(scrollable.length > 0 ){

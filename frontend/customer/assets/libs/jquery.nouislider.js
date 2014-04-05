@@ -1283,7 +1283,6 @@ function closure ( target, options, originalOptions ){
 	function start ( event, data ) {
 
 		$.fn.fullpage.stopTouchScroll()
-		console.log($.fn.fullpage.stopTouchScroll);
 
 		// Mark the handle as 'active' so it can be styled.
 		if( data.handles.length === 1 ) {
@@ -1569,7 +1568,6 @@ function closure ( target, options, originalOptions ){
 
 		// Test the options once, not for every slider.
 		var options = test( originalOptions, this );
-        console.log(options);
 		// Loop all items, and provide a new closed-scope environment.
 		return this.each(function(){
 			closure(this, options, originalOptions);
