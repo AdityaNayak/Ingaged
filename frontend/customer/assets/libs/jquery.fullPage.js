@@ -552,22 +552,12 @@
 			}
 		}
 
-		
-		$.fn.fullpage.moveSectionUp = function(){
-			var prev = $('.section.active').prev('.section');
-			
-			//looping to the bottom if there's no more sections above
-			if (!prev.length && (options.loopTop || options.continuousVertical)) {
-				prev = $('.section').last();
-			}
-
-			if (prev.length) {
-				scrollPage(prev, null, true);
-			}
-		};
-
-		$.fn.fullpage.moveSectionDown = function (){
-			var next = $('.section.active').next('.section');
+        // This one actually moves the section down.
+        // 'moveSectionDown' just triggers the 'moveSectionDown' event
+        // on the '.section' DOM element.
+        $.fn.fullpage.actualMoveSectionDown = function(){
+			var activeSection = $('.section.active');
+			var next = activeSection.next('.section');
 
 			//looping to the top if there's no more sections below
 			if(!next.length &&
@@ -580,6 +570,34 @@
 				(options.loopBottom || options.continuousVertical))){
 				scrollPage(next, null, false);
 			}
+        };
+
+		// This one just triggers the 'moveSectionDown' event on the
+		// '.section.active' event.
+		$.fn.fullpage.moveSectionDown = function(){
+			var activeSection = $('.section.active');
+		    activeSection.trigger('moveSectionDown');
+		};
+
+        // Analogous to 'actualMoveSectionDown'
+        $.fn.fullpage.actualMoveSectionUp = function(){
+			var activeSection = $('.section.active');
+			var prev = activeSection.prev('.section');
+			
+			//looping to the bottom if there's no more sections above
+			if (!prev.length && (options.loopTop || options.continuousVertical)) {
+				prev = $('.section').last();
+			}
+
+			if (prev.length) {
+				scrollPage(prev, null, true);
+			}
+        };
+	
+		// Analogous to 'moveSectionDown'
+		$.fn.fullpage.moveSectionUp = function(){
+			var activeSection = $('.section.active');
+			activeSection.trigger('moveSectionUp')
 		};
 		
 		$.fn.fullpage.moveTo = function (section, slide){
