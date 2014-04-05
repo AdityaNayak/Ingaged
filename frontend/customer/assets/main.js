@@ -6,11 +6,13 @@ require.config({
         'jquery': 'libs/jquery',
         'underscore': 'libs/underscore',
         'backbone': 'libs/backbone',
-        'jquery.fullPage': 'libs/jquery.fullPage'
+        'jquery.fullPage': 'libs/jquery.fullPage',
+        'jquery.nouislider': 'libs/jquery.nouislider'
     },
 
     'shim': {
-        'jquery.fullPage': ['jquery']
+        'jquery.fullPage': ['jquery'],
+        'jquery.nouislider': ['jquery']
     }
 
 });
