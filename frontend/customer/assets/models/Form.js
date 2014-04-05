@@ -10,7 +10,7 @@ define([
 function(_, Backbone, MerchantModel, FormCardCollection) {
     
     var FormModel = Backbone.Model.extend({
-        urlRoot: 'http://localhost:5000/customer/feedback',
+        urlRoot: 'http://192.168.1.106:5000/customer/feedback',
         parse: function(response){
             var cards;
 

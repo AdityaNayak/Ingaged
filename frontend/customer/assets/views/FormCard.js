@@ -12,6 +12,8 @@ define([
     'text!templates/cards/star_rating.html',
     'text!templates/cards/textbox.html',
     'text!templates/cards/yes_no.html',
+    // jquery fullPage
+    'jquery.fullPage',
     // noUiSlider
     'jquery.nouislider'
 ],
@@ -35,16 +37,23 @@ function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCard
         className: 'section row',
 
         events: {
+
             // Updating the element showing the NPS Score
             'change #nps-rating': 'updateNpsScore',
             'set #nps-rating': 'updateNpsScore',
-            'slide #nps-rating': 'updateNpsScore'
+            'slide #nps-rating': 'updateNpsScore',
+
+            'click .intr-btn, .intr': 'onChoiceClick'
         },
 
         initialize: function(options) {
             this.className = 'row'
             this.model = options.model;
             this.template = _.template( this.cardTemplates[this.model.get('type')], this.model.toJSON() );
+        },
+
+        onChoiceClick: function() {
+            $.fn.fullpage.moveSectionDown();
         },
 
         updateNpsScore: function(event, number) {
