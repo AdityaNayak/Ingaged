@@ -7,7 +7,7 @@ define([
     'collections/FormCardCollection',
 ],
 
-function(_, Backbone, MerchantModel, FormCardCollection){
+function(_, Backbone, MerchantModel, FormCardCollection) {
     
     var FormModel = Backbone.Model.extend({
         urlRoot: 'http://localhost:5000/customer/feedback',

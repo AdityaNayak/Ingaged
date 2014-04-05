@@ -3,7 +3,7 @@
 define([
     'underscore',
     'backbone',
-], function(_, Backbone){
+], function(_, Backbone) {
     
     var MerchantModel = Backbone.Model.extend({});
 

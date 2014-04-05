@@ -5,7 +5,7 @@ define([
     'backbone',
     'models/FormCard'
 ],
-function(_, Backbone, FormCardModel){
+function(_, Backbone, FormCardModel) {
     
     var FormCardCollection = Backbone.Collection.extend({
         model: FormCardModel
