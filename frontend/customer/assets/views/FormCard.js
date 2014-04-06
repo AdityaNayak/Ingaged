@@ -61,9 +61,14 @@ function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCard
             this.model = options.model;
             this.responseModel = options.responseModel;
             this.template = _.template( this.cardTemplates[this.model.get('type')], this.model.toJSON() );
+            this.filled = false;
         },
 
         moveCardDown: function() {
+            if ( this.model.get('required') && !this.filled ) {
+                alert("The current card doesn't seem to be filled correctly.");
+                return;
+            };
             $.fn.fullpage.actualMoveSectionDown();
         },
 
@@ -80,18 +85,21 @@ function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCard
 
             // TextBox Card
             if ( this.model.get('type') == 'TT' ) {
+                this.filled = true;
                 this.responseModel.attributes.field_responses[this.model.get('id')] = currentTarget.val();
                 return;
             }
 
             // Feedback Text Card
             if ( this.model.get('type') == 'FT' ) {
+                this.filled = true;
                 this.responseModel.set ('feedback_text', currentTarget.val() );
                 return;
             }
 
             // Customer Details Card
             if (this.model.get('type') == 'CD' ) {
+                this.filled = true;
                 this.responseModel.set( currentTarget.attr('name'), currentTarget.val() );
                 return
             }
@@ -104,6 +112,7 @@ function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCard
 
             response = $(e.currentTarget).data('response');
             if ( ['YN', 'ST', 'MT'].indexOf(this.model.get('type')) != -1 ) {
+                this.filled = true;
                 this.responseModel.attributes.field_responses[this.model.get('id')] = response;
             }
 
@@ -115,6 +124,7 @@ function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCard
             this.$el.find("#show-serialization-field").html(number);
 
             // Update the response model.
+            this.filled = true;
             this.responseModel.set( 'nps_score', number );
         },
 
