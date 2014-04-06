@@ -1,7 +1,9 @@
 // Filename: build.js
 
 ({
-    baseUrl: ".",
+    appDir: "../",
+    baseUrl: "assets",
+    dir: "../../to_be_deployed/customer",
     paths: {
         'jquery': 'libs/jquery',
         'underscore': 'libs/underscore',
@@ -10,5 +12,4 @@
         'jquery.nouislider': 'libs/jquery.nouislider'
     },
     name: "main",
-    out: "main-built.js",
 })

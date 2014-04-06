@@ -59,7 +59,7 @@ get_resource_dir = lambda r_dir: os.path.abspath(os.path.join(cwd, '..', r_dir))
 resource_dirs = {
     'assets': get_resource_dir('assets'),
     'admin': get_resource_dir('admin'),
-    'customer': get_resource_dir('customer'),
+    'customer': get_resource_dir('to_be_deployed/customer'),
     'dashboard': get_resource_dir('dashboard')
 }
 
@@ -142,19 +142,29 @@ def deploy(exp, env):
     """
     print '\n'
     # all the files which need to be uploaded
-    asset_files = [{'filename': i, 'key': os.path.join('assets', i.split('/assets', 1)[1][1:])} \
-            for i in get_dir_filenames(resource_dirs['assets'])]
+    all_files = []
+    # no assets directory needed for customer experience as all assets are within the customer directory itself
+    if exp != 'customer':
+        asset_files = [{'filename': i, 'key': os.path.join('assets', i.split('/assets', 1)[1][1:])} \
+                for i in get_dir_filenames(resource_dirs['assets'])]
+        all_files.extend(asset_files)
+    # check if the directory with code actually exists
+    if not os.path.isdir(resource_dirs[exp]):
+        print colored.red('No directory exists at {0}.'.format(resource_dirs[exp]))
+        return
     exp_files = [{'filename': i, 'key': i.split('/'+ exp, 1)[1][1:]} for i in get_dir_filenames(resource_dirs[exp])]
-    all_files = exp_files
-    all_files.extend(asset_files)
+    all_files.extend(exp_files)
     print colored.blue('{0} number of files need to be uploaded.'.format(len(all_files)))
 
     # check if the api_root and references to asset locations have been changed
-    m = '> Have you changed the references to resources in assets directory and value of `api_root`? '
-    local_changes = raw_input(colored.magenta(m))
-    if str.lower(local_changes) != 'y':
-        print colored.red('Change the asset references and value of `api_root` and restart this process.')
-        return False
+    # this check should not be carried for customer experience as it doesn't have any
+    # parent assets directory with its assets
+    if exp != 'customer':
+        m = '> Have you changed the references to resources in assets directory and value of `api_root`? '
+        local_changes = raw_input(colored.magenta(m))
+        if str.lower(local_changes) != 'y':
+            print colored.red('Change the asset references and value of `api_root` and restart this process.')
+            return False
 
     # bucket to upload the resources to
     bucket = conn.get_bucket(buckets[env][exp])

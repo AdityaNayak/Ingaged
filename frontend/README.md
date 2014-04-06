@@ -45,4 +45,8 @@ cd _deployment
 python deploy.py deploy --experience staging-1 --environment customer
 ```
 
+#### Note on Customer Facing Form Deployment
+As `require.js` is being used with the customer facing form, the complete built version of the same is copied to
+`to_be_deployed/customer`. The deployment script deploys this version of the customer facing form.
+
 **Note: Currently there are no e-Mails being sent automatically (as opposed to the same during deployment) on the heroku app. So when you deploy a new version, make it a point to intimate everyone else on your own. The best way to do this would be comment on the pull request in github.**

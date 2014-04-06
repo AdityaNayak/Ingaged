@@ -56,5 +56,5 @@ docs/_build/
 .bak
 .orig
 
-# require.js final built main file
-main-built.js
+# to be deployed directory
+frontend/to_be_deployed/
