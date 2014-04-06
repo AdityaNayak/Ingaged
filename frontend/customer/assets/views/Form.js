@@ -49,6 +49,7 @@ function($, _, Backbone, FormModel, FormResponseModel, FormCardView, SuccessThan
 
         render: function() {
             _.each(this.model.get('cards').models, this.addCard, this); // Append cards to the 'ol' of FormView
+            this.$el.addClass(this.model.get('css_class_name'));
             $('body').html(this.$el);
             this.activateFullPage();
         },
