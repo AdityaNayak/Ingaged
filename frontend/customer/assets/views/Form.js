@@ -7,9 +7,10 @@ define([
     'models/Form',
     'models/FormResponse',
     'views/FormCard',
+    'text!templates/success_thanks.html',
     'jquery.fullPage'
 ],
-function($, _, Backbone, FormModel, FormResponseModel, FormCardView) {
+function($, _, Backbone, FormModel, FormResponseModel, FormCardView, SuccessThanksTemplate) {
     
     var FormView = Backbone.View.extend({
 
@@ -34,12 +35,14 @@ function($, _, Backbone, FormModel, FormResponseModel, FormCardView) {
         submitFeedback: function() {
             // set the ID to the ID of the instance.
             // This gets changed to the ID of the form when the del is fetched.
-            this.model.set( 'id', this.instanceID );
+            this.responseModel.set( 'id', this.instanceID );
 
             // Save the form data
-            this.model.save(this.responseModel.toJSON(), {
+            var that = this;
+            this.responseModel.save( this.responseModel.toJSON(), {
                 'success': function(data) {
-                    alert("Yeah!! The form got saved.");
+                    var successTemplate = _.template(SuccessThanksTemplate);
+                    $('body').html(successTemplate);
                 },
             });
         },

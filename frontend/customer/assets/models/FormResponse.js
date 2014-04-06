@@ -7,6 +7,7 @@ define([
 function(_, Backbone){
     
     var FormResponseModel = Backbone.Model.extend({
+        urlRoot: 'http://192.168.1.106:5000/customer/feedback',
         defaults: {
             'feedback_text': null,
             'nps_score': 7,
