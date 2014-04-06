@@ -5,10 +5,11 @@ define([
     'underscore',
     'backbone',
     'models/Form',
+    'models/FormResponse',
     'views/FormCard',
     'jquery.fullPage'
 ],
-function($, _, Backbone, FormModel, FormCardView) {
+function($, _, Backbone, FormModel, FormResponseModel, FormCardView) {
     
     var FormView = Backbone.View.extend({
 
@@ -16,10 +17,31 @@ function($, _, Backbone, FormModel, FormCardView) {
 
         className: 'section-list',
 
+        events: {
+            'click #form-submit-btn': 'submitFeedback'
+        },
+
         initialize: function(options) {
+            this.instanceID = options.instanceID;
             this.model = new FormModel( { 'id': options.instanceID } );
             this.model.on('sync', this.render, this);
+            
+            this.responseModel = new FormResponseModel();
+
             this.model.fetch();
+        },
+
+        submitFeedback: function() {
+            // set the ID to the ID of the instance.
+            // This gets changed to the ID of the form when the del is fetched.
+            this.model.set( 'id', this.instanceID );
+
+            // Save the form data
+            this.model.save(this.responseModel.toJSON(), {
+                'success': function(data) {
+                    alert("Yeah!! The form got saved.");
+                },
+            });
         },
 
         render: function() {
@@ -30,7 +52,7 @@ function($, _, Backbone, FormModel, FormCardView) {
 
         addCard: function(cardModel) {
             var cardView;
-            cardView = new FormCardView( { 'model': cardModel } );
+            cardView = new FormCardView( { 'model': cardModel, 'responseModel': this.responseModel } );
             this.$el.append( cardView.render().$el );
         },
 
@@ -38,6 +60,7 @@ function($, _, Backbone, FormModel, FormCardView) {
             $.fn.fullpage({
                 easing: false,
                 css3: true,
+                verticalCentered: false,
                 touchSensitivity: 2
             });
         }

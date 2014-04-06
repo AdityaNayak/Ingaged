@@ -14,6 +14,12 @@ function(_, Backbone, MerchantModel, FormCardCollection) {
         parse: function(response){
             var cards;
 
+            // Response should be returned as such when the form data is being saved.
+            // This would occur in the case of a PUT request.
+            if ( response.hasOwnProperty('success') ) {
+                return response;
+            }
+
             // Form data exists under the 'form' key of the response.
             response = response.form;
 

@@ -43,25 +43,82 @@ function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCard
             'set #nps-rating': 'updateNpsScore',
             'slide #nps-rating': 'updateNpsScore',
 
-            'click .intr-btn, .intr': 'onChoiceClick'
+            // User clicks a choice on Yes/No, Multiple Choice or Star Rating card.
+            'click .intr-choice': 'onChoiceClick',
+
+            // Recording changes on TextBox Card, Feedback TextArea & Customer Details Card
+            'keyup input[name=tt_response]': 'textCardKeyUp', // TextBox card
+            'keyup .feedback-text': 'textCardKeyUp', // Feedback TextArea
+            'keyup input[name^="customer"]': 'textCardKeyUp', // Customer Details card
+
+            // Scrolling cards Up & Down
+            'moveSectionDown': 'moveCardDown',
+            'moveSectionUp': 'moveCardUp'
+
         },
 
         initialize: function(options) {
-            this.className = 'row'
             this.model = options.model;
+            this.responseModel = options.responseModel;
             this.template = _.template( this.cardTemplates[this.model.get('type')], this.model.toJSON() );
         },
 
-        onChoiceClick: function() {
+        moveCardDown: function() {
+            $.fn.fullpage.actualMoveSectionDown();
+        },
+
+        moveCardUp: function() {
+            $.fn.fullpage.actualMoveSectionUp();
+        },
+
+        textCardKeyUp: function(e) {
+            var currentTarget;
+
+            e.preventDefault();
+
+            currentTarget = $(e.currentTarget);
+
+            // TextBox Card
+            if ( this.model.get('type') == 'TT' ) {
+                this.responseModel.attributes.field_responses[this.model.get('id')] = currentTarget.val();
+                return;
+            }
+
+            // Feedback Text Card
+            if ( this.model.get('type') == 'FT' ) {
+                this.responseModel.set ('feedback_text', currentTarget.val() );
+                return;
+            }
+
+            // Customer Details Card
+            if (this.model.get('type') == 'CD' ) {
+                this.responseModel.set( currentTarget.attr('name'), currentTarget.val() );
+                return
+            }
+        },
+
+        onChoiceClick: function(e) {
+            var response;
+
+            e.preventDefault();
+
+            response = $(e.currentTarget).data('response');
+            if ( ['YN', 'ST', 'MT'].indexOf(this.model.get('type')) != -1 ) {
+                this.responseModel.attributes.field_responses[this.model.get('id')] = response;
+            }
+
             $.fn.fullpage.moveSectionDown();
         },
 
-        updateNpsScore: function(event, number) {
+        updateNpsScore: function(e, number) {
             number = Number(number);
             this.$el.find("#show-serialization-field").html(number);
+
+            // Update the response model.
+            this.responseModel.set( 'nps_score', number );
         },
 
-        addNoUiSlider: function() { // Adds noUiSlider to '#nps-rating' element
+        addNoUiSlider: function() {
             var npsStart;
 
             npsStart = 7;
