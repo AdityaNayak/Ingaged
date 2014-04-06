@@ -55,3 +55,6 @@ docs/_build/
 #Gitfiles
 .bak
 .orig
+
+# require.js final built main file
+main-built.js
