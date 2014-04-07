@@ -371,17 +371,16 @@ class FeedbackModel(db.Document):
         # list of dictionaries of responses
         responses = []
 
-        # iterating over all the responses of the feedback
-        for f_id, response in self.field_responses.items():
-            # check for the field the response is associatform.counter.get_next_counter
-            for field in form.fields:
-                if str(field.id) == f_id:
-                    responses.append({
-                        'text': field.text,
-                        'type': field.field_type,
-                        'response': response,
-                        'id': f_id
-                    })
+        # iterating over all fields of the form
+        for field in form.fields:
+            f_id = str(field.id)
+            responses.append({
+                'text': field.text,
+                'type': field.field_type,
+                'id': f_id,
+                'response': self.field_responses.get(f_id)
+            })
+
         return responses
 
     @staticmethod
@@ -413,11 +412,11 @@ class FeedbackModel(db.Document):
         for field in form.fields:
             # validate the response of the field
             response = field_responses.get(str(field.id))
-            if not response:
+            if not response and field.required:
                 raise FeedbackException('Response to all the fields of the form has not been provided.')
             # check if correct response is given to all of the fields
             try:
-                field.validate_customer_response(response)
+                if response: field.validate_customer_response(response)
             except ValueError:
                 raise FeedbackException('Correct response to one or more fields has not been given.')
 
