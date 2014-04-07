@@ -55,7 +55,14 @@ function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCard
 
             // Scrolling cards Up & Down
             'moveSectionDown': 'moveCardDown',
-            'moveSectionUp': 'moveCardUp'
+            'moveSectionUp': 'moveCardUp',
+
+            // Showing done button on TextBox Card & Feedback TextArea
+            'click input[name=tt_response]': 'showDone',
+            'click .feedback-text': 'showDone',
+
+            // Clicking on done will move the card down
+            'click .done': 'moveCardDown'
 
         },
 
@@ -64,6 +71,10 @@ function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCard
             this.responseModel = options.responseModel;
             this.template = _.template( this.cardTemplates[this.model.get('type')], this.model.toJSON() );
             this.filled = false;
+        },
+
+        showDone: function() {
+            this.$el.find('.done.hide').show();
         },
 
         moveCardDown: function() {
