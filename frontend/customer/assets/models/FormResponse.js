@@ -7,15 +7,13 @@ define([
 function(_, Backbone){
     
     var FormResponseModel = Backbone.Model.extend({
-        urlRoot: 'https://ingage-staging-1.herokuapp.com/customer/feedback',
+        urlRoot: 'http://localhost:5000/customer/feedback',
+
         defaults: {
-            'feedback_text': null,
-            'nps_score': 7,
-            'customer_name': null,
-            'customer_phone': null,
-            'customer_email': null,
-            'field_responses': {}
+            'field_responses': {},
+            'nps_score': 7
         }
+
     });
 
     return FormResponseModel;
