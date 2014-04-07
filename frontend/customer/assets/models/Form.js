@@ -47,7 +47,7 @@ function(_, Backbone, MerchantModel, FormCardCollection) {
             // Adding the NPS card
             cards.push({
                 'type': 'NPS',
-                'required': true,
+                'required': false,
                 'text': response.nps_score_heading
             });
             delete response.nps_score_heading;
