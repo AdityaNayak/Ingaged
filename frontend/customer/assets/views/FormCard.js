@@ -108,15 +108,22 @@ function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCard
         },
 
         onChoiceClick: function(e) {
-            var response;
+            var response, currentTarget;
 
             e.preventDefault();
 
-            response = $(e.currentTarget).data('response');
+            currentTarget = $(e.currentTarget); 
+            response = currentTarget.data('response');
+
+            // Add the response to the responseModel
             if ( ['YN', 'ST', 'MT'].indexOf(this.model.get('type')) != -1 ) {
                 this.filled = true;
                 this.responseModel.attributes.field_responses[this.model.get('id')] = response;
             }
+
+            // Add a class to response choice & remove it from any others if it exists
+            this.$el.find('.response.intr-choice').removeClass('response');
+            currentTarget.addClass('response');
 
             $.fn.fullpage.moveSectionDown();
         },
