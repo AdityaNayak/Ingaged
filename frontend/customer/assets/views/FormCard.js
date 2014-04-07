@@ -12,17 +12,19 @@ define([
     'text!templates/cards/star_rating.html',
     'text!templates/cards/textbox.html',
     'text!templates/cards/yes_no.html',
+    'text!templates/cards/custom_html.html',
     // jquery fullPage
     'jquery.fullPage',
     // noUiSlider
     'jquery.nouislider'
 ],
 function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCardTemplate, STCardTemplate,
-    TTCardTemplate, YNCardTemplate) {
+    TTCardTemplate, YNCardTemplate, CuHTMLCardTemplate) {
     
     var FormCardView = Backbone.View.extend({
         
         cardTemplates: {
+            'CU_HTML': CuHTMLCardTemplate,
             'CD': CDCardTemplate,
             'FT': FTCardTemplate,
             'MT': MTCardTemplate,

@@ -10,7 +10,7 @@ define([
 function(_, Backbone, MerchantModel, FormCardCollection) {
     
     var FormModel = Backbone.Model.extend({
-        urlRoot: 'http://192.168.1.106:5000/customer/feedback',
+        urlRoot: 'http://localhost:5000/customer/feedback',
         parse: function(response){
             var cards;
 
@@ -23,10 +23,19 @@ function(_, Backbone, MerchantModel, FormCardCollection) {
             // Form data exists under the 'form' key of the response.
             response = response.form;
 
+            // Cards array
+            cards = [];
+
+            // Add the custom HTML card as the first one
+            cards.push({
+                'type': 'CU_HTML',
+                'required': false,
+                'text': null
+            });
+
             // Add all the fields as cards. They will form the
             // first set of cards. NPS & Customer Details will
             // be added after that.
-            cards = [];
             _.each(response.fields, function(field){
                 cards.push(field);
             });
