@@ -1,21 +1,14 @@
 <div class="row">
-
     <li class="small-11 small-centered columns">
         <h3><%= text %></h3>
     </li>
-
 </div>
-
 <div class="row">
-
     <div class="small-10 columns small-centered">
         <ul>
-
             <% _.each(choices, function(choice) { %>
                 <li class="intr-choice intr intr-color" data-response="<%= choice %>"><%= choice %></li>
             <% }); %>
-
         </ul>
     </div>
-
 </div>
