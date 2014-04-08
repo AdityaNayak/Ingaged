@@ -307,7 +307,7 @@
 
                                                     <div class="secondary survey-column">
                                                         <ol>
-                                                            <% if (feedback.get('responses') != {}) { %>
+                                                            <% if (feedback.get('responses').length != 0) { %>
                                                                 <% _.each(feedback.get('responses'), function(response){ %>
                                                                     <li>
                                                                         <h5><%= response.text %></h5>
