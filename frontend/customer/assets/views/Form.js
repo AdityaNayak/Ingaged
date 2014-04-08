@@ -76,7 +76,9 @@ function($, _, Backbone, FormModel, FormResponseModel, FormCardView, SuccessThan
                 easing: false,
                 css3: true,
                 verticalCentered: false,
-                touchSensitivity: 2
+                touchSensitivity: 2,
+                paddingTop: '2em',
+                scrollingSpeed: 300,
             });
         }
 
