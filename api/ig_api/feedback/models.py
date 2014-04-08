@@ -128,6 +128,9 @@ class FormModel(db.Document):
     # CSS class name to be added for this form
     css_class_name = db.StringField(required=True)
 
+    # HTML for the display card
+    display_card_html = db.StringField(required=True)
+
     # which merchant is the form associated with?
     merchant = db.ReferenceField('MerchantModel', required=True)
 
@@ -237,7 +240,7 @@ class FormModel(db.Document):
 
     @staticmethod
     def create(name, description, customer_details_heading, feedback_heading, nps_score_heading, fields, 
-            merchant, incremental_id, css_class_name):
+            merchant, incremental_id, css_class_name, display_card_html):
         """Creates a new form instance.
 
         The `fields` keyword argument will take up a list with `FormFieldSubModel` instances. The order of these
@@ -247,7 +250,7 @@ class FormModel(db.Document):
         # saving the form
         form = FormModel(name=name, description=description, merchant=merchant, customer_details_heading=customer_details_heading,
                 feedback_heading=feedback_heading, nps_score_heading=nps_score_heading, fields=fields,
-                incremental_id=incremental_id, css_class_name=css_class_name)
+                incremental_id=incremental_id, css_class_name=css_class_name, display_card_html=display_card_html)
         try:
             form.save()
         except db.ValidationError:

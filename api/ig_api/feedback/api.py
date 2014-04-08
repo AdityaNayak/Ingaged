@@ -121,7 +121,8 @@ form_obj = {
     'feedback_heading': fields.String,
     'nps_score_heading': fields.String,
     'incremental_id': fields.Boolean,
-    'css_class_name': fields.String
+    'css_class_name': fields.String,
+    'display_card_html': fields.String
 }
 
 instance_obj = {
@@ -202,6 +203,7 @@ class FormList(Resource):
     post_parser.add_argument('customer_details_heading', required=True, type=unicode, location='json')
     post_parser.add_argument('incremental_id', required=True, type=bool, location='json')
     post_parser.add_argument('css_class_name', required=True, type=unicode, location='json')
+    post_parser.add_argument('display_card_html', required=True, type=unicode, location='json')
     post_parser.add_argument('fields', required=True, type=form_fields, location='json')
     get_fields = {
         'error': fields.Boolean(default=False),
