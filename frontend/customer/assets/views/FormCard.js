@@ -60,7 +60,10 @@ function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCard
             'click .feedback-text': 'showDone',
 
             // Clicking on done will move the card down
-            'click .done': 'moveCardDown'
+            'click .done': 'moveCardDown',
+
+            // Clicking on "Leave a Feedback" button on display card will move it down
+            'click #leave-feedback-btn': 'moveCardDown'
 
         },
 
