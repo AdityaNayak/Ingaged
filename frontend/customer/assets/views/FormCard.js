@@ -12,19 +12,17 @@ define([
     'text!templates/cards/star_rating.html',
     'text!templates/cards/textbox.html',
     'text!templates/cards/yes_no.html',
-    'text!templates/cards/custom_html.html',
     // jquery fullPage
     'jquery.fullPage',
     // noUiSlider
     'jquery.nouislider'
 ],
 function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCardTemplate, STCardTemplate,
-    TTCardTemplate, YNCardTemplate, CuHTMLCardTemplate) {
+    TTCardTemplate, YNCardTemplate) {
     
     var FormCardView = Backbone.View.extend({
         
         cardTemplates: {
-            'CU_HTML': CuHTMLCardTemplate,
             'CD': CDCardTemplate,
             'FT': FTCardTemplate,
             'MT': MTCardTemplate,
@@ -62,14 +60,22 @@ function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCard
             'click .feedback-text': 'showDone',
 
             // Clicking on done will move the card down
-            'click .done': 'moveCardDown'
+            'click .done': 'moveCardDown',
+
+            // Clicking on "Leave a Feedback" button on display card will move it down
+            'click #leave-feedback-btn': 'moveCardDown'
 
         },
 
         initialize: function(options) {
+            var template;
+
             this.model = options.model;
             this.responseModel = options.responseModel;
-            this.template = _.template( this.cardTemplates[this.model.get('type')], this.model.toJSON() );
+            // Template is there in the 'text' attribute of model if it is a display card
+            if ( this.model.get('type') == 'CU_HTML' ) template = _.template( this.model.get('text') );
+            else template = _.template( this.cardTemplates[this.model.get('type')], this.model.toJSON() );
+            this.template = template;
             this.filled = false;
         },
 
@@ -80,10 +86,10 @@ function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCard
         moveCardDown: function() {
             $('.section.active').removeClass('rq rq-rm');
             if ( this.model.get('required') && !this.filled ) {
-                    $('.section.active').addClass('rq').delay(200).queue(function(next){
-                    $(this).addClass("rq-rm");
-                    next();
-                });
+                $('.section.active').addClass('rq').delay(200).queue(function(next){
+                $(this).addClass("rq-rm");
+                next();
+            });
 
                 return;
             };
@@ -100,6 +106,13 @@ function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCard
             e.preventDefault();
 
             currentTarget = $(e.currentTarget);
+
+            // Mark card as not filled if the val() returns an empty string
+            console.log(currentTarget.val());
+            if ( currentTarget.val() == "" ){
+                this.filled = false;
+                return;
+            }
 
             // TextBox Card
             if ( this.model.get('type') == 'TT' ) {

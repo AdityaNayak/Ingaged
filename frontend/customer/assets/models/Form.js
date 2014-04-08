@@ -11,6 +11,7 @@ function(_, Backbone, MerchantModel, FormCardCollection) {
     
     var FormModel = Backbone.Model.extend({
         urlRoot: 'https://ingage-staging-1.herokuapp.com/customer/feedback',
+        // urlRoot: 'http://localhost:5000/customer/feedback',
         parse: function(response){
             var cards;
 
@@ -30,7 +31,7 @@ function(_, Backbone, MerchantModel, FormCardCollection) {
             cards.push({
                 'type': 'CU_HTML',
                 'required': false,
-                'text': null
+                'text': response.display_card_html
             });
 
             // Add all the fields as cards. They will form the

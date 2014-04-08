@@ -46,6 +46,10 @@ function($, _, Backbone, FormModel, FormResponseModel, FormCardView, SuccessThan
                 'success': function(data) {
                     var successTemplate = _.template(SuccessThanksTemplate);
                     $('body').html(successTemplate);
+                    // Page will reload 10 seconds after feedback has been submitted
+                    setTimeout(function() {
+                        location.reload(); 
+                    }, 10 * 1000);
                 },
             });
         },
