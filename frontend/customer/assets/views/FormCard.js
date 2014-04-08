@@ -73,8 +73,8 @@ function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCard
             // Clicking on done will move the card down
             'click .done': 'moveCardDown',
 
-            // Clicking on "Leave a Feedback" button on display card will move it down
-            'click #leave-feedback-btn': 'moveCardDown',
+            // Clicking on the display card should mvoe the card down
+            'click .display-container': 'moveCardDown',
 
             // Clicking on the "Submit" button will do the Customer Details card
             // validation & then trigger an event which will be caught by views/Form.js
