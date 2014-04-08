@@ -32,6 +32,17 @@ function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCard
             'YN': YNCardTemplate
         },
 
+        cardCSSClasses: {
+            'CU_HTML': 'display-card',
+            'YN': 'yes-no',
+            'ST': 'multiple rating',
+            'MT': 'multiple',
+            'TT': 'small-input',
+            'FT': 'large-input',
+            'NPS': 'input-slider',
+            'CD': 'customer-details'
+        },
+
         tagName: 'div',
 
         className: 'section row',
@@ -208,6 +219,8 @@ function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCard
         },
 
         render: function() {
+            // Add card specific CSS class
+            this.$el.addClass(this.cardCSSClasses[this.model.get('type')]);
             this.$el.html(this.template);
             if ( this.model.get('type') == 'NPS' ) this.addNoUiSlider();
             return this
