@@ -87,10 +87,9 @@ function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCard
             $('.section.active').removeClass('rq rq-rm');
             if ( this.model.get('required') && !this.filled ) {
                 $('.section.active').addClass('rq').delay(200).queue(function(next){
-                $(this).addClass("rq-rm");
-                next();
-            });
-
+                    $(this).addClass("rq-rm");
+                    next();
+                });
                 return;
             };
             $.fn.fullpage.actualMoveSectionDown();
