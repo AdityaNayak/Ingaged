@@ -63,7 +63,12 @@ function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCard
             'click .done': 'moveCardDown',
 
             // Clicking on "Leave a Feedback" button on display card will move it down
-            'click #leave-feedback-btn': 'moveCardDown'
+            'click #leave-feedback-btn': 'moveCardDown',
+
+            // Clicking on the "Submit" button will do the Customer Details card
+            // validation & then trigger an event which will be caught by views/Form.js
+            'click #form-submit-btn': 'submitFeedback'
+
 
         },
 
@@ -79,19 +84,36 @@ function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCard
             this.filled = false;
         },
 
+        submitFeedback: function(e) {
+            // Activate the required flag in Customer Details card model
+            // if NPS score is below 7 else deactivate it.
+            if ( this.responseModel.get('nps_score') <= 7 ) this.model.set( 'required', true );
+            else this.model.set( 'required', false );
+            
+            // Do the card validation & return if it is not validated
+            if ( this.validateCard() ) {
+                $(e.currentTarget).trigger('submitFeedback');
+            }
+        },
+
         showDone: function() {
             this.$el.find('.done.hide').show();
         },
 
-        moveCardDown: function() {
+        validateCard: function() {
             $('.section.active').removeClass('rq rq-rm');
             if ( this.model.get('required') && !this.filled ) {
                 $('.section.active').addClass('rq').delay(200).queue(function(next){
                     $(this).addClass("rq-rm");
                     next();
                 });
-                return;
+                return false; // false in case the filled flag of the view is not active
             };
+            return true // true in case the filled flag of the view is not active
+        },
+
+        moveCardDown: function() {
+            if ( !this.validateCard() ) return
             $.fn.fullpage.actualMoveSectionDown();
         },
 
@@ -100,20 +122,19 @@ function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCard
         },
 
         textCardKeyUp: function(e) {
-            var currentTarget;
+            var currentTarget, rM;
 
             e.preventDefault();
 
             currentTarget = $(e.currentTarget);
 
-            // Mark card as not filled if the val() returns an empty string
-            if ( currentTarget.val() == "" ){
-                this.filled = false;
-                return;
-            }
-
             // TextBox Card
             if ( this.model.get('type') == 'TT' ) {
+                // Mark card as not filled if the val() returns an empty string
+                if ( currentTarget.val() == "" ){
+                    this.filled = false;
+                    return;
+                }
                 this.filled = true;
                 this.responseModel.attributes.field_responses[this.model.get('id')] = currentTarget.val();
                 return;
@@ -128,7 +149,14 @@ function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCard
 
             // Customer Details Card
             if (this.model.get('type') == 'CD' ) {
-                this.filled = true;
+                rM = this.responseModel;
+                // Mark card as filled only if all of the three customer details are filled.
+                if ( rM.get('customer_name') && rM.get('customer_phone') && rM.get('customer_email') ) this.filled = true;
+                // Switch the filled flag off if the contents of a field are deleted by the user
+                if ( currentTarget.val() == "" ) {
+                    this.filled = false;
+                    this.responseModel.set( currentTarget.attr('name'), null );
+                }
                 this.responseModel.set( currentTarget.attr('name'), currentTarget.val() );
                 return
             }

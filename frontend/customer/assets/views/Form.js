@@ -19,7 +19,7 @@ function($, _, Backbone, FormModel, FormResponseModel, FormCardView, SuccessThan
         className: 'section-list',
 
         events: {
-            'click #form-submit-btn': 'submitFeedback'
+            'submitFeedback #form-submit-btn': 'submitFeedback'
         },
 
         initialize: function(options) {
