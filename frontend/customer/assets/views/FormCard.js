@@ -12,19 +12,17 @@ define([
     'text!templates/cards/star_rating.html',
     'text!templates/cards/textbox.html',
     'text!templates/cards/yes_no.html',
-    'text!templates/cards/custom_html.html',
     // jquery fullPage
     'jquery.fullPage',
     // noUiSlider
     'jquery.nouislider'
 ],
 function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCardTemplate, STCardTemplate,
-    TTCardTemplate, YNCardTemplate, CuHTMLCardTemplate) {
+    TTCardTemplate, YNCardTemplate) {
     
     var FormCardView = Backbone.View.extend({
         
         cardTemplates: {
-            'CU_HTML': CuHTMLCardTemplate,
             'CD': CDCardTemplate,
             'FT': FTCardTemplate,
             'MT': MTCardTemplate,
@@ -67,9 +65,14 @@ function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCard
         },
 
         initialize: function(options) {
+            var template;
+
             this.model = options.model;
             this.responseModel = options.responseModel;
-            this.template = _.template( this.cardTemplates[this.model.get('type')], this.model.toJSON() );
+            // Template is there in the 'text' attribute of model if it is a display card
+            if ( this.model.get('type') == 'CU_HTML' ) template = _.template( this.model.get('text') );
+            else template = _.template( this.cardTemplates[this.model.get('type')], this.model.toJSON() );
+            this.template = template;
             this.filled = false;
         },
 
