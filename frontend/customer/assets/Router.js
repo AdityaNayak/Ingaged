@@ -10,7 +10,7 @@ function($, _, Backbone, FormView) {
 
     var Router = Backbone.Router.extend({
         routes: {
-            'form/:instanceID': 'showForm', // Show the feedback form.
+            ':instanceID': 'showForm', // Show the feedback form.
             '*notFound': 'notFound' // Anything other than showing of feedback form.
         }
     });
