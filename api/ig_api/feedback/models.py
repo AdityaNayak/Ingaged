@@ -44,7 +44,7 @@ class FormFieldSubModel(db.EmbeddedDocument):
         def validate(self, *args, **kwargs):
             # check there are the correct amount of choices in case of multiple field
             if self.field_type == 'MT': # in case of MULTIPLE FIELD
-                if len(self.choices) < 2 or len(self.choices) > 5:
+                if len(self.choices) < 2 or len(self.choices) > 7:
                     raise db.ValidationError(message='Number of choices provided for multiple field should be between 2 and 5.')
 
             # run the original validation method
