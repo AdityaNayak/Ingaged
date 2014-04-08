@@ -51,6 +51,10 @@ function($, _, Backbone, FormModel, FormResponseModel, FormCardView, SuccessThan
                         location.reload(); 
                     }, 10 * 1000);
                 },
+                'error': function(data) {
+                    $('#btn-loading').fadeOut(300);
+                    $('#form-submit-btn').fadeIn(300);
+                }
             });
         },
 
