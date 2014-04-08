@@ -13,7 +13,7 @@ function(_, Backbone, MerchantModel, FormCardCollection) {
         urlRoot: 'https://ingage-staging-1.herokuapp.com/customer/feedback',
         // urlRoot: 'http://localhost:5000/customer/feedback',
         parse: function(response){
-            var cards;
+            var cards, noFields;
 
             // Response should be returned as such when the form data is being saved.
             // This would occur in the case of a PUT request.
@@ -23,6 +23,10 @@ function(_, Backbone, MerchantModel, FormCardCollection) {
 
             // Form data exists under the 'form' key of the response.
             response = response.form;
+
+            // Activate the no fields flag if required
+            noFields = false;
+            if ( response.fields.length == 0 ) noFields = true;
 
             // Cards array
             cards = [];
@@ -45,6 +49,16 @@ function(_, Backbone, MerchantModel, FormCardCollection) {
             // TODO: Currently the ordering of cards is done in a very crude
             //       manner. This needs to be improved so that it can be dynamic.
 
+            // Push the Feedback TextBox card first if there are no fields
+            if (noFields) {
+                cards.push({
+                    'type': 'FT',
+                    'required': false,
+                    'text': response.feedback_heading
+                });
+                delete response.feedback_heading;
+            }
+
             // Adding the NPS card
             cards.push({
                 'type': 'NPS',
@@ -54,12 +68,14 @@ function(_, Backbone, MerchantModel, FormCardCollection) {
             delete response.nps_score_heading;
 
             // Adding the Feedback TextBox card
-            cards.push({
-                'type': 'FT',
-                'required': false,
-                'text': response.feedback_heading
-            });
-            delete response.feedback_heading;
+            if (!noFields) {
+                cards.push({
+                    'type': 'FT',
+                    'required': false,
+                    'text': response.feedback_heading
+                });
+                delete response.feedback_heading;
+            }
 
             // Add the customer details card
             cards.push({
