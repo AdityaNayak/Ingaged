@@ -33,6 +33,9 @@ function($, _, Backbone, FormModel, FormResponseModel, FormCardView, SuccessThan
         },
 
         submitFeedback: function() {
+            $('#form-submit-btn').fadeOut(300);
+            $('#btn-loading').fadeIn(300);
+
             // set the ID to the ID of the instance.
             // This gets changed to the ID of the form when the del is fetched.
             this.responseModel.set( 'id', this.instanceID );
