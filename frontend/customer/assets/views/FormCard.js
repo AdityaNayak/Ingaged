@@ -10,7 +10,7 @@ define([
     'text!templates/cards/multiple_choice.html',
     'text!templates/cards/nps.html',
     'text!templates/cards/star_rating.html',
-    'text!templates/cards/textbox.html',
+    'text!templates/cards/input.html',
     'text!templates/cards/yes_no.html',
     // jquery fullPage
     'jquery.fullPage',
@@ -87,10 +87,9 @@ function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCard
             $('.section.active').removeClass('rq rq-rm');
             if ( this.model.get('required') && !this.filled ) {
                 $('.section.active').addClass('rq').delay(200).queue(function(next){
-                $(this).addClass("rq-rm");
-                next();
-            });
-
+                    $(this).addClass("rq-rm");
+                    next();
+                });
                 return;
             };
             $.fn.fullpage.actualMoveSectionDown();
