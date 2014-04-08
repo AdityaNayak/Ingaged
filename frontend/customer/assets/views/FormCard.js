@@ -104,6 +104,13 @@ function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCard
 
             currentTarget = $(e.currentTarget);
 
+            // Mark card as not filled if the val() returns an empty string
+            console.log(currentTarget.val());
+            if ( currentTarget.val() == "" ){
+                this.filled = false;
+                return;
+            }
+
             // TextBox Card
             if ( this.model.get('type') == 'TT' ) {
                 this.filled = true;
