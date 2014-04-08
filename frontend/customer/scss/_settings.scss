@@ -394,13 +394,13 @@ $form-label-font-color: scale-color($black, $lightness: 30%);
 $input-font-color: scale-color($black, $lightness: 30%);
 $input-font-size: rem-calc(16);
 $input-bg-color: $white;
-$input-focus-bg-color: scale-color($white, $lightness: -2%);
-$input-border-color: $grey;
-$input-focus-border-color: $primary-color;
+//$input-focus-bg-color: scale-color($white, $lightness: -2%);
+//$input-border-color: $grey;
+//$input-focus-border-color: $primary-color;
 // $input-border-style: solid;
 // $input-border-width: 1px;
 $input-disabled-bg: $grey;
-$input-box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+//$input-box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
 $input-include-glowing-effect: false;
 
 // We use these to style the fieldset border and spacing.

@@ -284,7 +284,7 @@ i{
 @media #{$xxlarge-up} { }
 @media #{$xxlarge-only} { }
 
-.barbeque-nation-form-1{
+.kabliwalas-form-1{
 	.load-screen{
 		background:#FFA238;
 	}
@@ -299,5 +299,26 @@ i{
 	}
 	h3{
 		color:#9D1B1D;
+	}
+	input,textarea{
+		border:2px dotted #9D1B1D !important;	
+	}
+}
+.oyo-form-1{
+	.load-screen{
+		
+	}
+	.load-bg{
+		
+		padding: 10em 0;
+	}
+	.txt-bg{
+		
+	}
+	h3,h2{
+		color:#EE3F3F;
+	}
+	input,textarea{
+		border:2px dotted #EE3F3F !important;
 	}
 }
