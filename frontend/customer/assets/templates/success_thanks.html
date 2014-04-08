@@ -1,9 +1,9 @@
 <div class="row">
 	<div class="small-10 columns small-centered text-center b-ws-top b-ws-bottom">
-        <h3>Thank you <%= customer_name %> for your feedback.</h3> </div>
+        <h3>Thank you <% if ( typeof customer_name !== "undefined" ) { %> <%= customer_name %> <% } %> for your feedback.</h3> </div>
 </div>
 <div class="row">
 	<div class="small-10 columns small-centered text-center b-ws-top">
-	<p class="sec sec-color">powered by Ingage</p>
+        <p class="sec sec-color">powered by Ingage</p>
 	</div>
 </div>
