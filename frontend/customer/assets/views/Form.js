@@ -34,7 +34,7 @@ function($, _, Backbone, FormModel, FormResponseModel, FormCardView, SuccessThan
 
         submitFeedback: function() {
             $('#form-submit-btn').fadeOut(300);
-            $('#btn-loading').fadeIn(300);
+            $('#btn-loading').delay(300).fadeIn(300);
 
             // set the ID to the ID of the instance.
             // This gets changed to the ID of the form when the del is fetched.
@@ -53,7 +53,7 @@ function($, _, Backbone, FormModel, FormResponseModel, FormCardView, SuccessThan
                 },
                 'error': function(data) {
                     $('#btn-loading').fadeOut(300);
-                    $('#form-submit-btn').fadeIn(300);
+                    $('#form-submit-btn').delay(300).fadeIn(300);
                 }
             });
         },
