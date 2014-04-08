@@ -44,7 +44,7 @@ function($, _, Backbone, FormModel, FormResponseModel, FormCardView, SuccessThan
             var that = this;
             this.responseModel.save( this.responseModel.toJSON(), {
                 'success': function(data) {
-                    var successTemplate = _.template(SuccessThanksTemplate);
+                    var successTemplate = _.template( SuccessThanksTemplate, that.responseModel.toJSON() );
                     $('body').html(successTemplate);
                     // Page will reload 10 seconds after feedback has been submitted
                     setTimeout(function() {
