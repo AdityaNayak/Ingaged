@@ -51,7 +51,8 @@
 //  "foundation/components/offcanvas",
 //"foundation/components/visibility";
 
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:300);
+@import "compass/css3/transition";
 
 @import "foundation-icons";
 @import "nouislider";
@@ -82,7 +83,14 @@ textarea{
 	color:$white;
 	border-color: darken($red,15%);
 }
-
+.rq{
+	background:$red;
+	@include transition(background 0.5s);
+}
+.rq-rm{
+	background:$white;
+	@include transition(background 0.5s);	
+}
 .intr-color{
 	background-color:$lightgrey;
 	border:1px solid $grey;

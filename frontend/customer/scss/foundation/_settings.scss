@@ -387,7 +387,7 @@ $shiny-edge-size: 0 0px 0;
 // We use these to style the labels in different ways
 // $form-label-pointer: pointer;
 // $form-label-font-size: rem-calc(14);
-// $form-label-font-weight: normal;
+ $form-label-font-weight: 300;
 $form-label-font-color: scale-color($black, $lightness: 30%);
 // $form-label-bottom-margin: rem-calc(8);
 // $input-font-family: inherit;

@@ -79,7 +79,11 @@ function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCard
 
         moveCardDown: function() {
             if ( this.model.get('required') && !this.filled ) {
-                alert("The current card doesn't seem to be filled correctly.");
+                    $('.section.active').addClass('rq').delay(200).queue(function(next){
+                    $(this).addClass("rq-rm");
+                    next();
+                });
+
                 return;
             };
             $.fn.fullpage.actualMoveSectionDown();
