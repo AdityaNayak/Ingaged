@@ -116,6 +116,9 @@ textarea{
 .sec{
 	font-size:0.75em !important;
 }
+.sec-color{
+	color:$black !important;
+}
 .yes-no{
 	i{
 		font-size: 1.5em;
@@ -219,7 +222,24 @@ i{
 .response{
 	box-shadow:0 0 2px 2px $blue;
 	}
-
+.s-ws-top{
+	margin-top:1em !important;
+}
+.s-ws-bottom{
+	margin-bottom:1em !important;
+}
+.m-ws-top{
+	margin-top:2em !important;
+}
+.m-ws-bottom{
+	margin-bottom:2em !important;
+}
+.b-ws-top{
+	margin-top:3em !important;
+}
+.b-ws-bottom{
+	margin-bottom:3em !important;
+}
 @media #{$small-up} { }
 @media #{$small-only} { }
 
