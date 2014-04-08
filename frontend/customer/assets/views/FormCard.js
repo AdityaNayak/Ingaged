@@ -10,7 +10,7 @@ define([
     'text!templates/cards/multiple_choice.html',
     'text!templates/cards/nps.html',
     'text!templates/cards/star_rating.html',
-    'text!templates/cards/textbox.html',
+    'text!templates/cards/input.html',
     'text!templates/cards/yes_no.html',
     // jquery fullPage
     'jquery.fullPage',
