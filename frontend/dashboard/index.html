@@ -202,7 +202,11 @@
     											<% } %>
     										</span> - 
     										<span class="customer-message">
-    											<%= feedback.get("feedback_text") %>
+                                                <% if (feedback.get("feedback_text")) { %>
+                                                    <%= feedback.get("feedback_text") %>
+                                                <% } else { %>
+                                                    No Text
+                                                <% } %>
     										</span>
     									</span>
     									<span class="small-2 columns text-right secondary secondary-color">
@@ -293,17 +297,25 @@
 
                                                     <hr>
                                                     <div class="secondary">
-                                                        <p><%= feedback.get("feedback_text") %></p>
+                                                        <% if (feedback.get('feedback_text')) { %>
+                                                            <p><%= feedback.get("feedback_text") %></p>
+                                                        <% } else { %>
+                                                            <strong>No feedback text was provided by the user.</strong>
+                                                        <% } %>
                                                     </div>
                                                     <hr>
 
                                                     <div class="secondary survey-column">
                                                         <ol>
-                                                            <% if (feedback.get('responses') == {}) { %>
+                                                            <% if (feedback.get('responses').length != 0) { %>
                                                                 <% _.each(feedback.get('responses'), function(response){ %>
                                                                     <li>
                                                                         <h5><%= response.text %></h5>
-                                                                        <p><%= response.response %></p>
+                                                                        <% if (response.response) { %>
+                                                                            <p><%= response.response %></p>
+                                                                        <% } else { %>
+                                                                            <p>No response provided.</p>
+                                                                        <% } %>
                                                                     </li>
                                                                 <% }); %>
                                                             <% } else { %>

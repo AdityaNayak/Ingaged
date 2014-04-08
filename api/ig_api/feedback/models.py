@@ -38,6 +38,7 @@ class FormFieldSubModel(db.EmbeddedDocument):
         field_type = db.StringField(max_length=2, choices=FIELD_TYPES, required=True)
         text = db.StringField(required=True)
         choices = db.ListField(db.StringField()) # only used in case of MULTIPLE FIELD
+        required = db.BooleanField(required=True, default=False);
         id = db.ObjectIdField(required=True, default=ObjectId)
 
         def validate(self, *args, **kwargs):
@@ -119,14 +120,16 @@ class FormModel(db.Document):
     # fields comprising of the form
     fields = db.ListField(db.EmbeddedDocumentField(FormFieldSubModel))
     
-    # price/value comparison flag (exists or not) & heading
-    price_value_exists = db.BooleanField(required=True, default=False)
-    price_value_heading = db.StringField(required=False)
-
     # heading text for 'Your Details', 'NPS Score', 'Tell Us More' sections
     customer_details_heading = db.StringField(required=True)
     feedback_heading = db.StringField(required=True)
     nps_score_heading = db.StringField(required=True)
+
+    # CSS class name to be added for this form
+    css_class_name = db.StringField(required=True)
+
+    # HTML for the display card
+    display_card_html = db.StringField(required=True)
 
     # which merchant is the form associated with?
     merchant = db.ReferenceField('MerchantModel', required=True)
@@ -237,7 +240,7 @@ class FormModel(db.Document):
 
     @staticmethod
     def create(name, description, customer_details_heading, feedback_heading, nps_score_heading, fields, 
-            merchant, incremental_id, price_value_exists, price_value_heading):
+            merchant, incremental_id, css_class_name, display_card_html):
         """Creates a new form instance.
 
         The `fields` keyword argument will take up a list with `FormFieldSubModel` instances. The order of these
@@ -246,8 +249,8 @@ class FormModel(db.Document):
 
         # saving the form
         form = FormModel(name=name, description=description, merchant=merchant, customer_details_heading=customer_details_heading,
-                feedback_heading=feedback_heading, nps_score_heading=nps_score_heading, fields=fields, incremental_id=incremental_id,
-                price_value_exists=price_value_exists, price_value_heading=price_value_heading)
+                feedback_heading=feedback_heading, nps_score_heading=nps_score_heading, fields=fields,
+                incremental_id=incremental_id, css_class_name=css_class_name, display_card_html=display_card_html)
         try:
             form.save()
         except db.ValidationError:
@@ -290,10 +293,7 @@ class InstanceModel(db.Document):
 class FeedbackModel(db.Document):
     # nps score and feedback text
     nps_score = db.IntField(required=True, choices=range(1,11))
-    feedback_text = db.StringField(required=True)
-
-    # price/value score
-    price_value_score = db.IntField(required=False, choices=range(1,11))
+    feedback_text = db.StringField(required=False)
 
     # customer response to the different fields of the form
     field_responses = db.DictField(required=False) # will not be required for feedbacks without any custom cards
@@ -374,17 +374,16 @@ class FeedbackModel(db.Document):
         # list of dictionaries of responses
         responses = []
 
-        # iterating over all the responses of the feedback
-        for f_id, response in self.field_responses.items():
-            # check for the field the response is associatform.counter.get_next_counter
-            for field in form.fields:
-                if str(field.id) == f_id:
-                    responses.append({
-                        'text': field.text,
-                        'type': field.field_type,
-                        'response': response,
-                        'id': f_id
-                    })
+        # iterating over all fields of the form
+        for field in form.fields:
+            f_id = str(field.id)
+            responses.append({
+                'text': field.text,
+                'type': field.field_type,
+                'id': f_id,
+                'response': self.field_responses.get(f_id)
+            })
+
         return responses
 
     @staticmethod
@@ -410,29 +409,23 @@ class FeedbackModel(db.Document):
         send_trans_email('feedback_nps_notification', emails, {'feedback': feedback})
 
     @staticmethod
-    def create(nps_score, feedback_text, field_responses, form_instance, customer_details=None, price_value_score=None):
+    def create(nps_score,field_responses, form_instance, feedback_text=None, customer_details=None):
         # validate the responses of the fields of the form
         form = form_instance.form
         for field in form.fields:
             # validate the response of the field
             response = field_responses.get(str(field.id))
-            if not response:
+            if not response and field.required:
                 raise FeedbackException('Response to all the fields of the form has not been provided.')
             # check if correct response is given to all of the fields
             try:
-                field.validate_customer_response(response)
+                if response: field.validate_customer_response(response)
             except ValueError:
                 raise FeedbackException('Correct response to one or more fields has not been given.')
 
         # feedback form object
         feedback = FeedbackModel(nps_score=nps_score, feedback_text=feedback_text, field_responses=field_responses,
                 form_instance=form_instance, merchant=form_instance.form.merchant)
-
-        # raise exception if price/value score is not provided
-        if form.price_value_exists and not price_value_score:
-            raise FeedbackException('The price/value score was not provided.')
-        else:
-            form.price_value_score = price_value_score
 
         # add counter info to feedback (if exists on form)
         if form.incremental_id:

@@ -55,3 +55,6 @@ docs/_build/
 #Gitfiles
 .bak
 .orig
+
+# to be deployed directory
+frontend/to_be_deployed/

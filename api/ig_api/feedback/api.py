@@ -106,6 +106,7 @@ merchant_obj = {
 field_obj = {
     'id': fields.String,
     'type': fields.String(attribute='field_type'),
+    'required': fields.Boolean,
     'text': fields.String,
     'choices': fields.List(fields.String)
 }
@@ -119,9 +120,9 @@ form_obj = {
     'customer_details_heading': fields.String,
     'feedback_heading': fields.String,
     'nps_score_heading': fields.String,
-    'price_value_exists': fields.Boolean,
-    'price_value_heading': fields.String,
-    'incremental_id': fields.Boolean
+    'incremental_id': fields.Boolean,
+    'css_class_name': fields.String,
+    'display_card_html': fields.String
 }
 
 instance_obj = {
@@ -149,7 +150,6 @@ feedback_obj = {
 
     # feedback information
     'nps_score': fields.Integer,
-    'price_value_score': fields.Integer,
     'feedback_text': fields.String,
     'received_at': fields.DateTime,
     'customer': fields.Nested(customer_obj),
@@ -185,7 +185,8 @@ class FormList(Resource):
             if not type(field) is dict:
                 raise ValueError("Every field should comprise of a dictionary.")
             # this will ensure that the field has the correct kind of keys
-            form_field = FormFieldSubModel(field_type=field.get('type'), text=field.get('text'), choices=field.get('choices')) 
+            form_field = FormFieldSubModel(field_type=field.get('type'), text=field.get('text'),
+                    choices=field.get('choices'), required=field.get('required'))
             try:
                 form_field.validate()
             except db.ValidationError:
@@ -199,10 +200,10 @@ class FormList(Resource):
     post_parser.add_argument('description', required=True, type=unicode, location='json')
     post_parser.add_argument('feedback_heading', required=True, type=unicode, location='json')
     post_parser.add_argument('nps_score_heading', required=True, type=unicode, location='json')
-    post_parser.add_argument('price_value_exists', required=True, type=bool, location='json')
-    post_parser.add_argument('price_value_heading', required=False, type=unicode, location='json')
     post_parser.add_argument('customer_details_heading', required=True, type=unicode, location='json')
     post_parser.add_argument('incremental_id', required=True, type=bool, location='json')
+    post_parser.add_argument('css_class_name', required=True, type=unicode, location='json')
+    post_parser.add_argument('display_card_html', required=True, type=unicode, location='json')
     post_parser.add_argument('fields', required=True, type=form_fields, location='json')
     get_fields = {
         'error': fields.Boolean(default=False),
@@ -312,8 +313,7 @@ class CustomerFeedback(Resource):
 
     put_parser = reqparse.RequestParser()
     put_parser.add_argument('nps_score', required=True, type=unicode, location='json')
-    put_parser.add_argument('price_value_score', required=False, type=unicode, location='json')
-    put_parser.add_argument('feedback_text', required=True, type=unicode, location='json')
+    put_parser.add_argument('feedback_text', required=False, type=unicode, location='json')
     put_parser.add_argument('field_responses', required=True, type=dict, location='json')
     put_parser.add_argument('customer_name', required=False, type=unicode, location='json')
     put_parser.add_argument('customer_mobile', required=False, type=unicode, location='json')
@@ -353,8 +353,8 @@ class CustomerFeedback(Resource):
         
         # save customer feedback
         try:
-            feedback = FeedbackModel.create(args['nps_score'], args['feedback_text'], args['field_responses'], \
-                    instance, customer_details, args['price_value_score'])
+            feedback = FeedbackModel.create(args['nps_score'], args['field_responses'], \
+                    instance, args.get('feedback_text'), customer_details)
         except FeedbackException:
             abort_error(4004)
 
