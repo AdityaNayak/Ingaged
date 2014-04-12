@@ -44,6 +44,7 @@ function($, _, Backbone, FormModel, FormResponseModel, FormCardView, SuccessThan
             var that = this;
             this.responseModel.save( this.responseModel.toJSON(), {
                 'success': function(data) {
+                    mixpanel.track( "Form Submitted", that.responseModel.toJSON() );
                     var successTemplate = _.template( SuccessThanksTemplate, that.responseModel.toJSON() );
                     $('body').html(successTemplate);
                     // Page will reload 10 seconds after feedback has been submitted
@@ -63,6 +64,8 @@ function($, _, Backbone, FormModel, FormResponseModel, FormCardView, SuccessThan
             this.$el.addClass(this.model.get('css_class_name'));
             $('body').html(this.$el);
             this.activateFullPage();
+
+            mixpanel.track( "Form Loaded", { "id": this.model.get("id") } )
         },
 
         addCard: function(cardModel) {

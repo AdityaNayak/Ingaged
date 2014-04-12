@@ -96,6 +96,8 @@ function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCard
         },
 
         submitFeedback: function(e) {
+            mixpanel.track( "Form Submit Try", this.responseModel.toJSON() );
+
             // Activate the required flag in Customer Details card model
             // if NPS score is below 7 else deactivate it.
             if ( this.responseModel.get('nps_score') <= 7 ) this.model.set( 'required', true );
@@ -124,6 +126,9 @@ function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCard
         },
 
         moveCardDown: function() {
+            // Mixpanel event if NPS card is moving down
+            if ( this.model.get('type') == 'NPS' ) mixpanel.track( "NPS Card Passed", this.responseModel.toJSON() );
+            // Don't move down if card is not validated
             if ( !this.validateCard() ) return
             $.fn.fullpage.actualMoveSectionDown();
         },
