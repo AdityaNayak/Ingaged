@@ -162,7 +162,7 @@ function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCard
             if (this.model.get('type') == 'CD' ) {
                 rM = this.responseModel;
                 // Mark card as filled only if all of the three customer details are filled.
-                if ( rM.get('customer_name') && rM.get('customer_phone') && rM.get('customer_email') ) this.filled = true;
+                if ( rM.get('customer_name') && rM.get('customer_mobile') && rM.get('customer_email') ) this.filled = true;
                 // Switch the filled flag off if the contents of a field are deleted by the user
                 if ( currentTarget.val() == "" ) {
                     this.filled = false;
