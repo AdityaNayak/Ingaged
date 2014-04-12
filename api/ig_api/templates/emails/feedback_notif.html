@@ -25,15 +25,13 @@ Here are the details of the Feedback:
 <h2> Form Details </h2>
 Form Name: {{ feedback.form_instance.form.name }}
 <br>
-
-<h2> Instance Details </h2>
-Instance Name: {{ feedback.form_instance.name }} <br>
+<h2> Instance Details </h2> Instance Name: {{ feedback.form_instance.name }} <br>
 Instance Location: {{ feedback.form_instance.location }} <br>
 Instance Description: {{ feedback.form_instance.description }} <br>
 
 <h2> Feedback Details </h2>
 Date: {{ feedback.received_at.strftime('%d-%m-%Y') }} <br>
-Time: {{ feedback.received_at.strftime('%I:%M %p') }} <br>
+Time: {{ utc_to_local(feedback.received_at).strftime('%I:%M %p') }} <br>
 NPS Score: {{ feedback.nps_score }} <br>
 Text: {{ feedback.feedback_text }} <br>
 

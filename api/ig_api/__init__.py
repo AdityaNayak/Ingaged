@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 
+import pytz
 from flask import Flask
 from flask_sslify import SSLify
 from flask.ext.mongoengine import MongoEngine
@@ -61,6 +62,16 @@ TRANSACTIONAL_EMAILS = {
 ## app initilization
 app = Flask(__name__)
 app.config.from_object(__name__)
+
+## Update jinja env globals
+
+# Method to convert UTC datetime object to Indian datetime object
+def utc_to_local(utc_dt):
+    local_tz = pytz.timezone('Asia/Kolkata') # use your local timezone name here
+    local_dt = utc_dt.replace(tzinfo=pytz.utc).astimezone(local_tz)
+    return local_tz.normalize(local_dt) # .normalize might be unnecessary
+
+app.jinja_env.globals.update(utc_to_local=utc_to_local)
 
 ## extensions
 db = MongoEngine(app)
