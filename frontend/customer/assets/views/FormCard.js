@@ -148,6 +148,7 @@ function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCard
             if ( this.model.get('type') == 'TT' ) {
                 // Mark card as not filled if the val() returns an empty string
                 if ( currentTarget.val() == "" ){
+                    delete this.responseModel.attributes.field_responses[this.model.get('id')];
                     this.filled = false;
                     return;
                 }
@@ -158,6 +159,13 @@ function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCard
 
             // Feedback Text Card
             if ( this.model.get('type') == 'FT' ) {
+                // Mark card as not filled if the val() returns an empty string
+                if ( currentTarget.val() == "" ){
+                    this.filled = false;
+                    this.responseModel.set( 'feedback_text', null )
+                    return;
+                }
+                console.log(this.responseModel);
                 this.filled = true;
                 this.responseModel.set ('feedback_text', currentTarget.val() );
                 return;
