@@ -14,5 +14,6 @@ gunicorn==18.0
 itsdangerous==0.23
 mongoengine==0.8.4
 pymongo==2.6.3
+pytz==2014.3
 six==1.4.1
 wsgiref==0.1.2

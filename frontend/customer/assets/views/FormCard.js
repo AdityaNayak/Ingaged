@@ -96,6 +96,8 @@ function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCard
         },
 
         submitFeedback: function(e) {
+            mixpanel.track( "Form Submit Try", this.responseModel.toJSON() );
+
             // Activate the required flag in Customer Details card model
             // if NPS score is below 7 else deactivate it.
             if ( this.responseModel.get('nps_score') <= 7 ) this.model.set( 'required', true );
@@ -124,6 +126,9 @@ function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCard
         },
 
         moveCardDown: function() {
+            // Mixpanel event if NPS card is moving down
+            if ( this.model.get('type') == 'NPS' ) mixpanel.track( "NPS Card Passed", this.responseModel.toJSON() );
+            // Don't move down if card is not validated
             if ( !this.validateCard() ) return
             $.fn.fullpage.actualMoveSectionDown();
         },
@@ -143,6 +148,7 @@ function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCard
             if ( this.model.get('type') == 'TT' ) {
                 // Mark card as not filled if the val() returns an empty string
                 if ( currentTarget.val() == "" ){
+                    delete this.responseModel.attributes.field_responses[this.model.get('id')];
                     this.filled = false;
                     return;
                 }
@@ -153,6 +159,13 @@ function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCard
 
             // Feedback Text Card
             if ( this.model.get('type') == 'FT' ) {
+                // Mark card as not filled if the val() returns an empty string
+                if ( currentTarget.val() == "" ){
+                    this.filled = false;
+                    this.responseModel.set( 'feedback_text', null )
+                    return;
+                }
+                console.log(this.responseModel);
                 this.filled = true;
                 this.responseModel.set ('feedback_text', currentTarget.val() );
                 return;
@@ -162,7 +175,7 @@ function($, _, Backbone, CDCardTemplate, FTCardTemplate, MTCardTemplate, NPSCard
             if (this.model.get('type') == 'CD' ) {
                 rM = this.responseModel;
                 // Mark card as filled only if all of the three customer details are filled.
-                if ( rM.get('customer_name') && rM.get('customer_phone') && rM.get('customer_email') ) this.filled = true;
+                if ( rM.get('customer_name') && rM.get('customer_mobile') && rM.get('customer_email') ) this.filled = true;
                 // Switch the filled flag off if the contents of a field are deleted by the user
                 if ( currentTarget.val() == "" ) {
                     this.filled = false;

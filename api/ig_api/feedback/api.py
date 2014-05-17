@@ -16,6 +16,11 @@ from ig_api.feedback.models import (FormModel, InstanceModel, FormException, Ins
 
 
 ## Helpers
+def unicode_not_required_arg(value, key):
+    if value == 'None':
+        return None
+    return value
+
 def nps_score_type(value, key):
     try:
         value = int(value)
@@ -313,7 +318,7 @@ class CustomerFeedback(Resource):
 
     put_parser = reqparse.RequestParser()
     put_parser.add_argument('nps_score', required=True, type=unicode, location='json')
-    put_parser.add_argument('feedback_text', required=False, type=unicode, location='json')
+    put_parser.add_argument('feedback_text', required=False, type=unicode_not_required_arg, location='json')
     put_parser.add_argument('field_responses', required=True, type=dict, location='json')
     put_parser.add_argument('customer_name', required=False, type=unicode, location='json')
     put_parser.add_argument('customer_mobile', required=False, type=unicode, location='json')

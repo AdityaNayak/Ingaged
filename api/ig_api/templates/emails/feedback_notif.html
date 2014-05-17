@@ -2,6 +2,13 @@ A feedback with an NPS score was below or equal to your set threshold of {{ feed
 
 Here are the details of the Feedback: 
 
+{% if feedback.form_instance.form.fields %}
+    <h2> Feedback Questions & Their Answers </h2>
+    {% for field in feedback.form_instance.form.fields %} <br>
+        <b>{{ field.text }}: </b> {{ feedback.field_responses[field.id|string] }} <br>
+    {% endfor %}
+{% endif %}
+
 <h2> Customer Details </h2>
 {% if feedback.customer.name %}
     Customer Name: {{ feedback.customer.name }}
@@ -19,25 +26,9 @@ Here are the details of the Feedback:
 {% endif %}
 
 {% if not feedback.customer %}
-    <h3>No Customer Data Exists for this feedback.</h3>
+    <h2>No Customer Data Exists for this feedback.</h2>
 {% endif %}
 
 <h2> Form Details </h2>
-Form Name: {{ feedback.form_instance.form.name }}
-<br>
-
-<h2> Instance Details </h2>
-Instance Name: {{ feedback.form_instance.name }} <br>
-Instance Location: {{ feedback.form_instance.location }} <br>
-Instance Description: {{ feedback.form_instance.description }} <br>
-
-<h2> Feedback Details </h2>
-Date: {{ feedback.received_at.strftime('%d-%m-%Y') }} <br>
-Time: {{ feedback.received_at.strftime('%I:%M %p') }} <br>
-NPS Score: {{ feedback.nps_score }} <br>
-Text: {{ feedback.feedback_text }} <br>
-
-<h2> Feedback Questions & Their Answers </h2>
-{% for field in feedback.form_instance.form.fields %} <br>
-    <b>{{ field.text }}: </b> {{ feedback.field_responses[field.id|string] }} <br>
-{% endfor %}
+Name: {{ feedback.form_instance.form.name }} <br>
+Location: {{ feedback.form_instance.location }} <br>

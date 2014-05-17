@@ -1,6 +1,10 @@
 <div class="row">
 	<div class="small-10 columns small-centered text-center b-ws-top b-ws-bottom">
-        <h3>Thank you <% if ( typeof customer_name !== "undefined" ) { %> <%= customer_name %> <% } %> for your feedback.</h3> </div>
+        <h2>Thank you <% if ( typeof customer_name !== "undefined" ) { %> <%= customer_name %> <% } %> for your feedback.</h2>
+        <% if ( nps_score <= 7 ) { %>
+            <h3>We will get back to you shortly.</h3>
+        <% } %>
+    </div>
 </div>
 <div class="row">
 	<div class="small-10 columns small-centered text-center b-ws-top">
