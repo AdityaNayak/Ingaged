@@ -45,6 +45,11 @@ $( document ).ready(function() {
     /* feedback timeline feedback model */
     var FeedbackModel = Backbone.Model.extend({});
 
+    /* nps graph model */
+    NPSGraphModel = Backbone.Model.extend({
+        urlRoot: api_root + "/dashboard/nps_week_analytics",
+    });
+
     /* collection storing the list of feedbacks which come in the timeline */
     var FeedbackTimelineCollection = Backbone.Collection.extend({
         model: FeedbackModel,
@@ -86,6 +91,7 @@ $( document ).ready(function() {
             return response.forms;
         }
     });
+
 
     /* collection of instances of a form */
     FormInstancesCollection = Backbone.Collection.extend({
@@ -356,6 +362,54 @@ $( document ).ready(function() {
                             that.$el.html(template);
                             that.$el.prepend(headerTemplate);
                             that.$el.append(footerTemplate);
+
+                            // nps chart rendering
+                            var ctx = $("#npsChart").get(0).getContext("2d");
+                            var data = {
+                                labels : ["6 weeks ago", "5 weeks ago", "4 weeks ago", "3 weeks ago", "2 weeks ago", "1 week ago"],
+                                datasets : [
+                                    {
+                                        fillColor : "rgba(151,187,205,0.5)",
+                                        strokeColor : "rgba(151,187,205,1)",
+                                        pointColor : "rgba(151,187,205,1)",
+                                        pointStrokeColor : "#fff",
+                                        data : [-76.47058823529412, -58.8235294117647, -26.31578947368421, 100]
+                                    }
+                                ]
+                            }
+                            var npsGraphModel = new NPSGraphModel();
+                            npsGraphModel.credentials = {
+                                username: $.cookie("username"),
+                                password: $.cookie("password")
+                            } 
+                            npsGraphModel.fetch({
+                                'success': function(npsGraph){
+                                    var labels, analytics, values;
+                                    labels = [];
+                                    values = [];
+                                    analytics = npsGraph.get("analytics");
+                                    lab = Object.keys(analytics);
+                                    lab = lab.sort();
+                                    lab = lab.reverse();
+                                    for(i=0; i<lab.length; i++){
+                                        if (lab[i] == 1) {
+                                            labels.push(lab[i] + " week ago");
+                                        } else {
+                                            labels.push(lab[i] + " weeks ago");
+                                        }
+                                        values.push(analytics[lab[i]]);
+                                    }
+                                    data["labels"] = labels;
+                                    data["datasets"]["data"] = values;
+                                    new Chart(ctx).Line(data, {
+                                        datasetFill: false,
+                                        scaleOverride: true,
+                                        scaleSteps: 10,
+                                        scaleStepWidth: 20,
+                                        scaleStartValue: -100
+                                    });
+                                }
+                            });
                         }
                     })
 
