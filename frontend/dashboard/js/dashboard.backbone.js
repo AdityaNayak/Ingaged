@@ -31,8 +31,7 @@ $( document ).ready(function() {
     };
 
 	/* hostname of the api */
-	// var api_root = 'https://ingage.herokuapp.com'
-	var api_root = 'https://ingage-staging-1.herokuapp.com'
+	var api_root = 'https://ingage.herokuapp.com'
 
     /* logs out the user on the click of the logout link */
     logoutUser = function(ev){
