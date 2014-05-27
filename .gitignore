@@ -58,3 +58,6 @@ docs/_build/
 
 # to be deployed directory
 frontend/to_be_deployed/
+
+# Mac OS X
+.DS_Store

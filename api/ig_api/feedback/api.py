@@ -9,7 +9,7 @@ from pymongo.errors import InvalidId
 
 from ig_api import api, db
 from ig_api.error_codes import abort_error
-from ig_api.helpers import upload_s3
+from ig_api.helpers import upload_s3, iso_to_gregorian
 from ig_api.authentication import login_required
 from ig_api.feedback.models import (FormModel, InstanceModel, FormException, InstanceException,
         FormFieldSubModel, FeedbackModel, FeedbackException)
@@ -478,6 +478,49 @@ class FeedbackTimelineExport(Resource):
         return {'csv_url': url}
 
 
+class NPSScoreWeekAnalytics(Resource):
+
+    @login_required('merchant')
+    def get(self):
+        current_week = datetime.datetime.now().isocalendar()[1]
+        # weeks for which nps score needs to be calculated
+        nps_weeks = range(current_week-6, current_week)
+        # minimum date for the calculation
+        min_date = iso_to_gregorian(datetime.datetime.now().isocalendar()[0], min(nps_weeks), 7)
+        # maximum date for the calculation
+        max_date = iso_to_gregorian(datetime.datetime.now().isocalendar()[0], max(nps_weeks), 7)
+        # all feedbacks within the given time period
+        feedbacks = FeedbackModel.objects.filter(form_instance__form__merchant=g.user.merchant)
+        feedbacks = FeedbackModel.objects.filter(received_at__gte=min_date, received_at__lte=max_date)
+        # analytics dict
+        analytics = {i: None for i in nps_weeks}
+        # add nps scores to analytics
+        for feedback in feedbacks:
+            week_number = feedback.received_at.isocalendar()[1]
+            if not analytics[week_number]:
+                analytics[week_number] = []
+            analytics[week_number].append(feedback.nps_score)
+        # check if there are any empty keys in analytics dict
+        for i in analytics.keys():
+            if analytics[i] is None:
+                analytics.pop(i)
+
+        # nps score calculation
+        for k,scores in analytics.items():
+            promoters = [i for i in scores if i == 9 or i == 10]
+            detractors = [i for i in scores if i <= 6]
+            promoters_perc = (float(len(promoters))/len(scores))*100
+            detractors_perc = (float(len(detractors))/len(scores))*100
+            analytics[k] = promoters_perc - detractors_perc
+
+        # renaming week numbers
+        week_numbers = analytics.keys()
+        week_numbers.sort(reverse=True)
+        for i in range(len(week_numbers)):
+            analytics[i+1] = analytics.pop(week_numbers[i])
+
+        return {"analytics": analytics, "error": False}
+
 class FeedbackTimeline(Resource):
 
     get_fields = {
@@ -615,6 +658,7 @@ api.add_resource(FormList, '/dashboard/forms')
 api.add_resource(Form, '/dashboard/forms/<form_id>')
 api.add_resource(FormInstanceList, '/dashboard/forms/<form_id>/instances')
 api.add_resource(FormInstance, '/dashboard/forms/<form_id>/instances/<instance_id>')
+api.add_resource(NPSScoreWeekAnalytics, '/dashboard/nps_week_analytics')
 api.add_resource(FeedbackTimeline, '/dashboard/timeline')
 api.add_resource(FeedbackTimelineExport, '/dashboard/timeline/csv_export')
 api.add_resource(FeedbackAnalytics, '/dashboard/forms/<form_id>/analytics')
