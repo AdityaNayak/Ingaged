@@ -365,18 +365,6 @@ $( document ).ready(function() {
 
                             // nps chart rendering
                             var ctx = $("#npsChart").get(0).getContext("2d");
-                            var data = {
-                                labels : ["6 weeks ago", "5 weeks ago", "4 weeks ago", "3 weeks ago", "2 weeks ago", "1 week ago"],
-                                datasets : [
-                                    {
-                                        fillColor : "rgba(151,187,205,0.5)",
-                                        strokeColor : "rgba(151,187,205,1)",
-                                        pointColor : "rgba(151,187,205,1)",
-                                        pointStrokeColor : "#fff",
-                                        data : [-76.47058823529412, -58.8235294117647, -26.31578947368421, 100]
-                                    }
-                                ]
-                            }
                             var npsGraphModel = new NPSGraphModel();
                             npsGraphModel.credentials = {
                                 username: $.cookie("username"),
@@ -399,14 +387,22 @@ $( document ).ready(function() {
                                         }
                                         values.push(analytics[lab[i]]);
                                     }
-                                    data["labels"] = labels;
-                                    data["datasets"]["data"] = values;
-                                    new Chart(ctx).Line(data, {
+                                    console.log(labels);
+                                    console.log(values);
+                                    new Chart(ctx).Line({ 
+                                        labels : labels,
+                                        datasets : [{ 
+                                            data : values,
+                                            fillColor : "rgba(151,187,205,0.5)", 
+                                            strokeColor : "rgba(151,187,205,1)", 
+                                            pointColor : "rgba(151,187,205,1)", 
+                                            pointStrokeColor : "#fff", 
+                                        }] }, {
                                         datasetFill: false,
-                                        scaleOverride: true,
-                                        scaleSteps: 10,
-                                        scaleStepWidth: 20,
-                                        scaleStartValue: -100
+                                        // scaleOverride: true,
+                                        // scaleSteps: 10,
+                                        // scaleStepWidth: 20,
+                                        // scaleStartValue: -100
                                     });
                                 }
                             });
