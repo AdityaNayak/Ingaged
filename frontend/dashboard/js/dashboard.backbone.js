@@ -413,7 +413,7 @@ $( document ).ready(function() {
                     $(document).foundation(); 
                     $(window).scroll(function() {
 				        var scroll = $(window).scrollTop();
-				        if (scroll >= 550) {
+				        if (scroll >= 705) {
 				            $("#details .panel").addClass("stickit");
 				        } else {
 				            $("#details .panel").removeClass("stickit");
