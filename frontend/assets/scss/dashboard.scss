@@ -263,10 +263,11 @@
 .stickit{
 	position:fixed;
 	top:0;
-	margin-left:54.4%;
+	//margin-left:54.4%;
 	width:38.8%;
 	z-index:9;
 	bottom:0;
+	float:left;
 }
 .pagination{
 	margin-top:2em;
