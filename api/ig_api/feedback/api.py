@@ -490,8 +490,10 @@ class NPSScoreWeekAnalytics(Resource):
         # maximum date for the calculation
         max_date = iso_to_gregorian(datetime.datetime.now().isocalendar()[0], max(nps_weeks), 7)
         # all feedbacks within the given time period
-        feedbacks = FeedbackModel.objects.filter(form_instance__form__merchant=g.user.merchant)
-        feedbacks = FeedbackModel.objects.filter(received_at__gte=min_date, received_at__lte=max_date)
+        forms = [i.id for i in FormModel.objects.filter(merchant=g.user.merchant)]
+        instances = InstanceModel.objects.filter(form__in=forms)
+        feedbacks = FeedbackModel.objects.filter(form_instance__in=instances)
+        feedbacks.filter(received_at__gte=min_date, received_at__lte=max_date)
         # analytics dict
         analytics = {i: None for i in nps_weeks}
         # add nps scores to analytics
